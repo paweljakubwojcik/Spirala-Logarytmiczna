@@ -1,2 +1,2 @@
-# Epicykloida
-Animacja powstawania Epicykloidy
+# Spirala Logarytmiczna
+Aplikacja rysująca spierale logarytmiczną o wyznaczonych parametrach.
