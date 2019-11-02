@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import figury.SpiralaLogarytmiczna;
+
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +29,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private Dimension minimumSize = new Dimension(640, 300);
 
 	private static JPanel graph;
-	private JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
+	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
 			napisZakresJednostka, poleKomentarz;
 
 	private JTextField poleParametrA, poleParametrB, poleZakres;
@@ -112,7 +114,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich element�w
 		addComponentListener(this); // musi by� za metod� przeskalujOkienko();
-
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(BigDecimal.valueOf(3))
+					.setParametrB(BigDecimal.valueOf(2)).setZakres(BigDecimal.valueOf(0.5)).setGraph(graph).build();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 	}
 
 	private void przeskalujOkienko() {
@@ -181,24 +188,44 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	}
 
-	private static void setParametrAText(String parametrAText) {
-
+	public static void setParametrAText(String parametrAText) throws Exception {
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			napisParametrA.setText(parametrAText);
+		else
+			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
 	}
 
-	private static void setParametrBText(String parametrBText) {
-
+	public static void setParametrBText(String parametrBText) throws Exception {
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			napisParametrB.setText(parametrBText);
+		else
+			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
 	}
 
-	private static void setZakresext(String zakresText) {
-
+	public static void setZakresText(String zakresText) throws Exception {
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			napisZakres.setText(zakresText);
+		else
+			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
 	}
 
-	private static void setJednostkaZakresuText(String jednostkaZakresuText) {
-
+	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws Exception {
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			napisZakresJednostka.setText(jednostkaZakresuText);
+		else
+			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
 	}
 
-	private static void setKomentarz(String komentarz) {
-
+	public static void setKomentarz(String komentarz) throws Exception {
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			poleKomentarz.setText(komentarz);
+		else
+			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
 	}
 
 	@Override
@@ -216,6 +243,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
+			// Jeśli tworzenie wykresu będzie zajmowało dużo czasu trzeba będzie ustawić
+			// tutaj spanko
 			// System.out.println("resize");
 			przeskalujOkienko();
 		}

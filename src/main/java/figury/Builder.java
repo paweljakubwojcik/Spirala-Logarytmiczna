@@ -18,8 +18,8 @@ interface Builder {
 
 	public Object setGraph(JPanel graph);
 
-	public Object build();
+	public Object build() throws Exception;
 
-	int sprawdzParametry();
+	int[] sprawdzParametry();
 
 }
