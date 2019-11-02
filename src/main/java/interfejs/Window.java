@@ -15,8 +15,8 @@ import javax.swing.JTextField;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	int sizeWindowX;
-	int sizeWindowY;
+	int sizeWindowX = 800;
+	int sizeWindowY = 600;
 
 	private static JPanel graph;
 	private JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
@@ -35,7 +35,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private static BigDecimal parametrA, parametrB, zakres;
 
 	Window() {
-
+		setSize(sizeWindowX, sizeWindowY);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 	}
 
 	private void przeskalujOkienko() {
