@@ -115,9 +115,10 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich element�w
 		addComponentListener(this); // musi by� za metod� przeskalujOkienko();
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(BigDecimal.valueOf(3))
-					.setParametrB(BigDecimal.valueOf(2)).setZakres(BigDecimal.valueOf(0.5)).setGraph(graph).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(BigDecimal.valueOf(0.7))
+					.setParametrB(BigDecimal.valueOf(0.3)).setZakres(BigDecimal.valueOf(70)).setGraph(graph).build();
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
 	}

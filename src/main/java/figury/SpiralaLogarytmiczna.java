@@ -23,24 +23,27 @@ public class SpiralaLogarytmiczna extends Figury {
 		double Ys = a * Math.pow(Math.E, b * 0) * Math.sin(0);
 		double Xm = a * Math.pow(Math.E, b * z) * Math.cos(z);
 		double Ym = a * Math.pow(Math.E, b * z) * Math.sin(z);
+		Xs = 0.0;
+		Ys = 0.0;
 
 		double wym = (double) roz / 2.0 / Math.sqrt(Math.pow(Xm - Xs, 2) + Math.pow(Ym - Ys, 2));
 
-		double probkowanie = 0.1;
+		double probkowanie = 0.01;
 		do {
 			punkty.clear();
 			probkowanie /= 10.0;
 			if (probkowanie == 0) {
 				break;
 			}
-			for (double fi = 0.000; fi < z; fi += probkowanie) {
+			for (double fi = -10000.000; fi < z; fi += probkowanie) {
 				double x = a * Math.pow(Math.E, b * fi) * Math.cos(fi);
 				double y = a * Math.pow(Math.E, b * fi) * Math.sin(fi);
+
 				Point pkt = new Point((int) ((x * wym + graph.getWidth() / 2)),
 						(int) ((y * wym + graph.getHeight() / 2)));
 				if (punkty.size() == 0)
 					punkty.add(pkt);
-				if (!pkt.equals(punkty.get(punkty.size() - 1)))
+				if (!pkt.equals(punkty.get(punkty.size() - 1)) && pkt.x >= 0 && pkt.y >= 0)
 					punkty.add(pkt);
 			}
 		} while (isGood());

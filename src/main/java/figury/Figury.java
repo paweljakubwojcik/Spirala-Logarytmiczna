@@ -1,14 +1,13 @@
 package figury;
 
 import java.awt.Point;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import interfejs.Window;
+import wykres.Wykres;
 
 public abstract class Figury {
 	private static final String[] komentarz = { "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
@@ -30,6 +29,8 @@ public abstract class Figury {
 		setOpis();
 		wyznaczPunkty();
 		System.out.println(punkty.size());
+		// System.out.println(punkty);
+		new Wykres(graph, punkty, zakres);
 	}
 
 	abstract void wyznaczPunkty();
