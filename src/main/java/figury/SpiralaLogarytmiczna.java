@@ -2,6 +2,9 @@ package figury;
 
 import java.awt.Point;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -34,7 +37,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		System.out.println("wym= " + wym);
 
 		// rysowanie prostej gdy podane parametry praktycznie prostują wykres
-		if (wym == 0.0) {
+		if (wym == 0.0 && b > 1) {
 			double kat = (z - Math.PI * ((int) (z / (Math.PI))));
 			double aa = Math.abs(Math.tan(kat));
 			for (int x = 0; x < graph.getWidth() / 2; x++) {
@@ -53,8 +56,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			double rad = z / Math.PI;
 			double katy = (rad - 2 * (int) (rad / 2));
 			double stopnie = katy * 180;
-			// System.out.println("katy= " + stopnie / Math.PI * 180 + " , " + stopnie + "
-			// rad");
 			if (stopnie > 90 && stopnie < 180) {
 				for (Point o : punkty) {
 					o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
@@ -72,6 +73,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				}
 			}
 			return;
+		} else if (wym == 0.0 && b < 1) {
+			// tu trzeba narysować koło
 		}
 
 		double probkowanie = 0.0001;
@@ -83,40 +86,68 @@ public class SpiralaLogarytmiczna extends Figury {
 		if (z < 0) {
 			start = z;
 			stop = 0;
-//			probkowanie = -0.01;
 		}
 
-//		Point starter;
+		long czasStart = System.currentTimeMillis();
+
+		punkty.clear();
+		double f = start;
+		probkowanie = Math.abs(z / (roz * 1024));
+		while (f < stop) {
+			double x1 = a * Math.pow(Math.E, b * f) * Math.cos(f);
+			double y1 = a * Math.pow(Math.E, b * f) * Math.sin(f);
+			double x2 = a * Math.pow(Math.E, b * (f + probkowanie)) * Math.cos(f + probkowanie);
+			double y2 = a * Math.pow(Math.E, b * (f + probkowanie)) * Math.sin(f + probkowanie);
+			double x3 = a * Math.pow(Math.E, b * (f + 2 * probkowanie)) * Math.cos(f + 2 * probkowanie);
+			double y3 = a * Math.pow(Math.E, b * (f + 2 * probkowanie)) * Math.sin(f + 2 * probkowanie);
+
+			Point pkt1 = new Point((int) ((x1 * wym + graph.getWidth() / 2)),
+					(int) ((-y1 * wym + graph.getHeight() / 2)));
+			Point pkt2 = new Point((int) ((x2 * wym + graph.getWidth() / 2)),
+					(int) ((-y2 * wym + graph.getHeight() / 2)));
+			Point pkt3 = new Point((int) ((x3 * wym + graph.getWidth() / 2)),
+					(int) ((-y3 * wym + graph.getHeight() / 2)));
+
+			if (Math.sqrt(Math.pow(pkt1.getX() - pkt2.getX(), 2) + Math.pow(pkt1.getY() - pkt2.getY(), 2)) > Math
+					.sqrt(2)
+					|| Math.sqrt(Math.pow(pkt2.getX() - pkt3.getX(), 2) + Math.pow(pkt1.getY() - pkt2.getY(), 2)) > Math
+							.sqrt(2)) {
+				probkowanie /= 1.3;
+			}
+
+			if (punkty.size() == 0)
+				punkty.add(pkt1);
+			if (!pkt1.equals(punkty.get(punkty.size() - 1)) && pkt1.x >= 0 && pkt1.y >= 0)
+				punkty.add(pkt1);
+			f += probkowanie;
+		}
+
+		// start kod może na przyszłość do sprawka
 //		do {
-//			double x = a * Math.pow(Math.E, b * (start += probkowanie)) * Math.cos((start += probkowanie));
-//			double y = a * Math.pow(Math.E, b * (start += probkowanie)) * Math.sin((start += probkowanie));
+//			punkty.clear();
+//			probkowanie /= 10.0;
+//			if (probkowanie == 0) {
+//				break;
+//			}
+//			for (double fi = start; fi < stop; fi += probkowanie) {
+//				double x = a * Math.pow(Math.E, b * fi) * Math.cos(fi);
+//				double y = a * Math.pow(Math.E, b * fi) * Math.sin(fi);
 //
-//			starter = new Point((int) ((x * wym + graph.getWidth() / 2)), (int) ((y * wym + graph.getHeight() / 2)));
-//
-//		} while (starter.x == graph.getWidth() / 2 && starter.y == graph.getHeight() / 2);
-//
-//		System.out.println(start);
-//		start -= probkowanie;
+//				Point pkt = new Point((int) ((x * wym + graph.getWidth() / 2)),
+//						(int) ((-y * wym + graph.getHeight() / 2)));
+//				if (punkty.size() == 0)
+//					punkty.add(pkt);
+//				if (!pkt.equals(punkty.get(punkty.size() - 1)) && pkt.x >= 0 && pkt.y >= 0)
+//					punkty.add(pkt);
+//			}
+//			// return;
+//		} while (isGood());
 
-		do {
-			punkty.clear();
-			probkowanie /= 10.0;
-			if (probkowanie == 0) {
-				break;
-			}
-			for (double fi = start; fi < stop; fi += probkowanie) {
-				double x = a * Math.pow(Math.E, b * fi) * Math.cos(fi);
-				double y = a * Math.pow(Math.E, b * fi) * Math.sin(fi);
-
-				Point pkt = new Point((int) ((x * wym + graph.getWidth() / 2)),
-						(int) ((-y * wym + graph.getHeight() / 2)));
-				if (punkty.size() == 0)
-					punkty.add(pkt);
-				if (!pkt.equals(punkty.get(punkty.size() - 1)) && pkt.x >= 0 && pkt.y >= 0)
-					punkty.add(pkt);
-			}
-			return;
-		} while (isGood());
+		System.err.println(System.currentTimeMillis() - czasStart);
+		Set<Point> set = new LinkedHashSet<Point>();
+		set.addAll(punkty);
+		punkty.clear();
+		punkty.addAll(set);
 
 	}
 

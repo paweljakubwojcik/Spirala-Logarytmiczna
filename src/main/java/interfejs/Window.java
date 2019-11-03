@@ -21,8 +21,8 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	int sizeWindowX = 800;
-	int sizeWindowY = 600;
+	int sizeWindowX = 1280;
+	int sizeWindowY = 720;
 
 	private Dimension poleSize = new Dimension(); // 100 , 30
 	private Dimension buttonSize = new Dimension();
@@ -115,9 +115,10 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich element�w
 		addComponentListener(this); // musi by� za metod� przeskalujOkienko();
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(BigDecimal.valueOf(10))
-					.setParametrB(BigDecimal.valueOf(0)).setZakres(BigDecimal.valueOf(20000)).setGraph(graph)// 5 10
-																												// 11.2452
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
+					.setParametrB(new BigDecimal("-0.1")).setZakres(new BigDecimal("25.246578")).setGraph(graph)// 5
+					// 10
+					// 11.2452
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();
