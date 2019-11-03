@@ -30,6 +30,7 @@ public abstract class Figury {
 		wyznaczPunkty();
 		System.out.println(punkty.size());
 		// System.out.println(punkty);
+		System.out.println(graph.getSize());
 		new Wykres(graph, punkty, zakres);
 	}
 
