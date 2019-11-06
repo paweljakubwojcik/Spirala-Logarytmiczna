@@ -21,6 +21,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	int sizeWindowX = 800;
 	int sizeWindowY = 600;
+
 	private Dimension poleSize = new Dimension(); // 100 , 30
 	private Dimension buttonSize = new Dimension();
 	private Dimension minimumSize = new Dimension(640, 300);
@@ -35,8 +36,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static final String NAZWAPROGRAMUTEXT = "Spirala Logarytmiczna";
 	public static final String PARAMETRYTEXT = "XXX";
 	public static final String RYSUJTEXT = "RYSUJ";
-	public static final String CZYSCTEXT = "CZYå∆";
-	public static final String PELNYEKRANTEXT = "PE£NY EKRAN";
+	public static final String CZYSCTEXT = "CZYƒπ≈°√Ñ‚Ä†";
+	public static final String PELNYEKRANTEXT = "PEƒπÔøΩNY EKRAN";
 
 	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
 	private static BigDecimal parametrA, parametrB, zakres;
@@ -109,8 +110,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		add(poleKomentarz);
 		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));//
 
-		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementÛw
-		addComponentListener(this); // musi byÊ za metodπ przeskalujOkienko();
+		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementƒè≈ºÀùw
+		addComponentListener(this); // musi byƒè≈ºÀù za metodƒè≈ºÀù przeskalujOkienko();
 
 	}
 
@@ -137,7 +138,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		
 		int odstepY = sizeWindowY/60;
 		int locationY = graph.getY() + graph.getHeight() + odstepY;
-		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma d≥ugoúci elementÛw)/ilosc elementÛw
+		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma d≈Çugo≈õci element√≥w)/ilosc element√≥w
 													// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
 		napisParametry.setSize(70, poleSize.height);
