@@ -10,6 +10,8 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
+import wykres.Wykres;
+
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 
@@ -18,28 +20,38 @@ public class SpiralaLogarytmiczna extends Figury {
 	}
 
 	@Override
-	void wyznaczPunkty() {
+	void wyznaczPunkty() { // TODO REFAKTORYZACJA
 		double a = parametrA.doubleValue();
 		double b = parametrB.doubleValue();
 		double z = zakres.doubleValue();
 
-		int roz = Math.min(graph.getWidth(), graph.getHeight());
-		double Xs = a * Math.pow(Math.E, b * 0) * Math.cos(0);
-		double Ys = a * Math.pow(Math.E, b * 0) * Math.sin(0);
-		double Xm = a * Math.pow(Math.E, b * z) * Math.cos(z);
-		double Ym = a * Math.pow(Math.E, b * z) * Math.sin(z);
-		if (z >= 0 && b > 0 || b < 0 && z < 0) {
-			Xs = 0.0;
-			Ys = 0.0;
-		} else {
-			Xm = 0.0;
-			Ym = 0.0;
-		}
-		double wym = (double) roz / 2.0 / Math.sqrt(Math.pow(Xm - Xs, 2) + Math.pow(Ym - Ys, 2));
-		System.out.println("wym= " + wym);
+		double az = a;
+		double wym = 0;
+		double roz = 0, Xs, Ys, Xm, Ym;
 
+		while (wym == 0) {
+			roz = Math.min(graph.getWidth(), graph.getHeight());
+			Xs = az * Math.pow(Math.E, b * 0) * Math.cos(0);
+			Ys = az * Math.pow(Math.E, b * 0) * Math.sin(0);
+			Xm = az * Math.pow(Math.E, b * z) * Math.cos(z);
+			Ym = az * Math.pow(Math.E, b * z) * Math.sin(z);
+			if (z >= 0 && b > 0 || b < 0 && z < 0) {
+				Xs = 0.0;
+				Ys = 0.0;
+			} else {
+				Xm = 0.0;
+				Ym = 0.0;
+			}
+//			System.out.println("roz= " + roz);
+			wym = (double) roz / 2.0 / Math.sqrt(Math.pow(Xm - Xs, 2) + Math.pow(Ym - Ys, 2));
+//			System.out.println("wym= " + wym);
+			if (wym == 0) {
+				az *= 1.0E-1;
+			}
+		}
+		System.out.println("wym= " + wym);
 		// rysowanie prostej gdy podane parametry praktycznie prostują wykres
-		if (wym == 0.0 && b > 1) {
+		if (Double.isNaN(wym) && b > 1) {
 			double kat = (z - Math.PI * ((int) (z / (Math.PI))));
 			double aa = Math.abs(Math.tan(kat));
 			for (int x = 0; x < graph.getWidth() / 2; x++) {
@@ -75,9 +87,10 @@ public class SpiralaLogarytmiczna extends Figury {
 				}
 			}
 			return;
-		} else if (wym == 0.0 && b < 1) {
-			// tu trzeba narysować koło
+		} else if (Double.isNaN(wym) && b < 1) {
+			// TODO tu trzeba narysować koło
 			System.out.println("Koło");
+			return;
 			// albo może i nie :D
 		}
 
@@ -125,12 +138,13 @@ public class SpiralaLogarytmiczna extends Figury {
 			double x1 = 0, y1 = 0;
 			for (double X = XStart; X < XKoniec; X += probki) {
 				for (double Y = YStart; Y < YKoniec; Y += probki) {
-					if (wym != 0 && b != 0 && a != 0) {
-						katFI = (1.0 / b * Math.log((Math.sqrt(Math.pow(X - s, 2) + Math.pow(-Y + t, 2))) / (a * wym)));
+					if (wym != 0 && b != 0 && az != 0) {
+						katFI = (1.0 / b
+								* Math.log((Math.sqrt(Math.pow(X - s, 2) + Math.pow(-Y + t, 2))) / (az * wym)));
 						// katFI /= Math.PI;
 						if (katFI <= stop && katFI >= start) {
-							x1 = a * Math.pow(Math.E, b * katFI) * Math.cos(katFI);
-							y1 = a * Math.pow(Math.E, b * katFI) * Math.sin(katFI);
+							x1 = az * Math.pow(Math.E, b * katFI) * Math.cos(katFI);
+							y1 = az * Math.pow(Math.E, b * katFI) * Math.sin(katFI);
 							Point pkt1 = new Point((int) ((x1 * wym + graph.getWidth() / 2)),
 									(int) ((-y1 * wym + graph.getHeight() / 2)));
 							if (pkt1.x >= 0 && pkt1.y >= 0 && pkt1.x < graph.getWidth() && pkt1.y < graph.getHeight()) {
@@ -188,6 +202,12 @@ public class SpiralaLogarytmiczna extends Figury {
 				// System.out.println();
 			}
 			// long ssssssss = System.currentTimeMillis();-
+			{
+//				Set<KatPunkt> set = new LinkedHashSet<KatPunkt>();
+//				set.addAll(katy);
+//				katy.clear();
+//				katy.addAll(set);
+			}
 			Collections.sort(katy, new Comparator<KatPunkt>() {
 				@Override
 				public int compare(KatPunkt p1, KatPunkt p2) {
@@ -203,53 +223,65 @@ public class SpiralaLogarytmiczna extends Figury {
 					punkty.add(katy.get(i).pkt);
 				} else {
 
-					if (odleglosc < Math.sqrt(2) * 50) {
+					if (odleglosc < Math.sqrt(2) * 60) {
 						double X1 = katy.get(i).pkt.getX(), X2 = katy.get(i - 1).pkt.getX(),
 								Y1 = katy.get(i).pkt.getY(), Y2 = katy.get(i - 1).pkt.getY();
 						double aa = (Y2 - Y1) / (X2 - X1);
 						double bb = (X2 - X1) / (Y2 - Y1);
 						Point pkt;
 
-						if (X2 > X1) {
-							for (int DX = 1; DX < X2 - X1; DX++) {
-								pkt = new Point((int) (X1 + DX), (int) (aa * DX + Y1));
-								if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0 && pkt.y < graph.getHeight())
-									punkty.add(pkt);
+						if (Math.abs(aa) <= 1) {
+							if (X2 > X1) {
+								for (int DX = 1; DX < X2 - X1; DX++) {
+									pkt = new Point((int) (X1 + DX), (int) (aa * DX + Y1));
+									if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0
+											&& pkt.y < graph.getHeight())
+										punkty.add(pkt);
+								}
+							} else {
+								for (int DX = 1; DX < X1 - X2; DX++) {
+									pkt = new Point((int) (X2 + DX), (int) (aa * DX + Y2));
+									if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0
+											&& pkt.y < graph.getHeight())
+										punkty.add(pkt);
+								}
 							}
 						} else {
-							for (int DX = 1; DX < X1 - X2; DX++) {
-								pkt = new Point((int) (X2 + DX), (int) (aa * DX + Y2));
-								if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0 && pkt.y < graph.getHeight())
-									punkty.add(pkt);
-							}
-						}
-
-						if (Y2 > Y1) {
-							for (int DY = 1; DY < Y2 - Y1; DY++) {
-								pkt = new Point((int) (bb * DY + X1), (int) (Y1 + DY));
-								if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0 && pkt.y < graph.getHeight())
-									punkty.add(pkt);
-							}
-						} else {
-							for (int DY = 1; DY < Y1 - Y2; DY++) {
-								pkt = new Point((int) (bb * DY + X2), (int) (Y2 + DY));
-								if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0 && pkt.y < graph.getHeight())
-									punkty.add(pkt);
+							if (Y2 > Y1) {
+								for (int DY = 1; DY < Y2 - Y1; DY++) {
+									pkt = new Point((int) (bb * DY + X1), (int) (Y1 + DY));
+									if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0
+											&& pkt.y < graph.getHeight())
+										punkty.add(pkt);
+								}
+							} else {
+								for (int DY = 1; DY < Y1 - Y2; DY++) {
+									pkt = new Point((int) (bb * DY + X2), (int) (Y2 + DY));
+									if (pkt.x >= 0 && pkt.x < graph.getWidth() && pkt.y >= 0
+											&& pkt.y < graph.getHeight())
+										punkty.add(pkt);
+								}
 							}
 						}
 					} else {
 						licznikOdleglosciowy++;
 					}
 				}
-				if (punkty.size() > roz * roz) {
+				if (punkty.size() > 5 * roz * roz) {
 					Set<Point> set = new LinkedHashSet<Point>();
 					set.addAll(punkty);
 					punkty.clear();
 					punkty.addAll(set);
 				}
 			}
-			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 60);
-			if (licznikOdleglosciowy > punkty.size() / 60 && wym != 0) {
+			Set<Point> set = new LinkedHashSet<Point>();
+			set.addAll(punkty);
+			punkty.clear();
+			punkty.addAll(set);
+			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 2);
+			if (licznikOdleglosciowy > punkty.size() / 2 && wym != 0 && probki >= 1.0 / 16 || probki > 0.25
+					|| punkty.size() == 0) {
+				new Wykres(graph, punkty, zakres);
 				probki /= 2.0;
 				OK = false;
 			} else {

@@ -30,15 +30,16 @@ public class Wykres {
 
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);
-		while (true) {
-			Graphics2D g = (Graphics2D) graph.getGraphics();
-			g.drawImage(wykres, 0, 0, null);
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		while (true) {
+		Graphics2D g = (Graphics2D) graph.getGraphics();
+		g.drawImage(wykres, 0, 0, null);
+
+//			try {
+//				Thread.sleep(20);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	private void scalObrazki() {

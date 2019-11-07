@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,8 +22,8 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	int sizeWindowX = 1280;
-	int sizeWindowY = 720;
+	int sizeWindowX = 1920;
+	int sizeWindowY = 1280;
 
 	private Dimension poleSize = new Dimension(); // 100 , 30
 	private Dimension buttonSize = new Dimension();
@@ -51,7 +52,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		setLocation(0, 0);
 		setSize(sizeWindowX, sizeWindowY);
 		setLayout(null);
-		setVisible(true);
 		setMinimumSize(minimumSize);
 
 		graph = new JPanel();
@@ -114,12 +114,26 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich element�w
 		addComponentListener(this); // musi by� za metod� przeskalujOkienko();
+
+		setVisible(true);
+
+		//////// Spanie jest po to żeby nie znikała szybko narysowana spirala ////////
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
-					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graph)// 5
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////
+
+		try {
+			long start = System.currentTimeMillis();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
+					.setParametrB(new BigDecimal("0.01")).setZakres(new BigDecimal("-5")).setGraph(graph)// 5
 					// 10
 					// 11.2452
 					.build();
+			System.out.println(
+					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
