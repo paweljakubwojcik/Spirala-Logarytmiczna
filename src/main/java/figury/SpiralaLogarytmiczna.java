@@ -88,8 +88,32 @@ public class SpiralaLogarytmiczna extends Figury {
 			}
 			return;
 		} else if (Double.isNaN(wym) && b < 1) {
-			// TODO tu trzeba narysować koło
+			// TODO tu trzeba narysować koło i sprawdzić X i Y czy są te największe
+			double mojeR = roz / 2;
 			System.out.println("Koło");
+
+			int XStart, XKoniec, YStart, YKoniec;
+			if (graph.getWidth() >= graph.getHeight()) {
+				XStart = (int) (graph.getWidth() / 2 - roz / 2 - 2);
+				XKoniec = (int) (graph.getWidth() / 2 + roz / 2 + 2);
+				YStart = 0;
+				YKoniec = (int) roz;
+			} else {
+				XStart = 0;
+				XKoniec = (int) roz;
+				YStart = (int) (graph.getHeight() / 2 - roz / 2 - 2);
+				YKoniec = (int) (graph.getHeight() / 2 + roz / 2 + 2);
+			}
+
+			double odl;
+			for (int X = XStart; X < XKoniec; X++) {
+				for (int Y = YStart; Y < YKoniec; Y++) {
+					odl = Math.sqrt(Math.pow((X - graph.getWidth() / 2), 2) + Math.pow((Y - graph.getHeight() / 2), 2));
+					if (odl <= mojeR) {
+						punkty.add(new Point(X, Y));
+					}
+				}
+			}
 			return;
 			// albo może i nie :D
 		}
@@ -103,6 +127,90 @@ public class SpiralaLogarytmiczna extends Figury {
 		if (z < 0) {
 			start = z;
 			stop = 0;
+		}
+
+		{
+			Point pkt1 = null;
+			Point pkt2 = null;
+			Point pkt3 = null;
+			if (z < 0) {
+				double fStop = (z - Math.PI * ((int) (z / (Math.PI))));
+				System.out.println("fStop= " + fStop);
+
+				double x1 = az * Math.pow(Math.E, b * start) * Math.cos(start);
+				double y1 = az * Math.pow(Math.E, b * start) * Math.sin(start);
+				pkt1 = new Point((int) ((x1 * wym + graph.getWidth() / 2)),
+						(int) ((-y1 * wym + graph.getHeight() / 2)));
+
+				double x2 = az * Math.pow(Math.E, b * fStop) * Math.cos(fStop);
+				double y2 = az * Math.pow(Math.E, b * fStop) * Math.sin(fStop);
+				pkt2 = new Point((int) ((x2 * wym + graph.getWidth() / 2)),
+						(int) ((-y2 * wym + graph.getHeight() / 2)));
+
+				double x3 = az * Math.pow(Math.E, b * (fStop - 2 * Math.PI)) * Math.cos((fStop - 2 * Math.PI));
+				double y3 = az * Math.pow(Math.E, b * (fStop - 2 * Math.PI)) * Math.sin((fStop - 2 * Math.PI));
+				pkt3 = new Point((int) ((x3 * wym + graph.getWidth() / 2)),
+						(int) ((-y3 * wym + graph.getHeight() / 2)));
+
+			} else if (z > 0) {
+				double fStart = (z - Math.PI * ((int) (z / (Math.PI))));
+				System.out.println("fStart= " + fStart);
+
+				double x1 = az * Math.pow(Math.E, b * fStart) * Math.cos(fStart);
+				double y1 = az * Math.pow(Math.E, b * fStart) * Math.sin(fStart);
+				pkt1 = new Point((int) ((x1 * wym + graph.getWidth() / 2)),
+						(int) ((-y1 * wym + graph.getHeight() / 2)));
+
+				double x2 = az * Math.pow(Math.E, b * stop) * Math.cos(stop);
+				double y2 = az * Math.pow(Math.E, b * stop) * Math.sin(stop);
+				pkt2 = new Point((int) ((x2 * wym + graph.getWidth() / 2)),
+						(int) ((-y2 * wym + graph.getHeight() / 2)));
+
+				double x3 = az * Math.pow(Math.E, b * (stop - 2 * Math.PI)) * Math.cos((stop - 2 * Math.PI));
+				double y3 = az * Math.pow(Math.E, b * (stop - 2 * Math.PI)) * Math.sin((stop - 2 * Math.PI));
+				pkt3 = new Point((int) ((x3 * wym + graph.getWidth() / 2)),
+						(int) ((-y3 * wym + graph.getHeight() / 2)));
+			}
+			double odleglosc3 = Math
+					.sqrt(Math.pow((pkt3.x - graph.getWidth() / 2), 2) + Math.pow((pkt3.y - graph.getHeight() / 2), 2));
+			double odleglosc2 = Math
+					.sqrt(Math.pow((pkt2.x - graph.getWidth() / 2), 2) + Math.pow((pkt2.y - graph.getHeight() / 2), 2));
+			double odleglosc1 = Math
+					.sqrt(Math.pow((pkt1.x - graph.getWidth() / 2), 2) + Math.pow((pkt1.y - graph.getHeight() / 2), 2));
+			if (Math.abs(odleglosc2 - odleglosc1) < Math.abs(z / Math.PI) && odleglosc2 - odleglosc3 <= 1) {
+				System.out.println("HAHAHAHHAHAHAHAHAH");
+				punkty.clear();
+				int XStart, XKoniec, YStart, YKoniec;
+				if (graph.getWidth() >= graph.getHeight()) {
+					XStart = (int) (graph.getWidth() / 2 - roz / 2 - 2);
+					XKoniec = (int) (graph.getWidth() / 2 + roz / 2 + 2);
+					YStart = 0;
+					YKoniec = (int) roz;
+				} else {
+					XStart = 0;
+					XKoniec = (int) roz;
+					YStart = (int) (graph.getHeight() / 2 - roz / 2 - 2);
+					YKoniec = (int) (graph.getHeight() / 2 + roz / 2 + 2);
+				}
+				double odl;
+				if (odleglosc2 < odleglosc1) {
+					double o = odleglosc2;
+					odleglosc2 = odleglosc1;
+					odleglosc1 = o;
+				}
+
+				for (int X = XStart; X < XKoniec; X++) {
+					for (int Y = YStart; Y < YKoniec; Y++) {
+						odl = Math.sqrt(
+								Math.pow((X - graph.getWidth() / 2), 2) + Math.pow((Y - graph.getHeight() / 2), 2));
+						if (odl + 0.58 >= odleglosc1 && odl - 0.58 <= odleglosc2) {
+							punkty.add(new Point(X, Y));
+						}
+					}
+				}
+				return;
+			}
+
 		}
 
 		long czasStart = System.currentTimeMillis();
@@ -134,8 +242,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				YStart = graph.getHeight() / 2 - roz / 2 - 2;
 				YKoniec = graph.getHeight() / 2 + roz / 2 + 2;
 			}
-
 			double x1 = 0, y1 = 0;
+
 			for (double X = XStart; X < XKoniec; X += probki) {
 				for (double Y = YStart; Y < YKoniec; Y += probki) {
 					if (wym != 0 && b != 0 && az != 0) {
@@ -279,7 +387,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			punkty.clear();
 			punkty.addAll(set);
 			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 2);
-			if (licznikOdleglosciowy > punkty.size() / 2 && wym != 0 && probki >= 1.0 / 16 || probki > 0.25
+			if (licznikOdleglosciowy > punkty.size() / 2 && wym != 0 && probki >= 1.0 / 16 || probki >= 1
 					|| punkty.size() == 0) {
 				new Wykres(graph, punkty, zakres);
 				probki /= 2.0;
