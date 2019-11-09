@@ -127,9 +127,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		try {
 			long start = System.currentTimeMillis();
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
-					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("220")).setGraph(graph)
-					.build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
+					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graph).build();
 			System.out.println(
 					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {

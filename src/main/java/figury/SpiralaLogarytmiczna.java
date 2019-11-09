@@ -24,7 +24,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		double a = parametrA.doubleValue();
 		double b = parametrB.doubleValue();
 		double z = zakres.doubleValue();
-
+		System.err.println("b= " + b);
+		System.err.println("z= " + z / Math.PI);
 		double az = a;
 		double wym = 0;
 		double roz = 0, Xs, Ys, Xm, Ym;
@@ -51,7 +52,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 		System.out.println("wym= " + wym);
 		// rysowanie prostej gdy podane parametry praktycznie prostują wykres
-		if (Double.isNaN(wym) && b > 1) {
+		if (Double.isNaN(wym) && Math.abs(b) > 1) {
 			double kat = (z - Math.PI * ((int) (z / (Math.PI))));
 			double aa = Math.abs(Math.tan(kat));
 			for (int x = 0; x < graph.getWidth() / 2; x++) {
@@ -70,24 +71,45 @@ public class SpiralaLogarytmiczna extends Figury {
 			double rad = z / Math.PI;
 			double katy = (rad - 2 * (int) (rad / 2));
 			double stopnie = katy * 180;
-			if (stopnie > 90 && stopnie < 180) {
-				for (Point o : punkty) {
-					o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
+			System.err.println("stopnie= " + stopnie);
+			if (stopnie >= 0) {
+				if (stopnie > 90 && stopnie < 180) {
+					for (Point o : punkty) {
+						o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
+					}
 				}
-			}
-			if (stopnie >= 180 && stopnie < 270) {
-				for (Point o : punkty) {
-					o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
-					o.y = -(o.y - graph.getHeight() / 2) + graph.getHeight() / 2;
+				if (stopnie >= 180 && stopnie < 270) {
+					for (Point o : punkty) {
+						o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
+						o.y = -(o.y - graph.getHeight() / 2) + graph.getHeight() / 2;
+					}
 				}
-			}
-			if (stopnie >= 270 && stopnie < 360) {
-				for (Point o : punkty) {
-					o.y = -(o.y - graph.getHeight() / 2) + graph.getHeight() / 2;
+				if (stopnie >= 270 && stopnie < 360) {
+					for (Point o : punkty) {
+						o.y = -(o.y - graph.getHeight() / 2) + graph.getHeight() / 2;
+					}
+				}
+			} else {
+				stopnie = -stopnie;
+				if (stopnie > 180 && stopnie < 270) {
+					for (Point o : punkty) {
+						o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
+					}
+				}
+				if (stopnie >= 90 && stopnie < 180) {
+					for (Point o : punkty) {
+						o.x = -(o.x - graph.getWidth() / 2) + graph.getWidth() / 2;
+						o.y = -(o.y - graph.getHeight() / 2) + graph.getHeight() / 2;
+					}
+				}
+				if (stopnie >= 0 && stopnie < 90) {
+					for (Point o : punkty) {
+						o.y = -(o.y - graph.getHeight() / 2) + graph.getHeight() / 2;
+					}
 				}
 			}
 			return;
-		} else if (Double.isNaN(wym) && b < 1) {
+		} else if (Double.isNaN(wym) && Math.abs(b) < 1) {
 			// TODO tu trzeba narysować koło i sprawdzić X i Y czy są te największe
 			double mojeR = roz / 2;
 			System.out.println("Koło");
@@ -133,31 +155,26 @@ public class SpiralaLogarytmiczna extends Figury {
 			Point pkt1 = null;
 			Point pkt2 = null;
 			Point pkt3 = null;
-			if (z < 0) {
-				double fStop = (z - Math.PI * ((int) (z / (Math.PI))));
-				System.out.println("fStop= " + fStop);
 
+			if (z < 0) {
 				double x1 = az * Math.pow(Math.E, b * start) * Math.cos(start);
 				double y1 = az * Math.pow(Math.E, b * start) * Math.sin(start);
 				pkt1 = new Point((int) ((x1 * wym + graph.getWidth() / 2)),
 						(int) ((-y1 * wym + graph.getHeight() / 2)));
 
-				double x2 = az * Math.pow(Math.E, b * fStop) * Math.cos(fStop);
-				double y2 = az * Math.pow(Math.E, b * fStop) * Math.sin(fStop);
+				double x2 = az * Math.pow(Math.E, b * stop) * Math.cos(stop);
+				double y2 = az * Math.pow(Math.E, b * stop) * Math.sin(stop);
 				pkt2 = new Point((int) ((x2 * wym + graph.getWidth() / 2)),
 						(int) ((-y2 * wym + graph.getHeight() / 2)));
 
-				double x3 = az * Math.pow(Math.E, b * (fStop - 2 * Math.PI)) * Math.cos((fStop - 2 * Math.PI));
-				double y3 = az * Math.pow(Math.E, b * (fStop - 2 * Math.PI)) * Math.sin((fStop - 2 * Math.PI));
+				double x3 = az * Math.pow(Math.E, b * (stop - 2 * Math.PI)) * Math.cos((stop - 2 * Math.PI));
+				double y3 = az * Math.pow(Math.E, b * (stop - 2 * Math.PI)) * Math.sin((stop - 2 * Math.PI));
 				pkt3 = new Point((int) ((x3 * wym + graph.getWidth() / 2)),
 						(int) ((-y3 * wym + graph.getHeight() / 2)));
 
-			} else if (z > 0) {
-				double fStart = (z - Math.PI * ((int) (z / (Math.PI))));
-				System.out.println("fStart= " + fStart);
-
-				double x1 = az * Math.pow(Math.E, b * fStart) * Math.cos(fStart);
-				double y1 = az * Math.pow(Math.E, b * fStart) * Math.sin(fStart);
+			} else if (z >= 0) {
+				double x1 = az * Math.pow(Math.E, b * start) * Math.cos(start);
+				double y1 = az * Math.pow(Math.E, b * start) * Math.sin(start);
 				pkt1 = new Point((int) ((x1 * wym + graph.getWidth() / 2)),
 						(int) ((-y1 * wym + graph.getHeight() / 2)));
 
@@ -177,7 +194,11 @@ public class SpiralaLogarytmiczna extends Figury {
 					.sqrt(Math.pow((pkt2.x - graph.getWidth() / 2), 2) + Math.pow((pkt2.y - graph.getHeight() / 2), 2));
 			double odleglosc1 = Math
 					.sqrt(Math.pow((pkt1.x - graph.getWidth() / 2), 2) + Math.pow((pkt1.y - graph.getHeight() / 2), 2));
-			if (Math.abs(odleglosc2 - odleglosc1) < Math.abs(z / Math.PI) && odleglosc2 - odleglosc3 <= 1) {
+			System.out.println("Delta odległości= " + Math.abs(odleglosc2 - odleglosc3));
+			System.out.println(
+					"Odległosci= " + Math.abs(odleglosc2 - odleglosc1) + "   Szerokość= " + Math.abs(z / Math.PI));
+			if (Math.abs(odleglosc2 - odleglosc1) < Math.abs(z / Math.PI) && Math.abs(odleglosc2 - odleglosc3) <= 3.1
+					&& Math.abs(b) <= 1) {
 				System.out.println("HAHAHAHHAHAHAHAHAH");
 				punkty.clear();
 				int XStart, XKoniec, YStart, YKoniec;
@@ -387,8 +408,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			punkty.clear();
 			punkty.addAll(set);
 			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 2);
-			if (licznikOdleglosciowy > punkty.size() / 2 && wym != 0 && probki >= 1.0 / 16 || probki >= 1
-					|| punkty.size() == 0) {
+			if (licznikOdleglosciowy > punkty.size() / 2 && wym != 0 && probki >= 1.0 / 16 || punkty.size() == 0) {
 				new Wykres(graph, punkty, zakres);
 				probki /= 2.0;
 				OK = false;
