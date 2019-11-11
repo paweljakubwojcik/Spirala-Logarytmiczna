@@ -2,12 +2,13 @@ package interfejs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
-import java.util.Currency;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,8 +23,8 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	int sizeWindowX = 1920;
-	int sizeWindowY = 1280;
+	int sizeWindowX = 800;
+	int sizeWindowY = 600;
 
 	private Dimension poleSize = new Dimension(); // 100 , 30
 	private Dimension buttonSize = new Dimension();
@@ -45,7 +46,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
 	private static BigDecimal parametrA, parametrB, zakres;
 
-	Window() {
+	private BufferedImage graphBI;
+
+	public Window() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(NAZWAPROGRAMUTEXT);
 		setLocationRelativeTo(null);
@@ -125,10 +128,13 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 
+		graphBI = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
 		try {
 			long start = System.currentTimeMillis();
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
-					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graph).build();
+			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
+					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graphBI).build()
+					.getImage());
 			System.out.println(
 					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {
@@ -203,44 +209,64 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	}
 
+	private void draw(BufferedImage BI) {
+		Graphics2D g2d = (Graphics2D) graph.getGraphics();
+		g2d.drawImage(BI, 0, 0, null);
+	}
+
+	private void draw() {
+		Graphics2D g2d = (Graphics2D) graph.getGraphics();
+		g2d.drawImage(graphBI, 0, 0, null);
+	}
+
 	public static void setParametrAText(String parametrAText) throws Exception {
-		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
-			napisParametrA.setText(parametrAText);
-		else
-			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		if (napisParametrA != null) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+				napisParametrA.setText(parametrAText);
+			else
+				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		}
 	}
 
 	public static void setParametrBText(String parametrBText) throws Exception {
-		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
-			napisParametrB.setText(parametrBText);
-		else
-			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		if (napisParametrB != null) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+				napisParametrB.setText(parametrBText);
+			else
+				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		}
 	}
 
 	public static void setZakresText(String zakresText) throws Exception {
-		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
-			napisZakres.setText(zakresText);
-		else
-			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		if (napisZakres != null) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+				napisZakres.setText(zakresText);
+			else
+				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		}
 	}
 
 	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws Exception {
-		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
-			napisZakresJednostka.setText(jednostkaZakresuText);
-		else
-			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		if (napisZakresJednostka != null) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+				napisZakresJednostka.setText(jednostkaZakresuText);
+			else
+				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		}
 	}
 
 	public static void setKomentarz(String komentarz) throws Exception {
-		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		if (stackTraceElements[2].getClassName().equals("figury.Figury"))
-			poleKomentarz.setText(komentarz);
-		else
-			throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		if (poleKomentarz != null) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+				poleKomentarz.setText(komentarz);
+			else
+				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+		}
 	}
 
 	@Override

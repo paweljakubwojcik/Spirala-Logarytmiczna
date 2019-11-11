@@ -1,6 +1,7 @@
 package figury;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,14 +9,19 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.swing.JPanel;
-
 import wykres.Wykres;
 
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 
-	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, JPanel graph) {
+	/**
+	 * 
+	 * @param parametrA - parametr A spirali
+	 * @param parametrB - parametr B spirali
+	 * @param zakres    - parametr fi
+	 * @param graph     - BufferedImage na którym ma się spirala narysować
+	 */
+	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph) {
 		super(opisy, parametrA, parametrB, zakres, graph);
 	}
 
@@ -50,6 +56,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				az *= 1.0E-1;
 			}
 		}
+
 		System.out.println("wym= " + wym);
 		// rysowanie prostej gdy podane parametry praktycznie prostują wykres
 		if (Double.isNaN(wym) && Math.abs(b) > 1) {
@@ -198,8 +205,8 @@ public class SpiralaLogarytmiczna extends Figury {
 			System.out.println(
 					"Odległosci= " + Math.abs(odleglosc2 - odleglosc1) + "   Szerokość= " + Math.abs(z / Math.PI));
 			if (Math.abs(odleglosc2 - odleglosc1) < Math.abs(z / Math.PI) && Math.abs(odleglosc2 - odleglosc3) <= 3.1
-					&& Math.abs(b) <= 1) {
-				System.out.println("HAHAHAHHAHAHAHAHAH");
+					&& Math.abs(b) <= 1) { // TODO bardzo małe B i małe fi
+				// System.out.println("HAHAHAHHAHAHAHAHAH");
 				punkty.clear();
 				int XStart, XKoniec, YStart, YKoniec;
 				if (graph.getWidth() >= graph.getHeight()) {
@@ -409,7 +416,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			punkty.addAll(set);
 			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 2);
 			if (licznikOdleglosciowy > punkty.size() / 2 && wym != 0 && probki >= 1.0 / 16 || punkty.size() == 0) {
-				new Wykres(graph, punkty, zakres);
+				new Wykres(graph, punkty, zakres); // TODO bardzo małe B i małe fi
 				probki /= 2.0;
 				OK = false;
 			} else {
@@ -493,7 +500,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		BigDecimal parametrA = null;
 		BigDecimal parametrB = null;
 		BigDecimal zakres = null;
-		JPanel graph = null;
+		BufferedImage graph = null;
 
 		@Override
 		public SpiralaLogarytmicznaBuilder setParametrA(BigDecimal parametrA) {
@@ -514,7 +521,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 
 		@Override
-		public SpiralaLogarytmicznaBuilder setGraph(JPanel graph) {
+		public SpiralaLogarytmicznaBuilder setGraph(BufferedImage graph) {
 			this.graph = graph;
 			return this;
 		}

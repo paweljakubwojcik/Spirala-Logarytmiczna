@@ -1,10 +1,9 @@
 package figury;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-
-import javax.swing.JPanel;
 
 import interfejs.Window;
 import wykres.Wykres;
@@ -18,9 +17,9 @@ public abstract class Figury {
 	BigDecimal parametrB;
 	BigDecimal zakres;
 	ArrayList<Point> punkty = new ArrayList<Point>();
-	JPanel graph;
+	BufferedImage graph;
 
-	public Figury(String[] opisy, BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, JPanel graph) {
+	public Figury(String[] opisy, BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph) {
 		this.opisy = opisy;
 		this.parametrA = parametrA;
 		this.parametrB = parametrB;
@@ -30,7 +29,7 @@ public abstract class Figury {
 		wyznaczPunkty();
 		System.out.println(punkty.size());
 		// System.out.println(punkty);
-		System.out.println(graph.getSize());
+		System.out.println(graph.getWidth() + " " + graph.getHeight());
 		new Wykres(graph, punkty, zakres);
 	}
 
@@ -69,5 +68,9 @@ public abstract class Figury {
 			}
 		}
 		return false;
+	}
+
+	public BufferedImage getImage() {
+		return graph;
 	}
 }

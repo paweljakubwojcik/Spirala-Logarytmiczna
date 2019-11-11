@@ -1,14 +1,13 @@
 package figury;
 
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
-
-import javax.swing.JPanel;
 
 interface Builder {
 	BigDecimal parametrA = null;
 	BigDecimal parametrB = null;
 	BigDecimal zakres = null;
-	JPanel graph = null;
+	BufferedImage graph = null;
 
 	public Object setParametrA(BigDecimal parametrA);
 
@@ -16,7 +15,7 @@ interface Builder {
 
 	public Object setZakres(BigDecimal zakres);
 
-	public Object setGraph(JPanel graph);
+	public Object setGraph(BufferedImage graph);
 
 	public Object build() throws Exception;
 
