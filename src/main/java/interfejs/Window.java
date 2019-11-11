@@ -46,7 +46,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
 	private static BigDecimal parametrA, parametrB, zakres;
 
-	private BufferedImage graphBI;
+	private BufferedImage graphImage;
 
 	public Window() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,12 +128,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////
 
-		graphBI = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		try {
 			long start = System.currentTimeMillis();
 			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
-					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graphBI).build()
+					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graphImage).build()
 					.getImage());
 			System.out.println(
 					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
@@ -216,7 +216,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	private void draw() {
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-		g2d.drawImage(graphBI, 0, 0, null);
+		g2d.drawImage(graphImage, 0, 0, null);
 	}
 
 	public static void setParametrAText(String parametrAText) throws Exception {

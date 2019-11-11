@@ -2,7 +2,7 @@ package figury;
 
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
-
+//TODO JavaDoc
 interface Builder {
 	BigDecimal parametrA = null;
 	BigDecimal parametrB = null;
