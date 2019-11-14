@@ -53,7 +53,7 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			System.err.println(e.getMessage());
 		}
 		BufferedImage spirala = new BufferedImage(width, height, imageType);
-		URL url = getClass().getResource("/Wykres[" + b + "," + z + "].png");
+		URL url = getClass().getResource("images/Wykres[" + b + "," + z + "].png");
 		try {
 			spirala = ImageIO.read(url);
 		} catch (IOException e) {

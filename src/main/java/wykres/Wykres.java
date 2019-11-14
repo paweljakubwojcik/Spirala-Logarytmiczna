@@ -34,7 +34,7 @@ public class Wykres {
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);
 
-		// Generowanie obrazków do testów
+		// Generowanie obrazków do testów zostawić w spokoju te 5 linijek poniżej
 //		try {
 //			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[0.1,30].png"));
 //		} catch (IOException e) {
