@@ -9,6 +9,7 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'io.qameta.allure' version '2.5'
 }
 
 repositories {
@@ -30,8 +31,17 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter-params:5.5.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.2")
     testCompile	'org.mockito:mockito-core:2.+'
-    
-    
+       
+}
+
+allure {
+    autoconfigure = true
+    version = '2.7.0'  // Latest Allure Version
+
+    useJUnit5 {
+        version = '2.7.0' // Latest Allure Version
+    }
+
 }
 
 test {
