@@ -9,7 +9,7 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
-    id 'net.saliman.cobertura' version '3.0.0'
+    id 'jacoco'
 }
 
 repositories {
@@ -31,16 +31,13 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter-params:5.5.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.2")
     testCompile	'org.mockito:mockito-core:2.+'
-    testRuntimeOnly 'net.sourceforge.cobertura:cobertura:2.1.1'
 }
 
 test {
     useJUnitPlatform()
 }
 
-cobertura {
-   rootProject.subprojects.each {
-     coverageDirs << file("${it.name}/build/test-results/coverage")
-   }
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/jacoco")
 }
-
