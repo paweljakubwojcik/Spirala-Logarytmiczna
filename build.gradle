@@ -49,3 +49,7 @@ jacocoTestReport {
         html.destination file("${buildDir}/jacoco")
     }
 }
+
+tasks.register("cleanJUnit") {
+    delete '${buildDir}/test-results'
+}
