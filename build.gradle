@@ -37,4 +37,9 @@ test {
     useJUnitPlatform()
 }
 
+cobertura {
+   rootProject.subprojects.each {
+     coverageDirs << file("${it.name}/build/test-results/coverage")
+   }
+}
 
