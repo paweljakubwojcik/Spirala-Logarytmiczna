@@ -51,5 +51,8 @@ jacocoTestReport {
 }
 
 tasks.register("cleanJUnit") {
-    delete '${buildDir}/test-results'
+    def dirName ="${buildDir}/test-results"
+    file ( dirName ).list().each{
+       f -> delete "${dirName}/${f}" 
+    }
 }
