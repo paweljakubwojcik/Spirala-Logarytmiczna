@@ -56,3 +56,9 @@ tasks.register("cleanJUnit") {
        f -> delete "${dirName}/${f}" 
     }
 }
+
+apply plugin: 'java'
+
+javadoc {
+    source = sourceSets.main.allJava
+}
