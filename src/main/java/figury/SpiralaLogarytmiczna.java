@@ -8,7 +8,13 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import wykres.Wykres;
-//TODO JavaDoc
+
+/**
+ * Wyznacza punkty spirali oraz opisy i komentarze w interfejs.Window
+ * 
+ * @author 7Adrian
+ *
+ */
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 
@@ -16,7 +22,7 @@ public class SpiralaLogarytmiczna extends Figury {
 	 * 
 	 * @param parametrA - parametr A spirali
 	 * @param parametrB - parametr B spirali
-	 * @param zakres    - parametr fi
+	 * @param zakres    - zakres rysowania spirali
 	 * @param graph     - BufferedImage na którym ma się spirala narysować
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph) {
@@ -209,6 +215,13 @@ public class SpiralaLogarytmiczna extends Figury {
 
 	}
 
+	/**
+	 * Odbicie lustrzane rysunku w zależności od ćwiartki
+	 * 
+	 * @param stopnie - kąt do którego docelowo funkcja ma się transformować
+	 * @param graphW2 - połowa szerokości rysowanego okienka
+	 * @param graphH2 - połowa wysokości rysowanego okeinka
+	 */
 	private void mirrorTransformForDegree(double stopnie, int graphW2, int graphH2) {
 		if (stopnie >= 0) {
 			if (stopnie > 90 && stopnie < 180) {
@@ -248,17 +261,40 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 	}
 
+	/**
+	 * Dodaje punkt dla zadanej wartości kąta FI
+	 * 
+	 * @param a      - parametr A funkcji
+	 * @param b      - parametr B funkcji
+	 * @param katFI  - kat dla którego liczymy wartość funkcji
+	 * @param skala  - skala z jaką rysujemy spiralę
+	 * @param graphW - szerokość rysowanego okienka
+	 * @param graphH - wysokość rysowanego okienka
+	 * @param katy   - lista do której punkt będzie dodany
+	 */
 	private void addPointOfFunction(double a, double b, double katFI, double skala, int graphW, int graphH,
 			ArrayList<KatPunkt> katy) {
 		double xf = wartoscFunkcjiX(a, b, katFI);
 		double yf = wartoscFunkcjiY(a, b, katFI);
 		Point pkt = transformFunctionToPixels(xf, yf, skala, graphW, graphH);
-		if (pkt.x >= 0 && pkt.y >= 0 && pkt.x < graphW && pkt.y < graphH) {
+		if (isXYinImage(pkt, graphW, graphH)) {
 			katy.add(new KatPunkt(katFI, pkt));
 		}
 
 	}
 
+	/**
+	 * Liczy kąt FI spirali dla zadanych wartości
+	 * 
+	 * @param X      - wartość X w pixelach
+	 * @param Y      - wartość Y w pixelach
+	 * @param a      - parametr A funkcji
+	 * @param b      - parametr B funkcji
+	 * @param skala  - skala z jaką rysujemy spiralę
+	 * @param graphW - szerokość rysowanego okienka
+	 * @param graphH - wysokość rysowanego okienka
+	 * @return - kąt Fi funkcji
+	 */
 	private double getKatFI(double X, double Y, double a, double b, double skala, int graphW, int graphH) {
 		int graphW2 = graphW / 2;
 		int graphH2 = graphH / 2;
@@ -275,16 +311,35 @@ public class SpiralaLogarytmiczna extends Figury {
 		return a * Math.pow(Math.E, b * z) * Math.sin(z);
 	}
 
+	/**
+	 * Klasa przypominająca klasę Point z API Javy, natomiast rozszerząja ją o
+	 * dodatkową zmienną zmiennoprzecinkową
+	 * 
+	 * @author 7Adrian
+	 *
+	 */
 	private class KatPunkt {
 		double kat;
 		Point pkt;
 
+		/**
+		 * Tworzy nowy punkt
+		 * 
+		 * @param kat - wartość kąta
+		 * @param pkt - punkt
+		 */
 		public KatPunkt(double kat, Point pkt) {
 			this.kat = kat;
 			this.pkt = pkt;
 		}
 	}
 
+	/**
+	 * Builder dla figury.SpiralaLogarytmiczna
+	 * 
+	 * @author 7Adrian
+	 *
+	 */
 	public static class SpiralaLogarytmicznaBuilder implements Builder {
 		BigDecimal parametrA = null;
 		BigDecimal parametrB = null;
