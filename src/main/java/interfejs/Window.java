@@ -118,8 +118,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		add(poleKomentarz);
 		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));//
 
-		przeskalujOkienko();// w tym miejscu ustawia size wszystkich element�w
-		addComponentListener(this); // musi by� za metod� przeskalujOkienko();
+		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
+		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
 
 		setVisible(true);
 
@@ -152,10 +152,10 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		sizeWindowY = this.getHeight();
 
 		poleSize.width = 50;
-		poleSize.height = 30;
+		poleSize.height = sizeWindowY / 30;
 
 		buttonSize.width = 100;
-		buttonSize.height = 30;
+		buttonSize.height = sizeWindowY / 30;
 
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -164,33 +164,35 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		graph.setSize(sizeWindowX - sizeWindowX / 20, sizeWindowY * 4 / 6);
 		graph.setLocation(sizeWindowX / 80, napisNazwaProgramu.getHeight());
+		graph.setAlignmentX(100);
 
-		int locationY = graph.getY() + graph.getHeight() + sizeWindowY / 60;
-		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma d�ugo�ci element�w)/ilosc element�w
+		int odstepY = sizeWindowY / 60;
+		int locationY = graph.getY() + graph.getHeight() + odstepY;
+		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
 													// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
-		napisParametry.setSize(70, 30);
+		napisParametry.setSize(70, poleSize.height);
 		napisParametry.setLocation(graph.getX(), locationY);
 
-		napisParametrA.setSize(20, 30);
+		napisParametrA.setSize(20, poleSize.height);
 		napisParametrA.setLocation(napisParametry.getLocation().x + napisParametry.getSize().width + odstep, locationY);
 
 		poleParametrA.setSize(poleSize);
 		poleParametrA.setLocation(napisParametrA.getLocation().x + napisParametrA.getSize().width, locationY);
 
-		napisParametrB.setSize(20, 30);
+		napisParametrB.setSize(20, poleSize.height);
 		napisParametrB.setLocation(poleParametrA.getLocation().x + poleParametrA.getSize().width + odstep, locationY);
 
 		poleParametrB.setSize(poleSize);
 		poleParametrB.setLocation(napisParametrB.getX() + napisParametrB.getWidth(), locationY);
 
-		napisZakres.setSize(50, 30);
+		napisZakres.setSize(50, poleSize.height);
 		napisZakres.setLocation(poleParametrB.getLocation().x + poleParametrB.getSize().width + odstep, locationY);
 
 		poleZakres.setSize(poleSize);
 		poleZakres.setLocation(napisZakres.getX() + napisZakres.getWidth(), locationY);
 
-		napisZakresJednostka.setSize(30, 30);
+		napisZakresJednostka.setSize(30, poleSize.height);
 		napisZakresJednostka.setLocation(poleZakres.getLocation().x + poleZakres.getSize().width, locationY);
 
 		// jbUTTON
@@ -203,8 +205,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskPelnyEkran.setSize(buttonSize);
 		przyciskPelnyEkran.setLocation(przyciskCzysc.getX() + przyciskCzysc.getWidth() + odstep, locationY);
 
-		poleKomentarz.setLocation(graph.getX(), locationY + 40);
-		poleKomentarz.setSize(graph.getWidth(), 50);
+		poleKomentarz.setLocation(graph.getX(), locationY + odstepY + poleSize.height);
+		poleKomentarz.setSize(graph.getWidth(),
+				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 30);
 
 	}
 
