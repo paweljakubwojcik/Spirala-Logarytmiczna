@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 
 /**
  * Interface wzorca projektowego Budowniczy. Należy go zaimplementować kiedy
- * chcemy utworzyć nową figurę. <br>
+ * chcemy utworzyć nową figurę. 
  * W implementowanej funkcji należy zmienić Object na nazwę klasy wewnętrznej
  * którą tworzy do stworzenia budowniczego, natomiast przy metodzie build należy
- * zmienić Object na nazwę klasy obiekt której zwracamy. <br>
- * <br>
- * <b>Uwaga: Należy ustawić każdy parametr aby funkcja mogła się policzyć!</b>
- * <br>
+ * zmienić Object na nazwę klasy obiekt której zwracamy. 
+ * 
+ * Uwaga: Należy ustawić każdy parametr aby funkcja mogła się policzyć!
+ * 
  * 
  * @author 7Adrian
  *
