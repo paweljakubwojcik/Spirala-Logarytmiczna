@@ -103,12 +103,15 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		// JButtons
 		przyciskCzysc = new JButton(CZYSCTEXT);
+		przyciskCzysc.addActionListener(this);
 		add(przyciskCzysc);
 
 		przyciskRysuj = new JButton(RYSUJTEXT);
+		przyciskRysuj.addActionListener(this);
 		add(przyciskRysuj);
 
 		przyciskPelnyEkran = new JButton(PELNYEKRANTEXT);
+		przyciskPelnyEkran.addActionListener(this);
 		add(przyciskPelnyEkran);
 
 		poleKomentarz = new JLabel();
@@ -133,8 +136,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		try {
 			long start = System.currentTimeMillis();
 			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
-					.setParametrB(new BigDecimal("0.000000001")).setZakres(new BigDecimal("10")).setGraph(graphImage).build()
-					.getImage());
+					.setParametrB(new BigDecimal("0.000000001")).setZakres(new BigDecimal("10")).setGraph(graphImage)
+					.build().getImage());
 			System.out.println(
 					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {
@@ -300,8 +303,25 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
+		JButton obj = (JButton) e.getSource();
+		if (obj == przyciskRysuj) {
+			graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = (Graphics2D) graph.getGraphics();
+			g2d.drawImage(nic, 0, 0, null);
+			try {
+				long start = System.currentTimeMillis();
+				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder()
+						.setParametrA(new BigDecimal(poleParametrA.getText()))
+						.setParametrB(new BigDecimal(poleParametrB.getText()))
+						.setZakres(new BigDecimal(poleZakres.getText())).setGraph(graphImage).build().getImage());
+				System.out.println(
+						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+			} catch (Exception exc) {
+				exc.printStackTrace();
+				System.err.println(exc.getMessage());
+			}
+		}
 	}
 
 }
