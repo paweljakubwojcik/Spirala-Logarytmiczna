@@ -43,7 +43,7 @@ class SpiralaLogarytmicznaWydajnoscTestJUnit5 {
 			"0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75" })
 	@DisplayName(value = "Testy wydajności spirali")
 	void testRysowania(String a, String b, String z) {
-		assertTimeout(Duration.ofMillis(1000), () -> {
+		assertTimeout(Duration.ofMillis(2000), () -> {
 			try {
 				new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal(a))
 						.setParametrB(new BigDecimal(b)).setZakres(new BigDecimal(z)).setGraph(graph).build();
