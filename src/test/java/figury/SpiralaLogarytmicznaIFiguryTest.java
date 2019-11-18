@@ -225,7 +225,7 @@ class SpiralaLogarytmicznaIFiguryTest {
 	@ParameterizedTest(name = "X= {0}; Y= {1}; graphW= {2}; graphH= {3}; wynik= {4}")
 	@CsvSource({ "10, 20, 800, 600, True", "-10, 20, 800, 600, False", "-10, -20, 800, 600, False",
 			"900, 20, 800, 600, False", "10, 800, 800, 600, False", "800, 20, 800, 600, False",
-			"10, 600, 800, 600, False", "800, 600, 800, 600, False" })
+			"10, 600, 800, 600, False", "800, 600, 800, 600, False", "10, -20, 800, 600, False" })
 	@DisplayName(value = "Testy funkcji isXYinImage(dla X, Y, graphW, graphH)")
 	void testIsXYinImageDoubleDoubleIntInt(double X, double Y, int graphW, int graphH, boolean expectedResult) {
 		// Given
@@ -239,7 +239,7 @@ class SpiralaLogarytmicznaIFiguryTest {
 	@ParameterizedTest(name = "pkt.X= {0}; pkt.Y= {1}; graphW= {2}; graphH= {3}; wynik= {4}")
 	@CsvSource({ "10, 20, 800, 600, True", "-10, 20, 800, 600, False", "-10, -20, 800, 600, False",
 			"900, 20, 800, 600, False", "10, 800, 800, 600, False", "800, 20, 800, 600, False",
-			"10, 600, 800, 600, False", "800, 600, 800, 600, False" })
+			"10, 600, 800, 600, False", "800, 600, 800, 600, False", "10, -20, 800, 600, False" })
 	@DisplayName(value = "Testy funkcji isXYinImage(dla Point, graphW, graphH)")
 	void testIsXYinImagePointIntInt(double X, double Y, int graphW, int graphH, boolean expectedResult) {
 		// Given

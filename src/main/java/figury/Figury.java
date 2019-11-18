@@ -274,13 +274,13 @@ public abstract class Figury {
 			if (x2 > x1) {
 				for (int DX = 1; DX < x2 - x1; DX++) {
 					pkt = new Point((int) (x1 + DX), (int) (aa * DX + y1));
-					if (pkt.x >= 0 && pkt.x < graphW && pkt.y >= 0 && pkt.y < graphH)
+					if (isXYinImage(pkt, graphW, graphH))
 						punkty.add(pkt);
 				}
 			} else {
 				for (int DX = 1; DX < x1 - x2; DX++) {
 					pkt = new Point((int) (x2 + DX), (int) (aa * DX + y2));
-					if (pkt.x >= 0 && pkt.x < graphW && pkt.y >= 0 && pkt.y < graphH)
+					if (isXYinImage(pkt, graphW, graphH))
 						punkty.add(pkt);
 				}
 			}
@@ -288,13 +288,13 @@ public abstract class Figury {
 			if (y2 > y1) {
 				for (int DY = 1; DY < y2 - y1; DY++) {
 					pkt = new Point((int) (bb * DY + x1), (int) (y1 + DY));
-					if (pkt.x >= 0 && pkt.x < graphW && pkt.y >= 0 && pkt.y < graphH)
+					if (isXYinImage(pkt, graphW, graphH))
 						punkty.add(pkt);
 				}
 			} else {
 				for (int DY = 1; DY < y1 - y2; DY++) {
 					pkt = new Point((int) (bb * DY + x2), (int) (y2 + DY));
-					if (pkt.x >= 0 && pkt.x < graphW && pkt.y >= 0 && pkt.y < graphH)
+					if (isXYinImage(pkt, graphW, graphH))
 						punkty.add(pkt);
 				}
 			}
