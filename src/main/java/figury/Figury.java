@@ -344,7 +344,7 @@ public abstract class Figury {
 	 * @return - kąt bez wielokrotności liczby 2 PI
 	 */
 	public static double getRadWithout2PIMultiply(double rad) {
-		return rad - 2 * Math.PI * ((int) (rad / Math.PI));
+		return rad - 2 * Math.PI * ((int) (rad / 2 / Math.PI));
 	}
 
 	/**

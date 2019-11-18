@@ -42,7 +42,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 	@CsvSource({ "0.5, 0.1, 30", "0.5, 0.1, 2", "0.5, 0.001, 200", "0.5, 0.001, 2000", "0.5, 0.0000001, 2000",
 			"0.5, 0.3, 70", "0.5, 0, 200", "0.5, 1.1, 200.82", "0.5, 1.1, 201.49", "0.5, 1.1, 201.82",
 			"0.5, 1.1, -6.82", "0.5, 1.5, 201.23", "0.5, 1.15, 201.70", "0.5, 1, 200", "0.5, 2.5, 201",
-			"0.5, 5, 200.24", "0.5, 7.5, 200.50", "0.5, 10, 200.75", "0.5, -1.1, 6.82", "0.5, -1.1, -6.82", "0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75" })
+			"0.5, 5, 200.24", "0.5, 7.5, 200.50", "0.5, 10, 200.75", "0.5, -1.1, 6.82", "0.5, -1.1, -6.82",
+			"0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75" })
 	@DisplayName(value = "Testy powstawania spirali")
 	void testRysowania(String a, String b, String z) {
 		try {
@@ -53,7 +54,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			System.err.println(e.getMessage());
 		}
 		BufferedImage spirala = new BufferedImage(width, height, imageType);
-		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); ///figury/images/Wykres dla javy
+		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); /// figury/images/Wykres dla
+																							/// javy
 		try {
 			spirala = ImageIO.read(url);
 		} catch (IOException e) {

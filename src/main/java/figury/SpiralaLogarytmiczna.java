@@ -371,27 +371,26 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 
 		@Override
-		public SpiralaLogarytmiczna build() throws Exception {
+		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
 			SpiralaLogarytmiczna.setKomentarz(sprawdzParametry());
 			if (parametrA != null && parametrB != null && zakres != null && graph != null && sprawdzParametry() == null)
 				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph);
 			else if (parametrA == null)
-				throw new Exception("Parametr A nie został ustawiony");
+				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
 			else if (parametrB == null)
-				throw new Exception("Parametr B nie został ustawiony");
+				throw new ExceptionInInitializerError("Parametr B nie został ustawiony");
 			else if (zakres == null)
-				throw new Exception("Parametr zakres nie został ustawiony");
+				throw new ExceptionInInitializerError("Parametr zakres nie został ustawiony");
 			else if (graph == null)
-				throw new Exception("Parametr graph nie został ustawiony");
-			else if (sprawdzParametry() != null)
-				throw new Exception("Błąd wprowadzonych parametrów");
-			return null;
+				throw new ExceptionInInitializerError("Parametr graph nie został ustawiony");
+			else
+				throw new ExceptionInInitializerError("Błąd wprowadzonych parametrów");
 		}
 
 		@Override
 		public int[] sprawdzParametry() {
 			int[] a = { 0, 1 };
-			if (parametrA.compareTo(new BigDecimal(0)) == 1) {
+			if (parametrA != null && parametrA.compareTo(new BigDecimal(0)) == 1) {
 				return null;
 			}
 			return a;
