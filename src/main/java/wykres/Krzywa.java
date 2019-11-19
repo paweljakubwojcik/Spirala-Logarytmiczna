@@ -15,6 +15,7 @@ public class Krzywa {
 		long start = System.currentTimeMillis();
 		while (punkty.size() > 0) {
 			int nr = punkty.size() - 1;
+			// System.out.print(punkty.get(nr).x + " " + punkty.get(nr).y + " ");
 			krzywa.setRGB(punkty.get(nr).x, punkty.get(nr).y, Color.BLUE.getRGB());
 			punkty.remove(nr);
 		}
