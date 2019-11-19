@@ -22,11 +22,11 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	int sizeWindowX = 1920;
-	int sizeWindowY = 1280;
+	int sizeWindowX = 800;
+	int sizeWindowY = 600;
 
-	private Dimension poleSize = new Dimension(); // 100 , 30
-	private Dimension buttonSize = new Dimension();
+	private Dimension poleSize = new Dimension(50, 30); // 100 , 30
+	private Dimension buttonSize = new Dimension(100, 30);
 	private Dimension minimumSize = new Dimension(640, 300);
 
 	private static JPanel graph;
@@ -39,8 +39,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static final String NAZWAPROGRAMUTEXT = "Spirala Logarytmiczna";
 	public static final String PARAMETRYTEXT = "XXX";
 	public static final String RYSUJTEXT = "RYSUJ";
-	public static final String CZYSCTEXT = "CZYŚĆ";
-	public static final String PELNYEKRANTEXT = "PEŁNY EKRAN";
+	public static final String CZYSCTEXT = "CZYĹšÄ†";
+	public static final String PELNYEKRANTEXT = "PEĹ�NY EKRAN";
 
 	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
 	private static BigDecimal parametrA, parametrB, zakres;
@@ -101,23 +101,26 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// JButtons
 		przyciskCzysc = new JButton(CZYSCTEXT);
 		add(przyciskCzysc);
+		przyciskCzysc.addActionListener(this);
 
 		przyciskRysuj = new JButton(RYSUJTEXT);
 		add(przyciskRysuj);
+		przyciskRysuj.addActionListener(this);
 
 		przyciskPelnyEkran = new JButton(PELNYEKRANTEXT);
 		add(przyciskPelnyEkran);
+		przyciskPelnyEkran.addActionListener(this);
 
 		poleKomentarz = new JLabel();
 		add(poleKomentarz);
 		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));//
 
-		przeskalujOkienko();// w tym miejscu ustawia size wszystkich element�w
-		addComponentListener(this); // musi by� za metod� przeskalujOkienko();
+		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
+		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
 
 		setVisible(true);
 
-		//////// Spanie jest po to żeby nie znikała szybko narysowana spirala ////////
+		//////// Spanie jest po to ĹĽeby nie znikaĹ‚a szybko narysowana spirala ////////
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e1) {
@@ -130,7 +133,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
 					.setParametrB(new BigDecimal("0.1")).setZakres(new BigDecimal("30")).setGraph(graph).build();
 			System.out.println(
-					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+					"Wykonywanie Spirali trwaĹ‚o: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
@@ -142,12 +145,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		sizeWindowX = this.getWidth();
 		sizeWindowY = this.getHeight();
 
-		poleSize.width = 50;
-		poleSize.height = 30;
-
-		buttonSize.width = 100;
-		buttonSize.height = 30;
-
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
 		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
@@ -157,7 +154,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		graph.setLocation(sizeWindowX / 80, napisNazwaProgramu.getHeight());
 
 		int locationY = graph.getY() + graph.getHeight() + sizeWindowY / 60;
-		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma d�ugo�ci element�w)/ilosc element�w
+		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma dďż˝ugoďż˝ci elementďż˝w)/ilosc
+													// elementďż˝w
 													// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
 		napisParametry.setSize(70, 30);
@@ -258,7 +256,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// Jeśli tworzenie wykresu będzie zajmowało dużo czasu trzeba będzie ustawić
+			// JeĹ›li tworzenie wykresu bÄ™dzie zajmowaĹ‚o duĹĽo czasu trzeba bÄ™dzie
+			// ustawiÄ‡
 			// tutaj spanko
 			// System.out.println("resize");
 			przeskalujOkienko();
@@ -274,7 +273,36 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
+		if (e.getSource() == przyciskRysuj) {
+			String wpisaneA = poleParametrA.getText();
+			boolean isThatANumber = true;
+
+			for (int i = 0; i < wpisaneA.length(); i++) {
+				if ((int) poleParametrA.getText().charAt(i) > 57 || (int) poleParametrA.getText().charAt(i) < 49) {
+					// dodaj komentarz w polu komentarzy aby wpisac poprawne dane
+					System.out.print("to nie jest liczba");
+
+					isThatANumber = false;
+					break;
+				}
+			}
+			if (isThatANumber) {
+				if (Double.valueOf(poleParametrA.getText()) >= 0) {
+
+				}
+			}
+		}
+
+		;
+
+		if (e.getSource() == przyciskCzysc) {
+			System.out.println("Czyscze");
+		}
+
+		if (e.getSource() == przyciskPelnyEkran) {
+			System.out.println("rOBIE PELNY EKRAN");
+		}
 
 	}
 
