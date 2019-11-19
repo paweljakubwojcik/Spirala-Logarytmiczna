@@ -39,8 +39,6 @@ public class SpiralaLogarytmiczna extends Figury {
 		int graphH = graph.getHeight();
 		int graphW2 = graphW / 2;
 		int graphH2 = graphH / 2;
-		System.err.println("b= " + b);
-		System.err.println("z= " + z / Math.PI);
 		double az = a;
 		double skala = 0;
 		double rozmiarMin = Math.min(graphW, graphH);
@@ -67,14 +65,11 @@ public class SpiralaLogarytmiczna extends Figury {
 				Xm = 0.0;
 				Ym = 0.0;
 			}
-//			System.out.println("roz= " + roz);
 			skala = getSkala(rozmiarMin, Xm, Ym, Xs, Ys);
-//			System.out.println("wym= " + wym);
 			if (skala == 0) {
 				az *= 1.0E-1;
 			}
 		}
-		System.out.println("wym= " + skala);
 
 		// rysowanie prostej gdy podane parametry praktycznie prostują wykres
 		if (Double.isNaN(skala) && Math.abs(b) > 1) {
@@ -113,8 +108,6 @@ public class SpiralaLogarytmiczna extends Figury {
 		double odlOstPKT = mathDistanceOfPoints(pkt2.x, pkt2.y, graphW2, graphH2);
 		double odlPOstPKT = mathDistanceOfPoints(pkt3.x, pkt3.y, graphW2, graphH2);
 
-		System.out.println("Delta odległości= " + Math.abs(odlOstPKT - odlPOstPKT));
-		System.out.println("Odległosci= " + Math.abs(odlOstPKT - odl1PKT) + "   Szerokość= " + Math.abs(zRad));
 		if (Math.abs(odlOstPKT - odl1PKT) < Math.abs(zRad) && Math.abs(odlOstPKT - odlPOstPKT) <= 4 && Math.abs(b) <= 1
 				&& Math.abs(zRad) >= 2) {
 			punkty.clear();
@@ -172,7 +165,6 @@ public class SpiralaLogarytmiczna extends Figury {
 				}
 			}
 			clearDoubledPoints(punkty);
-//			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 2);
 			if (licznikOdleglosciowy > punkty.size() / 2 && probki >= 1.0 / 16 || punkty.size() == 0) {
 				new Wykres(graph, punkty, zakres);
 				probki /= 2.0;

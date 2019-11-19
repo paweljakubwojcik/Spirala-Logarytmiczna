@@ -88,14 +88,12 @@ class SpiralaLogarytmicznaTestJUnit5 {
 				}
 			}
 		} else {
-			System.err.println("Rozmiary różne");
 			return 1;
 		}
 		System.out.println("Stosunek błędnych pixeli= " + iloscBlednychPixeli * 100 / iloscPixeli + "%");
 		if (iloscBlednychPixeli / iloscPixeli >= 0.01) {
 			return iloscBlednychPixeli / iloscPixeli;
 		}
-		System.err.println("Takie same są");
 		return 0;
 	}
 

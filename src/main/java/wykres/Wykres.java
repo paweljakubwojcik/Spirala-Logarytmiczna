@@ -36,16 +36,8 @@ public class Wykres {
 //			e.printStackTrace();
 //		}
 
-//		while (true) {
 		Graphics2D g = (Graphics2D) graph.getGraphics();
 		g.drawImage(wykres, 0, 0, null);
-
-//			try {
-//				Thread.sleep(20);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 
 	private void scalObrazki() {
