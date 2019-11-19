@@ -7,6 +7,12 @@ import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
+ * 
+ * @author 7Adrian
+ * @since 1.0
+ */
 public class Wykres {
 	private BufferedImage graph;
 	private ArrayList<Point> punkty;

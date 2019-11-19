@@ -5,6 +5,11 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * Rysuje punkty na wykresie z podanej listy
+ * 
+ * @since 1.0
+ */
 public class Krzywa {
 	private static BufferedImage krzywa;
 

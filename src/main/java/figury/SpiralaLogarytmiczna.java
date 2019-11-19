@@ -13,7 +13,7 @@ import wykres.Wykres;
  * Wyznacza punkty spirali oraz opisy i komentarze w interfejs.Window
  * 
  * @author 7Adrian
- *
+ * @since 1.0
  */
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };

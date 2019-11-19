@@ -20,6 +20,12 @@ import javax.swing.SwingConstants;
 
 import figury.SpiralaLogarytmiczna;
 
+/**
+ * Tworzy okienko, obsługuje przyciski, skaluje okienko.
+ * 
+ * @author pafeu
+ * @since 1.0
+ */
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 

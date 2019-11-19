@@ -9,7 +9,7 @@ package interfejs;
  * 
  * @author 7Adrian
  * @author pafeu
- *
+ * @since 1.0
  */
 public class Main {
 

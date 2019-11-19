@@ -17,7 +17,7 @@ import wykres.Wykres;
  * w klasie interfejs.Window.
  * 
  * @author 7Adrian
- *
+ * @since 1.0
  */
 public abstract class Figury {
 
