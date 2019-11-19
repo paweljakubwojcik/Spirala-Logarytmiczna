@@ -480,6 +480,17 @@ public abstract class Figury {
 	}
 
 	/**
+	 * Rysuje koło wpisane w kwadrat zrobiony z wymiarów graphW i graphH
+	 * 
+	 * @param graphW - szerokość obszaru rysowanego
+	 * @param graphH - wysokość obszaru rysowanego
+	 * @param punkty - ArrayList<Point> w której wyznaczone punkty zostaną zapisane
+	 */
+	public static void drawCircle(int graphW, int graphH, ArrayList<Point> punkty) {
+		drawRing(0.0, Math.min(graphW, graphH) / 2.0, graphW, graphH, punkty);
+	}
+
+	/**
 	 * Liczy odległość między początkiem układu kartezjańskiego a punktem
 	 * 
 	 * @param x - współrzędna x punktu

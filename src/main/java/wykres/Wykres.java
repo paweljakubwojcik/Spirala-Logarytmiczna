@@ -31,7 +31,7 @@ public class Wykres {
 
 		// Generowanie obrazków do testów zostawić w spokoju te 5 linijek poniżej
 //		try {
-//			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[0.1,30].png"));
+//			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[10.123,-1000.5].png"));
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
