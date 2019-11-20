@@ -32,6 +32,9 @@ class WindowTest {
 	@Test
 	final void testWindow() {
 		// TODO Posprawdzać pozostałe pola w sposób dostępu do prywatnych pól
+		// Given
+		// When
+		// THEN
 		assertAll("Sprawdza opisy utworzonego okienka", () -> assertEquals("Spirala Logarytmiczna", okno.getTitle()),
 				() -> assertEquals("Spirala Logarytmiczna", Window.NAZWAPROGRAMUTEXT),
 				() -> assertTrue(okno.isVisible()));
@@ -76,14 +79,21 @@ class WindowTest {
 	@DisplayName(value = "testComponentHidden")
 	@Test
 	final void testComponentHidden() {
+		// Given
 		okno.componentHidden(s);
+		// When
+		// Then
 		assertTrue(true);
 	}
 
 	@DisplayName(value = "testComponentMoved")
 	@Test
 	final void testComponentMoved() {
+		// Given
 		okno.componentMoved(s);
+		// When
+		// Then
+		assertTrue(true);
 	}
 
 	@Disabled
@@ -95,7 +105,11 @@ class WindowTest {
 	@DisplayName(value = "testComponentShown")
 	@Test
 	final void testComponentShown() {
+		// Given
 		okno.componentShown(s);
+		// When
+		// Then
+		assertTrue(true);
 	}
 
 	@DisplayName(value = "Wciśnięcie przycisku w JFrame")
