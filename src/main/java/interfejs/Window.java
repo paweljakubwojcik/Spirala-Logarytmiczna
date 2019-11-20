@@ -49,6 +49,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private BufferedImage graphImage;
 
 	public Window() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(NAZWAPROGRAMUTEXT);
 		setLocationRelativeTo(null);
@@ -139,9 +140,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// Rysowanie obrazka startowego
 		try {
 			long start = System.currentTimeMillis();
-			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
-					.setParametrB(new BigDecimal("0.000000001")).setZakres(new BigDecimal("10")).setGraph(graphImage)
-					.build().getImage());
+			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.000000001")
+					.setZakres("10").setGraph(graphImage).build().getImage());
 			System.out.println(
 					"Wykonywanie Spirali trwaĹ‚o: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {
@@ -337,12 +337,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			g2d.drawImage(nic, 0, 0, null);
 			try {
 				long start = System.currentTimeMillis();
-				
-				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder()
-						.setParametrA(new BigDecimal(poleParametrA.getText()))
-						.setParametrB(new BigDecimal(poleParametrB.getText()))
-						.setZakres(new BigDecimal(poleZakres.getText())).setGraph(graphImage).build().getImage());
-				
+
+				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
+						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
+						.build().getImage());
+
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 			} catch (Exception exc) {

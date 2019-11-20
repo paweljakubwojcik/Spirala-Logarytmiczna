@@ -54,7 +54,8 @@ public class SpiralaLogarytmiczna extends Figury {
 			katStop = 0;
 		}
 
-		// Próba znalezienia takiego a żeby mimo wszystko dało się narysować coś nie nie
+		// Próba znalezienia takiego a żeby mimo wszystko dało się narysować coś
+		// nie nie
 		// będącego oskryptowaną figurą, oraz wyznaczenie skali rysunku
 		while (skala == 0) {
 			double Xs = wartoscFunkcjiX(az, b, 0);
@@ -86,7 +87,8 @@ public class SpiralaLogarytmiczna extends Figury {
 			mirrorTransformForDegree(stopnie, graphW2, graphH2);
 			return;
 		} else if (Double.isNaN(skala) && Math.abs(b) < 1) {
-			// TODO tu trzeba narysować koło i sprawdzić X i Y czy są te największe i czy
+			// TODO tu trzeba narysować koło i sprawdzić X i Y czy są te największe i
+			// czy
 			// wgl ta część kodu jest jeszcze potrzebna
 			double mojeR = rozmiarMin2;
 			System.out.println("Koło");
@@ -341,26 +343,31 @@ public class SpiralaLogarytmiczna extends Figury {
 	 *
 	 */
 	public static class SpiralaLogarytmicznaBuilder implements Builder {
+		String parametrAText = null;
+		String parametrBText = null;
+		String zakresText = null;
+
 		BigDecimal parametrA = null;
 		BigDecimal parametrB = null;
 		BigDecimal zakres = null;
 		BufferedImage graph = null;
 
 		@Override
-		public SpiralaLogarytmicznaBuilder setParametrA(BigDecimal parametrA) {
-			this.parametrA = parametrA;
+		public SpiralaLogarytmicznaBuilder setParametrA(String parametrA) {
+			this.parametrAText = parametrA;
 			return this;
 		}
 
 		@Override
-		public SpiralaLogarytmicznaBuilder setParametrB(BigDecimal parametrB) {
-			this.parametrB = parametrB;
+		public SpiralaLogarytmicznaBuilder setParametrB(String parametrBText) {
+			this.parametrBText = parametrBText;
 			return this;
 		}
 
 		@Override
-		public SpiralaLogarytmicznaBuilder setZakres(BigDecimal zakres) {
-			this.zakres = zakres.multiply(new BigDecimal(Math.PI));
+		public SpiralaLogarytmicznaBuilder setZakres(String zakresText) {
+			this.zakresText = zakresText;
+
 			return this;
 		}
 
@@ -372,28 +379,70 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		@Override
 		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
-			SpiralaLogarytmiczna.setKomentarz(sprawdzParametry());
-			if (parametrA != null && parametrB != null && zakres != null && graph != null && sprawdzParametry() == null)
+
+			Figury.setKomentarz(sprawdzParametry());
+
+			if (parametrAText != null && parametrBText != null && zakresText != null && graph != null
+					&& sprawdzParametry() == null) {
+				parametrA = new BigDecimal(parametrAText);
+				parametrB = new BigDecimal(parametrBText);
+				zakres = new BigDecimal(zakresText);
+				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
 				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph);
-			else if (parametrA == null)
-				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
-			else if (parametrB == null)
-				throw new ExceptionInInitializerError("Parametr B nie został ustawiony");
-			else if (zakres == null)
-				throw new ExceptionInInitializerError("Parametr zakres nie został ustawiony");
+			} else if (parametrAText == null)
+				throw new ExceptionInInitializerError("Parametr A nie zosta�� ustawiony");
+			else if (parametrBText == null)
+				throw new ExceptionInInitializerError("Parametr B nie zosta�� ustawiony");
+			else if (zakresText == null)
+				throw new ExceptionInInitializerError("Parametr zakres nie zosta�� ustawiony");
 			else if (graph == null)
-				throw new ExceptionInInitializerError("Parametr graph nie został ustawiony");
+				throw new ExceptionInInitializerError("Parametr graph nie zosta� ustawiony");
 			else
-				throw new ExceptionInInitializerError("Błąd wprowadzonych parametrów");
+				throw new ExceptionInInitializerError("B��d wprowadzonych parametr�w");
 		}
 
 		@Override
 		public int[] sprawdzParametry() {
-			int[] a = { 0, 1 };
-			if (parametrA != null && parametrA.compareTo(new BigDecimal(0)) == 1) {
-				return null;
-			}
+			int[] a = { 1, 0 };// 0 - ignoruje; 1- niepoprawne znaki; 2- a ujemne;
+
+			if(parametrAText==null) //dodaj komentarz a nieustawione
+				;
+			if(parametrBText==null) //dodaj komentarz b nieustawione
+				;
+			if(zakresText==null) //dodaj komentarz z nieustawione
+				;
+			
+			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
+				if (Double.valueOf(parametrAText) < 0) {
+					a[1] = 2;
+					return a;
+				} else
+					return null;
 			return a;
+
 		}
+
+		/**
+		 * 
+		 * @param string
+		 * @return true je�li string da si� przekonwetowa� na liczb�
+		 */
+		private boolean isItANumber(String string) {
+
+			if (string == null)
+				return false;
+
+			for (int i = 0; i < string.length(); i++) {
+				if (string.charAt(0) == "-".charAt(0) && i == 0)
+					i++;
+				if (string.charAt(0) == ".".charAt(0))
+					return false;
+				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48)
+						&& string.charAt(i) != ".".charAt(0))
+					return false;
+			}
+			return true;
+		}
+
 	}
 }

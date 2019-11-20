@@ -21,26 +21,26 @@ interface Builder {
 	/**
 	 * Ustawia parametr A funkcji
 	 * 
-	 * @param parametrA - parametr A funkcji
+	 * @param parametrA - parametr A funkcji  STRING Który da siê zamieniæ na liczbê
 	 * @return - WewnÄ™trzna klasa Budowniczego
 	 */
-	public Object setParametrA(BigDecimal parametrA);
+	public Object setParametrA(String parametrA);
 
 	/**
 	 * Ustawia parametr B funkcji
 	 * 
-	 * @param parametrB - parametr B funkcji
+	 * @param parametrB - parametr B funkcji  STRING Który da siê zamieniæ na liczbê
 	 * @return - WewnÄ™trzna klasa Budowniczego
 	 */
-	public Object setParametrB(BigDecimal parametrB);
+	public Object setParametrB(String parametrB);
 
 	/**
 	 * Ustawia zakres funkcji
 	 * 
-	 * @param zakres - zakres rysowania funkcji
+	 * @param zakres - zakres rysowania funkcji STRING Który da siê zamieniæ na liczbê
 	 * @return - WewnÄ™trzna klasa Budowniczego
 	 */
-	public Object setZakres(BigDecimal zakres);
+	public Object setZakres(String zakres);
 
 	/**
 	 * Ustawia obrazek w ktÃ³rym ma zostaÄ‡ narysowana figura
@@ -61,9 +61,9 @@ interface Builder {
 	public Object build() throws Exception;
 
 	/**
-	 * Sprawdza wpisane dane czy moÅ¼na utworzyÄ‡ z nich funkcjÄ™ i generuje komentarz.
+	 * Sprawdza wpisane dane czy moÅ¼na utworzyÄ‡ z nich funkcjÄ™ i generuje komentarz
 	 * 
-	 * @return - Numery indeksÃ³w komentarzy ktÃ³re siÄ™ majÄ… wyÅ›wietliÄ‡.
+	 * @return - Numery indeksÃ³w komentarzy ktÃ³re siÄ™ majÄ… wyÅ›wietliÄ‡. 
 	 */
 	int[] sprawdzParametry();
 

@@ -32,8 +32,8 @@ class SpiralaLogarytmicznaIFiguryTest {
 	static void setUpBeforeClass() throws Exception {
 		BufferedImage graf = new BufferedImage(760, 400, BufferedImage.TYPE_INT_ARGB);
 		try {
-			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal(0.5))
-					.setParametrB(new BigDecimal(0.1)).setZakres(new BigDecimal(30)).setGraph(graf).build();
+			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
+					.setParametrB("0.1").setZakres("30").setGraph(graf).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

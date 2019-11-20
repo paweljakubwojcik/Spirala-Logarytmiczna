@@ -19,8 +19,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		SpiralaLogarytmiczna spirala = null;
 		// When
 		try {
-			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
-					.setParametrB(new BigDecimal("1500")).setZakres(new BigDecimal("2")).setGraph(graphImage).build();
+			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10")
+					.setParametrB("1500").setZakres("2").setGraph(graphImage).build();
 		} catch (Exception e) {
 		}
 		// Then
@@ -35,8 +35,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		ExceptionInInitializerError thrown = null;
 		// When
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrB(new BigDecimal("1500"))
-					.setZakres(new BigDecimal("2")).setGraph(graphImage).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrB("1500")
+					.setZakres("2").setGraph(graphImage).build();
 		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
@@ -52,8 +52,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		ExceptionInInitializerError thrown = null;
 		// When
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
-					.setZakres(new BigDecimal("2")).setGraph(graphImage).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10")
+					.setZakres("2").setGraph(graphImage).build();
 		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
@@ -69,8 +69,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		ExceptionInInitializerError thrown = null;
 		// When
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
-					.setParametrB(new BigDecimal("1500")).setGraph(graphImage).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10")
+					.setParametrB("1500").setGraph(graphImage).build();
 		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
@@ -85,8 +85,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		ExceptionInInitializerError thrown = null;
 		// When
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("10"))
-					.setParametrB(new BigDecimal("1500")).setZakres(new BigDecimal("2")).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10")
+					.setParametrB("1500").setZakres("2").build();
 		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
@@ -102,8 +102,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		ExceptionInInitializerError thrown = null;
 		// When
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("-10"))
-					.setParametrB(new BigDecimal("1500")).setZakres(new BigDecimal("2")).setGraph(graphImage).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("-10")
+					.setParametrB("1500").setZakres("2").setGraph(graphImage).build();
 		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}

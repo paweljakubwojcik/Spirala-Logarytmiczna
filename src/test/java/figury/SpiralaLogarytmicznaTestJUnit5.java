@@ -26,8 +26,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 	public static void setUpBeforeClass() {
 		BufferedImage graf = new BufferedImage(760, 400, BufferedImage.TYPE_INT_ARGB);
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal(0.5))
-					.setParametrB(new BigDecimal(0.1)).setZakres(new BigDecimal(30)).setGraph(graf).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
+					.setParametrB("0.1").setZakres("30").setGraph(graf).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -47,8 +47,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 	@DisplayName(value = "Testy powstawania spirali")
 	void testRysowania(String a, String b, String z) {
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal(a))
-					.setParametrB(new BigDecimal(b)).setZakres(new BigDecimal(z)).setGraph(graph).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a)
+					.setParametrB(b).setZakres(z).setGraph(graph).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
