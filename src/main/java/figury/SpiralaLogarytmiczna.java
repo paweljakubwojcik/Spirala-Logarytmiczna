@@ -414,7 +414,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			
 			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
 				if (Double.valueOf(parametrAText) < 0) {
-					a[1] = 2;
+					a[1] = 2; //dodaj komentarz a musi byæ nieujemne
 					return a;
 				} else
 					return null;
