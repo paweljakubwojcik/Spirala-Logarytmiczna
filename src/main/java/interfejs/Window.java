@@ -124,8 +124,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		add(poleKomentarz);
 		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));//
 
-		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
-		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
+		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementów
+		addComponentListener(this); // musi bydź za metodą˝ przeskalujOkienko();
 
 		setVisible(true);
 
