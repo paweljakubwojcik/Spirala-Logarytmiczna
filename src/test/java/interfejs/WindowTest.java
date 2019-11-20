@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 @DisplayName(value = "Testy klasy interfejs.Window")
 class WindowTest {
 	static Window okno;
