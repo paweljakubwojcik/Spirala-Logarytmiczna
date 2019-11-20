@@ -13,7 +13,7 @@ import wykres.Wykres;
  * Wyznacza punkty spirali oraz opisy i komentarze w interfejs.Window
  * 
  * @author 7Adrian
- *
+ * @since 1.0
  */
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
@@ -39,12 +39,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		int graphH = graph.getHeight();
 		int graphW2 = graphW / 2;
 		int graphH2 = graphH / 2;
-		System.err.println("b= " + b);
-		System.err.println("z= " + z / Math.PI);
 		double az = a;
 		double skala = 0;
 		double rozmiarMin = Math.min(graphW, graphH);
-		double rozmiarMin2 = rozmiarMin / 2.0;
 
 		// wyznaczenie początkowego i końcowego fi
 		double katStart = 0;
@@ -69,52 +66,31 @@ public class SpiralaLogarytmiczna extends Figury {
 				Xm = 0.0;
 				Ym = 0.0;
 			}
-//			System.out.println("roz= " + roz);
 			skala = getSkala(rozmiarMin, Xm, Ym, Xs, Ys);
-//			System.out.println("wym= " + wym);
 			if (skala == 0) {
 				az *= 1.0E-1;
 			}
 		}
-		System.out.println("wym= " + skala);
 
 		// rysowanie prostej gdy podane parametry praktycznie prostują wykres
 		if (Double.isNaN(skala) && Math.abs(b) > 1) {
 			double kat = getRadWithoutPIMultiply(z);
-			drawLine(kat, graphW2, graphH2, punkty);
+			if (kat >= 0)
+				drawLine(kat, graphW2, graphH2, punkty);
+			else {
+				drawLine(0, graphW2, graphH2, punkty);
+				return;
+			}
 			double katy = getRadWithout2Multiply(zRad);
 			double stopnie = katy * 180;
 			mirrorTransformForDegree(stopnie, graphW2, graphH2);
 			return;
 		} else if (Double.isNaN(skala) && Math.abs(b) < 1) {
-			// TODO tu trzeba narysować koło i sprawdzić X i Y czy są te największe i
-			// czy
-			// wgl ta część kodu jest jeszcze potrzebna
-			double mojeR = rozmiarMin2;
-			System.out.println("Koło");
-
-			int XStart, XKoniec, YStart, YKoniec;
-			if (graphW >= graphH) {
-				XStart = (int) (graphW2 - rozmiarMin2 - 2);
-				YStart = 0;
-				XKoniec = (int) (graphW2 + rozmiarMin2 + 2);
-				YKoniec = (int) rozmiarMin;
-			} else {
-				XStart = 0;
-				YStart = (int) (graphH2 - rozmiarMin2 - 2);
-				XKoniec = (int) rozmiarMin;
-				YKoniec = (int) (graphH2 + rozmiarMin2 + 2);
-			}
-
-			for (int X = XStart; X < XKoniec; X++) {
-				for (int Y = YStart; Y < YKoniec; Y++) {
-					if (mathDistanceOfPoints(X, Y, graphW2, graphH2) <= mojeR) {
-						punkty.add(new Point(X, Y));
-					}
-				}
-			}
+			drawCircle(graphW, graphH, punkty);
 			return;
-			// albo może i nie :D
+		} else if (Double.isNaN(skala) && Math.abs(b) == 1) {
+			drawArc(2 * Math.PI, graphW, graphH, punkty);
+			return;
 		}
 
 		// Rysowanie okregu, pierścienia, koła, jeśli parametry wejściowe są długo
@@ -133,10 +109,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		double odlOstPKT = mathDistanceOfPoints(pkt2.x, pkt2.y, graphW2, graphH2);
 		double odlPOstPKT = mathDistanceOfPoints(pkt3.x, pkt3.y, graphW2, graphH2);
 
-		System.out.println("Delta odległości= " + Math.abs(odlOstPKT - odlPOstPKT));
-		System.out.println("Odległosci= " + Math.abs(odlOstPKT - odl1PKT) + "   Szerokość= " + Math.abs(zRad));
-		if (Math.abs(odlOstPKT - odl1PKT) < Math.abs(zRad) && Math.abs(odlOstPKT - odlPOstPKT) <= 3.1
-				&& Math.abs(b) <= 1 && Math.abs(zRad) >= 2) {
+		if (Math.abs(odlOstPKT - odl1PKT) < Math.abs(zRad) && Math.abs(odlOstPKT - odlPOstPKT) <= 4 && Math.abs(b) <= 1
+				&& Math.abs(zRad) >= 2) {
 			punkty.clear();
 			if (odlOstPKT < odl1PKT) {
 				double o = odlOstPKT;
@@ -145,7 +119,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			}
 			drawRing(odl1PKT, odlOstPKT, graphW, graphH, punkty);
 			return;
-		} else if (Math.abs(odlOstPKT - odlPOstPKT) <= 2.1 && Math.abs(b) <= 1 && Math.abs(zRad) < 4) {
+		} else if (Math.abs(odlOstPKT - odlPOstPKT) <= 2.1 && Math.abs(b) <= 1 && Math.abs(zRad) < 2) {
 			drawArc(z, graphW, graphH, punkty);
 			return;
 		}
@@ -163,15 +137,9 @@ public class SpiralaLogarytmiczna extends Figury {
 			getStartStopPoint(start, koniec, graphW, graphH);
 			for (double X = start.x; X < koniec.x; X += probki) {
 				for (double Y = start.y; Y < koniec.y; Y += probki) {
-					if (skala != 0 && b != 0 && az != 0) {
-						katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
-						if (katFI <= katStop && katFI >= katStart) {
-							addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
-						}
-					} else if (skala != 0 && b == 0) {
-						if (Math.abs((mathDistanceOfPoints(X, Y, graphW2, graphH2)) - rozmiarMin2) <= Math.sqrt(2)
-								&& isXYinImage(X, Y, graphW, graphH))
-							punkty.add(new Point((int) X, (int) Y));
+					katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
+					if (katFI <= katStop && katFI >= katStart) {
+						addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
 					}
 				}
 			}
@@ -190,19 +158,15 @@ public class SpiralaLogarytmiczna extends Figury {
 					punkty.add(katy.get(i).pkt);
 				} else {
 
-					if (odleglosc < Math.sqrt(2) * 60) {
+					if (odleglosc < Math.sqrt(2) * 3) {
 						drawLine(katy.get(i).pkt, katy.get(i - 1).pkt, graphW2, graphH2, punkty);
 					} else {
 						licznikOdleglosciowy++;
 					}
 				}
-				if (punkty.size() > 5 * rozmiarMin * rozmiarMin) {
-					clearDoubledPoints(punkty);
-				}
 			}
 			clearDoubledPoints(punkty);
-//			System.out.println("licznik= " + licznikOdleglosciowy + " punktysize= " + punkty.size() / 2);
-			if (licznikOdleglosciowy > punkty.size() / 2 && skala != 0 && probki >= 1.0 / 16 || punkty.size() == 0) {
+			if (licznikOdleglosciowy > punkty.size() / 2 && probki >= 1.0 / 16 || punkty.size() == 0) {
 				new Wykres(graph, punkty, zakres);
 				probki /= 2.0;
 				OK = false;
@@ -213,7 +177,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 
 		clearDoubledPoints(punkty);
-		System.err.println("Czas szukania punktów metodą próbkowania: " + (System.currentTimeMillis() - czasStart));
+		System.out.println("Czas szukania punktów metodą próbkowania: " + (System.currentTimeMillis() - czasStart));
 
 	}
 
@@ -225,42 +189,23 @@ public class SpiralaLogarytmiczna extends Figury {
 	 * @param graphH2 - połowa wysokości rysowanego okeinka
 	 */
 	private void mirrorTransformForDegree(double stopnie, int graphW2, int graphH2) {
-		if (stopnie >= 0) {
-			if (stopnie > 90 && stopnie < 180) {
-				for (Point o : punkty) {
-					o.x = -(o.x - graphW2) + graphW2;
-				}
-			}
-			if (stopnie >= 180 && stopnie < 270) {
-				for (Point o : punkty) {
-					o.x = -(o.x - graphW2) + graphW2;
-					o.y = -(o.y - graphH2) + graphH2;
-				}
-			}
-			if (stopnie >= 270 && stopnie < 360) {
-				for (Point o : punkty) {
-					o.y = -(o.y - graphH2) + graphH2;
-				}
-			}
-		} else {
-			stopnie = -stopnie;
-			if (stopnie > 180 && stopnie < 270) {
-				for (Point o : punkty) {
-					o.x = -(o.x - graphW2) + graphW2;
-				}
-			}
-			if (stopnie >= 90 && stopnie < 180) {
-				for (Point o : punkty) {
-					o.x = -(o.x - graphW2) + graphW2;
-					o.y = -(o.y - graphH2) + graphH2;
-				}
-			}
-			if (stopnie >= 0 && stopnie < 90) {
-				for (Point o : punkty) {
-					o.y = -(o.y - graphH2) + graphH2;
-				}
+		if (stopnie > 90 && stopnie < 180) {
+			for (Point o : punkty) {
+				o.x = -(o.x - graphW2) + graphW2;
 			}
 		}
+		if (stopnie >= 180 && stopnie < 270) {
+			for (Point o : punkty) {
+				o.x = -(o.x - graphW2) + graphW2;
+				o.y = -(o.y - graphH2) + graphH2;
+			}
+		}
+		if (stopnie >= 270 && stopnie < 360) {
+			for (Point o : punkty) {
+				o.y = -(o.y - graphH2) + graphH2;
+			}
+		}
+
 	}
 
 	/**
@@ -405,16 +350,16 @@ public class SpiralaLogarytmiczna extends Figury {
 		public int[] sprawdzParametry() {
 			int[] a = { 1, 0 };// 0 - ignoruje; 1- niepoprawne znaki; 2- a ujemne;
 
-			if(parametrAText==null) //dodaj komentarz a nieustawione
+			if (parametrAText == null) // dodaj komentarz a nieustawione
 				;
-			if(parametrBText==null) //dodaj komentarz b nieustawione
+			if (parametrBText == null) // dodaj komentarz b nieustawione
 				;
-			if(zakresText==null) //dodaj komentarz z nieustawione
+			if (zakresText == null) // dodaj komentarz z nieustawione
 				;
-			
+
 			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
 				if (Double.valueOf(parametrAText) < 0) {
-					a[1] = 2; //dodaj komentarz a musi by� nieujemne
+					a[1] = 2; // dodaj komentarz a musi by� nieujemne
 					return a;
 				} else
 					return null;

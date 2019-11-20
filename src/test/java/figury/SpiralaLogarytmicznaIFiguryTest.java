@@ -9,8 +9,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +22,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import interfejs.Window;
 
 @DisplayName(value = "Test metod z Figur i Spirali Logarytmicznej")
 class SpiralaLogarytmicznaIFiguryTest {
@@ -76,10 +81,34 @@ class SpiralaLogarytmicznaIFiguryTest {
 		fail("Not yet implemented"); // TODO
 	}
 
-	@Disabled
+	@DisplayName(value = "setOpis() sprawdza czy wykonanie nowerj spirali zmienia opis w interfejs.Window")
 	@Test
-	void testSetOpis() {
-		fail("Not yet implemented"); // TODO sprawdzić zapis parametrów, oraz zachowanie przy wyjątku
+	void testSetOpis()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// Given
+		Window okno = new Window();
+		okno.setVisible(false);
+		Class<?> okno2 = okno.getClass();
+		Field ParamA = okno2.getDeclaredField("napisParametrA");
+		ParamA.setAccessible(true);
+		JLabel PA = (JLabel) ParamA.get(okno);
+		Field ParamB = okno2.getDeclaredField("napisParametrB");
+		ParamB.setAccessible(true);
+		JLabel PB = (JLabel) ParamB.get(okno);
+		Field ParamZakresText = okno2.getDeclaredField("napisZakres");
+		ParamZakresText.setAccessible(true);
+		JLabel PZT = (JLabel) ParamZakresText.get(okno);
+		Field ParamJednostkaZakresText = okno2.getDeclaredField("napisZakresJednostka");
+		ParamJednostkaZakresText.setAccessible(true);
+		JLabel PJZT = (JLabel) ParamJednostkaZakresText.get(okno);
+		// When
+		String A = PA.getText();
+		String B = PB.getText();
+		String ZT = PZT.getText();
+		String JZT = PJZT.getText();
+		// Then
+		assertAll("Sprawdza czy opisy w interfejs.Window zostały ustawione", () -> assertEquals("a=", A),
+				() -> assertEquals("b=", B), () -> assertEquals("zakres=", ZT), () -> assertEquals("rad", JZT));
 	}
 
 	@DisplayName(value = "isGood() dla linni z punktami blisko siebie")

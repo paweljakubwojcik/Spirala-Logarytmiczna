@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * 
  * 
  * @author 7Adrian
- *
+ * @since 1.0
  */
 interface Builder {
 

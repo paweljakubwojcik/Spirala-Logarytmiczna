@@ -7,6 +7,12 @@ import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
+ * 
+ * @author 7Adrian
+ * @since 1.0
+ */
 public class Wykres {
 	private BufferedImage graph;
 	private ArrayList<Point> punkty;
@@ -31,21 +37,13 @@ public class Wykres {
 
 		// Generowanie obrazków do testów zostawić w spokoju te 5 linijek poniżej
 //		try {
-//			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[0.1,30].png"));
+//			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[10.123,-1000.5].png"));
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
 
-//		while (true) {
 		Graphics2D g = (Graphics2D) graph.getGraphics();
 		g.drawImage(wykres, 0, 0, null);
-
-//			try {
-//				Thread.sleep(20);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 
 	private void scalObrazki() {
