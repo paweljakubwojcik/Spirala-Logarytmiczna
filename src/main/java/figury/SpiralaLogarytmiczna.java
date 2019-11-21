@@ -335,15 +335,15 @@ public class SpiralaLogarytmiczna extends Figury {
 				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
 				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph);
 			} else if (parametrAText == null)
-				throw new ExceptionInInitializerError("Parametr A nie zosta³‚ ustawiony");
+				throw new ExceptionInInitializerError("Parametr A nie zostaï¿½ï¿½ ustawiony");
 			else if (parametrBText == null)
-				throw new ExceptionInInitializerError("Parametr B nie zosta³‚ ustawiony");
+				throw new ExceptionInInitializerError("Parametr B nie zostaï¿½ï¿½ ustawiony");
 			else if (zakresText == null)
-				throw new ExceptionInInitializerError("Parametr zakres nie zosta³‚ ustawiony");
+				throw new ExceptionInInitializerError("Parametr zakres nie zostaï¿½ï¿½ ustawiony");
 			else if (graph == null)
-				throw new ExceptionInInitializerError("Parametr graph nie zosta³ ustawiony");
+				throw new ExceptionInInitializerError("Parametr graph nie zostaï¿½ ustawiony");
 			else
-				throw new ExceptionInInitializerError("B³¹d wprowadzonych parametrów");
+				throw new ExceptionInInitializerError("Bï¿½ï¿½d wprowadzonych parametrï¿½w");
 		}
 
 		@Override
@@ -359,7 +359,7 @@ public class SpiralaLogarytmiczna extends Figury {
 
 			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
 				if (Double.valueOf(parametrAText) < 0) {
-					a[1] = 2; // dodaj komentarz a musi byæ nieujemne
+					a[1] = 2; // dodaj komentarz a musi byï¿½ nieujemne
 					return a;
 				} else
 					return null;
@@ -370,7 +370,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		/**
 		 * 
 		 * @param string
-		 * @return true jeœli string da siê przekonwetowaæ na liczbê
+		 * @return true jeï¿½li string da siï¿½ przekonwetowaï¿½ na liczbï¿½
+		 * @author Pafeu
 		 */
 		private boolean isItANumber(String string) {
 
@@ -383,7 +384,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				if (string.charAt(0) == ".".charAt(0))
 					return false;
 				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48)
-						&& string.charAt(i) != ".".charAt(0))
+						&& string.charAt(i) != ".".charAt(0) && string.charAt(i) != "E".charAt(0) )
 					return false;
 			}
 			return true;

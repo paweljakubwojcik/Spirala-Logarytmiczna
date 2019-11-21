@@ -313,28 +313,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-//		if (e.getSource() == przyciskRysuj) {
-//			String wpisaneA = poleParametrA.getText();
-//			boolean isThatANumber = true;
-//
-//			for (int i = 0; i < wpisaneA.length(); i++) {
-//				if ((int) poleParametrA.getText().charAt(i) > 57 || (int) poleParametrA.getText().charAt(i) < 49) {
-//					// dodaj komentarz w polu komentarzy aby wpisac poprawne dane
-//					System.out.print("to nie jest liczba");
-//
-//					isThatANumber = false;
-//					break;
-//				}
-//			}
-//			if (isThatANumber) {
-//				if (Double.valueOf(poleParametrA.getText()) >= 0) {
-//
-//				}
-//			}
-//		}
-//
-//		;
-
 		JButton obj = (JButton) e.getSource();
 		if (obj == przyciskRysuj) {
 			graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -362,6 +340,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		if (obj == przyciskPelnyEkran) {
 			System.out.println("rOBIE PELNY EKRAN");
+			setFullScreen();
 		}
 
 	}
