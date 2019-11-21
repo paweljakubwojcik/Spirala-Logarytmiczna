@@ -335,15 +335,15 @@ public class SpiralaLogarytmiczna extends Figury {
 				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
 				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph);
 			} else if (parametrAText == null)
-				throw new ExceptionInInitializerError("Parametr A nie zosta�� ustawiony");
+				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
 			else if (parametrBText == null)
-				throw new ExceptionInInitializerError("Parametr B nie zosta�� ustawiony");
+				throw new ExceptionInInitializerError("Parametr B nie został ustawiony");
 			else if (zakresText == null)
-				throw new ExceptionInInitializerError("Parametr zakres nie zosta�� ustawiony");
+				throw new ExceptionInInitializerError("Parametr zakres nie został ustawiony");
 			else if (graph == null)
-				throw new ExceptionInInitializerError("Parametr graph nie zosta� ustawiony");
+				throw new ExceptionInInitializerError("Parametr graph nie został ustawiony");
 			else
-				throw new ExceptionInInitializerError("B��d wprowadzonych parametr�w");
+				throw new ExceptionInInitializerError("Błąd wprowadzonych parametrów");
 		}
 
 		@Override
@@ -383,8 +383,8 @@ public class SpiralaLogarytmiczna extends Figury {
 					i++;
 				if (string.charAt(0) == ".".charAt(0))
 					return false;
-				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48)
-						&& string.charAt(i) != ".".charAt(0) && string.charAt(i) != "E".charAt(0) )
+				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48) && string.charAt(i) != ".".charAt(0)
+						&& string.charAt(i) != "E".charAt(0))
 					return false;
 			}
 			return true;
