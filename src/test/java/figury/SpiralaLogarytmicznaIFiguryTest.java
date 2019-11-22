@@ -24,6 +24,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import interfejs.Window;
 
+@Disabled
 @DisplayName(value = "Test metod z Figur i Spirali Logarytmicznej")
 class SpiralaLogarytmicznaIFiguryTest {
 	BufferedImage graph;

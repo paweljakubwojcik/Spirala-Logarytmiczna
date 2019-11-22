@@ -11,10 +11,12 @@ import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+@Disabled
 @DisplayName(value = "Testy parametryzowane spirali")
 class SpiralaLogarytmicznaTestJUnit5 {
 	BufferedImage graph;
@@ -26,8 +28,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 	public static void setUpBeforeClass() {
 		BufferedImage graf = new BufferedImage(760, 400, BufferedImage.TYPE_INT_ARGB);
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
-					.setParametrB("0.1").setZakres("30").setGraph(graf).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.1")
+					.setZakres("30").setGraph(graf).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,8 +50,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 	@DisplayName(value = "Testy powstawania spirali")
 	void testRysowania(String a, String b, String z) {
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a)
-					.setParametrB(b).setZakres(z).setGraph(graph).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a).setParametrB(b).setZakres(z)
+					.setGraph(graph).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
