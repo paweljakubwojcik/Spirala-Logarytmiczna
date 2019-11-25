@@ -25,10 +25,11 @@ public class SpiralaLogarytmiczna extends Figury {
 	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
 	 * pracy wielowątkowej.
 	 * 
-	 * @param parametrA - parametr A spirali
-	 * @param parametrB - parametr B spirali
-	 * @param zakres    - zakres rysowania spirali
-	 * @param graph     - BufferedImage na którym ma się spirala narysować
+	 * @param parametrA      - parametr A spirali
+	 * @param parametrB      - parametr B spirali
+	 * @param zakres         - zakres rysowania spirali
+	 * @param graph          - BufferedImage na którym ma się spirala narysować
+	 * @param numberOfThread - liczba wątków utworzona do rysowania
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph,
 			int numberOfThread) {
@@ -480,6 +481,12 @@ public class SpiralaLogarytmiczna extends Figury {
 			return this;
 		}
 
+		/**
+		 * Nadaję liczbę wątków jaką będzie używać aplikacja podczas rysowania Spirali
+		 * 
+		 * @param numberOfThread - liczba wątków która będzie zaangażowana w rysowanie
+		 * @return - Wewnętrzna klasa Budowniczego
+		 */
 		public SpiralaLogarytmicznaBuilder setThreads(int numberOfThread) {
 			this.numberOfThread = numberOfThread;
 			return this;
