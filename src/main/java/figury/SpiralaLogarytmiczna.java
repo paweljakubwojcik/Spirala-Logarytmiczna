@@ -19,7 +19,7 @@ import wykres.Wykres;
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
-	private static int numberOfThread;
+	private int numberOfThread;
 
 	/**
 	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
@@ -30,8 +30,12 @@ public class SpiralaLogarytmiczna extends Figury {
 	 * @param zakres    - zakres rysowania spirali
 	 * @param graph     - BufferedImage na którym ma się spirala narysować
 	 */
-	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph) {
+	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph,
+			int numberOfThread) {
 		super(opisy, parametrA, parametrB, zakres, graph);
+		this.numberOfThread = numberOfThread;
+		wyznaczPunkty();
+		new Wykres(graph, punkty, zakres);
 	}
 
 	@Override
@@ -141,8 +145,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			getStartStopPoint(start, koniec, graphW, graphH);
 
 //			long czasPoczatkowy = System.currentTimeMillis();
-			numberOfThread = Runtime.getRuntime().availableProcessors();
-
 			// Wykonywanie rysowania wielowątkowo
 			if (numberOfThread > 1) {
 				int dX = koniec.x - start.x;
@@ -451,6 +453,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		BigDecimal zakres = null;
 		BufferedImage graph = null;
 
+		int numberOfThread = 1;
+
 		@Override
 		public SpiralaLogarytmicznaBuilder setParametrA(String parametrA) {
 			this.parametrAText = parametrA;
@@ -476,6 +480,11 @@ public class SpiralaLogarytmiczna extends Figury {
 			return this;
 		}
 
+		public SpiralaLogarytmicznaBuilder setThreads(int numberOfThread) {
+			this.numberOfThread = numberOfThread;
+			return this;
+		}
+
 		@Override
 		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
 
@@ -487,7 +496,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				parametrB = new BigDecimal(parametrBText);
 				zakres = new BigDecimal(zakresText);
 				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
-				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph);
+				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph, numberOfThread);
 			} else if (parametrAText == null)
 				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
 			else if (parametrBText == null)

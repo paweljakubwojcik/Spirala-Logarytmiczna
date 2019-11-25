@@ -313,7 +313,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
 						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-						.build().getImage());
+						.setThreads(Runtime.getRuntime().availableProcessors()).build().getImage());
 
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");

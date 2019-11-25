@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import interfejs.Window;
-import wykres.Wykres;
 
 /**
  * Klasa Figury zawiera informacje o metodach i polach które muszą zawierać
@@ -62,8 +61,6 @@ public abstract class Figury {
 		this.zakres = zakres;
 		this.graph = graph;
 		setOpis();
-		wyznaczPunkty();
-		new Wykres(graph, punkty, zakres);
 	}
 
 	/**
