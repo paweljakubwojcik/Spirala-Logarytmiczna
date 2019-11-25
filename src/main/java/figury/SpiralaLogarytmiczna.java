@@ -2,8 +2,6 @@ package figury;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,13 +32,6 @@ public class SpiralaLogarytmiczna extends Figury {
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph) {
 		super(opisy, parametrA, parametrB, zakres, graph);
-//		if (watki.isEmpty()) {
-//		numberOfThread = Runtime.getRuntime().availableProcessors();
-//		System.out.println("Nie ma nas");
-//		for (int i = 0; i < numberOfThread; i++) {
-//			watki.add(new MultiDraw());
-//			}
-//		}
 	}
 
 	@Override
@@ -151,7 +142,8 @@ public class SpiralaLogarytmiczna extends Figury {
 
 //			long czasPoczatkowy = System.currentTimeMillis();
 			numberOfThread = Runtime.getRuntime().availableProcessors();
-//			numberOfThread = 1;
+
+			// Wykonywanie rysowania wielowątkowo
 			if (numberOfThread > 1) {
 				int dX = koniec.x - start.x;
 				int perCore = dX / numberOfThread;
@@ -168,6 +160,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				for (int i = 0; i < numberOfThread; i++) {
 					katPunktWatek.add(new ArrayList<KatPunkt>());
 				}
+				// Ustawienie każdego wątku według pracy którą musi wykonać
 				for (MultiDraw watek : watki) {
 					watek.setArguments(probki, new Point(start.x + perCore * counter + offset, start.y),
 							new Point(start.x + perCore * (counter + 1) + offset, koniec.y), az, b, skala, graphW,
@@ -178,6 +171,7 @@ public class SpiralaLogarytmiczna extends Figury {
 					watek.start();
 				}
 
+				// Dodawanie punktów jak tylko wątek skończy je wyznaczać
 				while (!watki.isEmpty()) {
 					for (int i = 0; i < watki.size(); i++) {
 						if (!watki.get(i).isAlive()) {
@@ -192,15 +186,7 @@ public class SpiralaLogarytmiczna extends Figury {
 					}
 				}
 //				System.out.println("Czasy wykonywania wieluwątków= " + (System.currentTimeMillis() - czasPoczatkowy));
-
-//				long sss = System.currentTimeMillis();
-//				for (int i = 0; i < katPunktWatek.size(); i++) {
-//					for (int j = 0; j < katPunktWatek.get(i).size(); j++) {
-//						katy.add(katPunktWatek.get(i).get(j));
-//					}
-//				}
-//				System.err.println("Czas przenoszenia punktów =" + (System.currentTimeMillis() - sss));
-			} else {
+			} else { // Wykonywanie rysowania jednowątkowo
 				double katFI;
 				for (double X = start.x; X < koniec.x; X += probki) {
 					for (double Y = start.y; Y < koniec.y; Y += probki) {
@@ -222,9 +208,9 @@ public class SpiralaLogarytmiczna extends Figury {
 //				System.out.println("Czasy wykonywania sortowania= " + (System.currentTimeMillis() - czasPoczatkowy2));
 			}
 
-			int licznikOdleglosciowy = 0;
-
 //			long czasPoczatkowy3 = System.currentTimeMillis();
+			// Aproksymacja funkcji
+			int licznikOdleglosciowy = 0;
 			for (int i = 1; i < katy.size(); i++) {
 				double odleglosc = mathDistanceOfPoints(katy.get(i).pkt, katy.get(i - 1).pkt);
 				if (odleglosc <= Math.sqrt(2)) {
@@ -240,6 +226,8 @@ public class SpiralaLogarytmiczna extends Figury {
 //			System.out.println("Czasy wykonywania aproksymowania= " + (System.currentTimeMillis() - czasPoczatkowy3));
 
 			clearDoubledPoints(punkty);
+			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
+			// próbkowania
 			if (licznikOdleglosciowy > punkty.size() / 2 && probki >= 1.0 / 16 || punkty.size() == 0) {
 				new Wykres(graph, punkty, zakres);
 				probki /= 2.0;
@@ -350,16 +338,17 @@ public class SpiralaLogarytmiczna extends Figury {
 		ArrayList<KatPunkt> katy;
 
 		/**
-		 * Konstruktor
+		 * Konstruktor nowego wątku
 		 */
 		MultiDraw() {
 			super();
 		}
 
+		/**
+		 * Wyznacza punkty i układa je w kolejności rosnącej według kąta
+		 */
 		@Override
 		public void run() {
-//			System.out.println("I'm Started");
-
 //			long czasPoczatkowy = System.currentTimeMillis();
 			for (double X = start.x; X < koniec.x; X += probki) {
 				for (double Y = start.y; Y < koniec.y; Y += probki) {
@@ -374,10 +363,14 @@ public class SpiralaLogarytmiczna extends Figury {
 			});
 //			System.out.println("Czasy wykonywania wyatku" + currentThread().getName() + "= "
 //					+ (System.currentTimeMillis() - czasPoczatkowy));
-
-//			System.err.println(katy.size());
 		}
 
+		/**
+		 * Dodaje punkt o współrzędnych X i Y
+		 * 
+		 * @param X - Współrzędna X
+		 * @param Y - Współrzędna Y
+		 */
 		private void addPoint(double X, double Y) {
 			double katFI;
 			katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
@@ -386,6 +379,22 @@ public class SpiralaLogarytmiczna extends Figury {
 			}
 		}
 
+		/**
+		 * Ustawia niezbędne dane dla wykonania obliczeń przez wątek
+		 * 
+		 * @param probki   - dokładność próbkowania po X i Y
+		 * @param start    - Punkt początkowy od którego zaczyna być wykonywana pętla
+		 * @param koniec   - Punkt końcowy do którego będzie wykonywana pętla
+		 * @param az       - parametr A spirali
+		 * @param b        - parametr B spirali
+		 * @param skala    - skala wykresu
+		 * @param graphW   - szerokość okienka
+		 * @param graphH   - wysokość okienka
+		 * @param katStop  - kąt końcowy spirali
+		 * @param katStart - kąt początkowy spirali
+		 * @param katy     - {@link ArrayList<KatPunkt>} katy do której będą dodane nowe
+		 *                 punkty
+		 */
 		void setArguments(double probki, Point start, Point koniec, double az, double b, double skala, int graphW,
 				int graphH, double katStop, double katStart, ArrayList<KatPunkt> katy) {
 			this.probki = probki;
@@ -399,7 +408,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			this.katStart = katStart;
 			this.katStop = katStop;
 			this.katy = katy;
-//			System.out.println(start + " " + koniec);
 		}
 
 	}
