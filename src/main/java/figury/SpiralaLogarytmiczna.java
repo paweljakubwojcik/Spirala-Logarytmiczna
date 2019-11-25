@@ -2,10 +2,13 @@ package figury;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Vector;
 
 import wykres.Wykres;
 
@@ -17,8 +20,12 @@ import wykres.Wykres;
  */
 public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
+	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
+	private static int numberOfThread;
 
 	/**
+	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
+	 * pracy wielowątkowej.
 	 * 
 	 * @param parametrA - parametr A spirali
 	 * @param parametrB - parametr B spirali
@@ -27,6 +34,13 @@ public class SpiralaLogarytmiczna extends Figury {
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph) {
 		super(opisy, parametrA, parametrB, zakres, graph);
+//		if (watki.isEmpty()) {
+//		numberOfThread = Runtime.getRuntime().availableProcessors();
+//		System.out.println("Nie ma nas");
+//		for (int i = 0; i < numberOfThread; i++) {
+//			watki.add(new MultiDraw());
+//			}
+//		}
 	}
 
 	@Override
@@ -128,36 +142,94 @@ public class SpiralaLogarytmiczna extends Figury {
 		ArrayList<KatPunkt> katy = new ArrayList<KatPunkt>();
 		boolean OK = false;
 		double probki = 0.5;
-		double katFI;
 		while (!OK) {
 			katy.clear();
 			punkty.clear();
 
 			Point start = new Point(), koniec = new Point();
 			getStartStopPoint(start, koniec, graphW, graphH);
-			for (double X = start.x; X < koniec.x; X += probki) {
-				for (double Y = start.y; Y < koniec.y; Y += probki) {
-					katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
-					if (katFI <= katStop && katFI >= katStart) {
-						addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
+
+//			long czasPoczatkowy = System.currentTimeMillis();
+			numberOfThread = Runtime.getRuntime().availableProcessors();
+//			numberOfThread = 1;
+			if (numberOfThread > 1) {
+				int dX = koniec.x - start.x;
+				int perCore = dX / numberOfThread;
+				int rest = dX % numberOfThread;
+				int offset = 0;
+				int counter = 0;
+
+				for (int i = 0; i < numberOfThread; i++) {
+					watki.add(new MultiDraw());
+				}
+
+				ArrayList<ArrayList<KatPunkt>> katPunktWatek;
+				katPunktWatek = new ArrayList<ArrayList<KatPunkt>>();
+				for (int i = 0; i < numberOfThread; i++) {
+					katPunktWatek.add(new ArrayList<KatPunkt>());
+				}
+				for (MultiDraw watek : watki) {
+					watek.setArguments(probki, new Point(start.x + perCore * counter + offset, start.y),
+							new Point(start.x + perCore * (counter + 1) + offset, koniec.y), az, b, skala, graphW,
+							graphH, katStop, katStart, katPunktWatek.get(counter));
+					if (rest-- > 0)
+						offset++;
+					counter++;
+					watek.start();
+				}
+
+				while (!watki.isEmpty()) {
+					for (int i = 0; i < watki.size(); i++) {
+						if (!watki.get(i).isAlive()) {
+							katy.addAll(watki.get(i).katy);
+							watki.remove(i);
+						}
+						try {
+							Thread.sleep(1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				}
+//				System.out.println("Czasy wykonywania wieluwątków= " + (System.currentTimeMillis() - czasPoczatkowy));
+
+//				long sss = System.currentTimeMillis();
+//				for (int i = 0; i < katPunktWatek.size(); i++) {
+//					for (int j = 0; j < katPunktWatek.get(i).size(); j++) {
+//						katy.add(katPunktWatek.get(i).get(j));
+//					}
+//				}
+//				System.err.println("Czas przenoszenia punktów =" + (System.currentTimeMillis() - sss));
+			} else {
+				double katFI;
+				for (double X = start.x; X < koniec.x; X += probki) {
+					for (double Y = start.y; Y < koniec.y; Y += probki) {
+
+						katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
+						if (katFI <= katStop && katFI >= katStart) {
+							addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
+						}
+
+					}
+				}
+//				long czasPoczatkowy2 = System.currentTimeMillis();
+				Collections.sort(katy, new Comparator<KatPunkt>() {
+					@Override
+					public int compare(KatPunkt p1, KatPunkt p2) {
+						return Double.compare(p1.kat, p2.kat);
+					}
+				});
+//				System.out.println("Czasy wykonywania sortowania= " + (System.currentTimeMillis() - czasPoczatkowy2));
 			}
 
-			Collections.sort(katy, new Comparator<KatPunkt>() {
-				@Override
-				public int compare(KatPunkt p1, KatPunkt p2) {
-					return Double.compare(p1.kat, p2.kat);
-				}
-			});
 			int licznikOdleglosciowy = 0;
 
+//			long czasPoczatkowy3 = System.currentTimeMillis();
 			for (int i = 1; i < katy.size(); i++) {
 				double odleglosc = mathDistanceOfPoints(katy.get(i).pkt, katy.get(i - 1).pkt);
 				if (odleglosc <= Math.sqrt(2)) {
 					punkty.add(katy.get(i).pkt);
 				} else {
-
 					if (odleglosc < Math.sqrt(2) * 3) {
 						drawLine(katy.get(i).pkt, katy.get(i - 1).pkt, graphW2, graphH2, punkty);
 					} else {
@@ -165,6 +237,8 @@ public class SpiralaLogarytmiczna extends Figury {
 					}
 				}
 			}
+//			System.out.println("Czasy wykonywania aproksymowania= " + (System.currentTimeMillis() - czasPoczatkowy3));
+
 			clearDoubledPoints(punkty);
 			if (licznikOdleglosciowy > punkty.size() / 2 && probki >= 1.0 / 16 || punkty.size() == 0) {
 				new Wykres(graph, punkty, zakres);
@@ -176,9 +250,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			katy.clear();
 		}
 
-		clearDoubledPoints(punkty);
 		System.out.println("Czas szukania punktów metodą próbkowania: " + (System.currentTimeMillis() - czasStart));
-
 	}
 
 	/**
@@ -259,11 +331,85 @@ public class SpiralaLogarytmiczna extends Figury {
 	}
 
 	/**
+	 * Klasa dodająca wielowątkowo punkty spirali
+	 * 
+	 * @author 7Adrian
+	 * @since 1.1
+	 */
+	private class MultiDraw extends Thread implements Runnable {
+		double probki;
+		Point start;
+		Point koniec;
+		double az;
+		double b;
+		double skala;
+		int graphW;
+		int graphH;
+		double katStop;
+		double katStart;
+		ArrayList<KatPunkt> katy;
+
+		/**
+		 * Konstruktor
+		 */
+		MultiDraw() {
+			super();
+		}
+
+		@Override
+		public void run() {
+//			System.out.println("I'm Started");
+
+//			long czasPoczatkowy = System.currentTimeMillis();
+			for (double X = start.x; X < koniec.x; X += probki) {
+				for (double Y = start.y; Y < koniec.y; Y += probki) {
+					addPoint(X, Y);
+				}
+			}
+			Collections.sort(katy, new Comparator<KatPunkt>() {
+				@Override
+				public int compare(KatPunkt p1, KatPunkt p2) {
+					return Double.compare(p1.kat, p2.kat);
+				}
+			});
+//			System.out.println("Czasy wykonywania wyatku" + currentThread().getName() + "= "
+//					+ (System.currentTimeMillis() - czasPoczatkowy));
+
+//			System.err.println(katy.size());
+		}
+
+		private void addPoint(double X, double Y) {
+			double katFI;
+			katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
+			if (katFI <= katStop && katFI >= katStart) {
+				addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
+			}
+		}
+
+		void setArguments(double probki, Point start, Point koniec, double az, double b, double skala, int graphW,
+				int graphH, double katStop, double katStart, ArrayList<KatPunkt> katy) {
+			this.probki = probki;
+			this.start = start;
+			this.koniec = koniec;
+			this.az = az;
+			this.b = b;
+			this.skala = skala;
+			this.graphW = graphW;
+			this.graphH = graphH;
+			this.katStart = katStart;
+			this.katStop = katStop;
+			this.katy = katy;
+//			System.out.println(start + " " + koniec);
+		}
+
+	}
+
+	/**
 	 * Klasa przypominająca klasę Point z API Javy, natomiast rozszerząja ją o
 	 * dodatkową zmienną zmiennoprzecinkową
 	 * 
 	 * @author 7Adrian
-	 *
+	 * @since 1.0
 	 */
 	private class KatPunkt {
 		double kat;
@@ -285,7 +431,7 @@ public class SpiralaLogarytmiczna extends Figury {
 	 * Builder dla figury.SpiralaLogarytmiczna
 	 * 
 	 * @author 7Adrian
-	 *
+	 * @since 1.0
 	 */
 	public static class SpiralaLogarytmicznaBuilder implements Builder {
 		String parametrAText = null;
@@ -351,15 +497,15 @@ public class SpiralaLogarytmiczna extends Figury {
 			int[] a = { 1, 0 };// 0 - ignoruje; 1- niepoprawne znaki; 2- a ujemne;
 
 			if (parametrAText == null) // dodaj komentarz a nieustawione
-				;
+				a = new int[] { 1, 3 };
 			if (parametrBText == null) // dodaj komentarz b nieustawione
-				;
+				a = new int[] { 1, 4 };
 			if (zakresText == null) // dodaj komentarz z nieustawione
-				;
+				a = new int[] { 1, 5 };
 
 			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
 				if (Double.valueOf(parametrAText) < 0) {
-					a[1] = 2; // dodaj komentarz a musi by� nieujemne
+					a[1] = 2; // dodaj komentarz a musi być nieujemne
 					return a;
 				} else
 					return null;
@@ -368,9 +514,10 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 
 		/**
+		 * Sprawdza czy da się przekonwertować obiekt typu String na obiekt liczbowy
 		 * 
 		 * @param string
-		 * @return true je�li string da si� przekonwetowa� na liczb�
+		 * @return true jeśli string da się przekonwetować na liczbę
 		 * @author Pafeu
 		 */
 		private boolean isItANumber(String string) {

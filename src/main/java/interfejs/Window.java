@@ -113,17 +113,14 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskCzysc = new JButton(CZYSCTEXT);
 		przyciskCzysc.addActionListener(this);
 		add(przyciskCzysc);
-		przyciskCzysc.addActionListener(this);
 
 		przyciskRysuj = new JButton(RYSUJTEXT);
 		przyciskRysuj.addActionListener(this);
 		add(przyciskRysuj);
-		przyciskRysuj.addActionListener(this);
 
 		przyciskPelnyEkran = new JButton(PELNYEKRANTEXT);
 		przyciskPelnyEkran.addActionListener(this);
 		add(przyciskPelnyEkran);
-		przyciskPelnyEkran.addActionListener(this);
 
 		poleKomentarz = new JLabel();
 		add(poleKomentarz);
@@ -324,6 +321,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				exc.printStackTrace();
 				System.err.println(exc.getMessage());
 			}
+			System.gc();
 		}
 
 		if (obj == przyciskCzysc) {

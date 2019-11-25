@@ -19,7 +19,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName(value = "Testy klasy interfejs.Window")
-class WindowTest {
+class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach tekstowych to czy
+					// pojawi się stosowny komentarz do tego
 	static Window okno;
 	ComponentEvent s = null;
 

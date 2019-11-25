@@ -24,8 +24,16 @@ public abstract class Figury {
 	/**
 	 * Zawiera komunikaty jakie mają się wyświetlać według kryterium zawartym w
 	 * wymaganiach
+	 * 
+	 * @param 0 - ""
+	 * @param 1 - "Podano niepoprawne dane.\n"
+	 * @param 2 - "a musi być większe od zera\n"
+	 * @param 3 - "a musi należeć do liczb rzeczywistych\n"
+	 * @param 4 - "b musi należeć do liczb rzeczywistych\n"
+	 * @param 5 - "U+03C6 musi należeć do liczb rzeczywistych"
+	 * 
 	 */
-	private static final String[] komentarz = { "","Podano niepoprawne dane.\n", "a musi być większe od zera\n",
+	private static final String[] komentarz = { "", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
 			"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
 			"U+03C6 musi należeć do liczb rzeczywistych" };
 	String[] opisy = { " ", " ", " ", " " };
@@ -55,9 +63,6 @@ public abstract class Figury {
 		this.graph = graph;
 		setOpis();
 		wyznaczPunkty();
-//		System.out.println(punkty.size());
-//		System.out.println(punkty);
-//		System.out.println(graph.getWidth() + " " + graph.getHeight());
 		new Wykres(graph, punkty, zakres);
 	}
 

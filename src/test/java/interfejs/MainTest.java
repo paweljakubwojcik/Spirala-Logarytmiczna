@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@DisplayName(value = "Test startu aplikacji")
 class MainTest {
 
 	@DisplayName(value = "Sprawdza czy tworzenie okienka nie wywala błędu")
