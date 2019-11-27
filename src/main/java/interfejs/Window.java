@@ -287,7 +287,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static void setKomentarz(String komentarz) throws Exception {
 		if (poleKomentarz != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			if (stackTraceElements[2].getClassName().equals("figury.Figury")
+					|| stackTraceElements[2].getClassName().equals("interfejs.Window"))
 				poleKomentarz.setText(komentarz);
 			else
 				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
@@ -365,6 +366,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			g.fillRect(0, 0, graph.getWidth(), graph.getHeight());
 			graph.setImage(filler);
 			graph.repaint();
+
+			poleKomentarz.setText("");
+			poleParametrA.setText("");
+			poleParametrA.setText("");
+			poleParametrA.setText("");
 
 		}
 

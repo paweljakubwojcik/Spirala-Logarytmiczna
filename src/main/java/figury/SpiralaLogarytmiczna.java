@@ -354,11 +354,11 @@ public class SpiralaLogarytmiczna extends Figury {
 //					"U+03C6 musi nale�e� do liczb rzeczywistych" };
 			int[] a = { 0, 0, 0, 0, 0 };
 
-			if (parametrAText == null) // dodaj komentarz a nieustawione
+			if (parametrAText.isEmpty()) // dodaj komentarz a nieustawione
 				a[0] = 1;
-			if (parametrBText == null) // dodaj komentarz b nieustawione
+			if (parametrBText.isEmpty()) // dodaj komentarz b nieustawione
 				a[1] = 1;
-			if (zakresText == null) // dodaj komentarz z nieustawione
+			if (zakresText.isEmpty()) // dodaj komentarz z nieustawione
 				a[2] = 1;
 			if (isItANumber(parametrAText))
 				if (Double.valueOf(parametrAText) < 0)
@@ -382,7 +382,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		 */
 		private boolean isItANumber(String string) {
 
-			if (string == null)
+			if (string.isEmpty())
 				return false;
 
 			for (int i = 0; i < string.length(); i++) {

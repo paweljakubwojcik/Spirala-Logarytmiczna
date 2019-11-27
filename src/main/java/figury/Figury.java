@@ -25,8 +25,8 @@ public abstract class Figury {
 	 * Zawiera komunikaty jakie mają się wyświetlać według kryterium zawartym w
 	 * wymaganiach
 	 */
-	private static final String[] komentarz = { "Parametr a nie został ustawiony", "Parametr b nie został ustawiony",
-			"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
+	private static final String[] komentarz = { "Parametr a nie został ustawiony \n ", "Parametr b nie został ustawiony \n ",
+			"Zakres nie został ustawiony \n ", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
 			"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
 			"U+03C6 musi nale�e� do liczb rzeczywistych" };
 	String[] opisy = { " ", " ", " ", " " };
