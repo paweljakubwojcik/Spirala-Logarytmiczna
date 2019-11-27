@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import wykres.AntiAliazing;
 import wykres.Wykres;
 
 /**
@@ -23,6 +24,7 @@ public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
 	private int numberOfThread;
+	private boolean SSAA;
 
 	/**
 	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
@@ -33,13 +35,23 @@ public class SpiralaLogarytmiczna extends Figury {
 	 * @param zakres         - zakres rysowania spirali
 	 * @param graph          - BufferedImage na którym ma się spirala narysować
 	 * @param numberOfThread - liczba wątków utworzona do rysowania
+	 * @param nrSSAA         - liczba próbek na pixel
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph,
-			int numberOfThread) {
+			int numberOfThread, int nrSSAA) {
 		super(opisy, parametrA, parametrB, zakres, graph);
 		this.numberOfThread = numberOfThread;
+		SSAA = false;
 		wyznaczPunkty();
 		new Wykres(graph, krzywa, zakres);
+		if (nrSSAA > 1) {
+			SSAA = true;
+			BufferedImage krzywaSSAA = new BufferedImage(graph.getWidth() * nrSSAA, graph.getHeight() * nrSSAA,
+					BufferedImage.TYPE_INT_ARGB);
+			krzywa = krzywaSSAA;
+			wyznaczPunkty();
+			new Wykres(graph, AntiAliazing.SSAAMonoColor(krzywa, nrSSAA), zakres);
+		}
 	}
 
 	@Override
@@ -48,8 +60,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		double b = parametrB.doubleValue();
 		double z = zakres.doubleValue();
 		double zRad = z / Math.PI;
-		int graphW = graph.getWidth();
-		int graphH = graph.getHeight();
+		int graphW = krzywa.getWidth();
+		int graphH = krzywa.getHeight();
 		int graphW2 = graphW / 2;
 		int graphH2 = graphH / 2;
 		double az = a;
@@ -234,7 +246,8 @@ public class SpiralaLogarytmiczna extends Figury {
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
 			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
-				new Wykres(graph, krzywa, zakres);
+				if (!SSAA)
+					new Wykres(graph, krzywa, zakres);
 				probki /= 2.0;
 				OK = false;
 			} else {
@@ -477,6 +490,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		BufferedImage graph = null;
 
 		int numberOfThread = 0;
+		int nrSSAA = 0;
 
 		@Override
 		public SpiralaLogarytmicznaBuilder setParametrA(String parametrA) {
@@ -514,10 +528,23 @@ public class SpiralaLogarytmiczna extends Figury {
 			return this;
 		}
 
+		/**
+		 * Nadaję liczbę próbek jaka ma być użyta do stworzenia jednego pixela
+		 * 
+		 * @param numberOfSamplings - pierwiastek liczby próbek na jeden pixel
+		 * @return - Wewnętrzna klasa Budowniczego
+		 */
+		public SpiralaLogarytmicznaBuilder setSSAA(int numberOfSamplings) {
+			this.nrSSAA = numberOfSamplings;
+			return this;
+		}
+
 		@Override
 		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
 			if (numberOfThread == 0)
 				numberOfThread = Runtime.getRuntime().availableProcessors();
+			if (nrSSAA == 0)
+				nrSSAA = 1;
 
 			Figury.setKomentarz(sprawdzParametry());
 
@@ -527,7 +554,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				parametrB = new BigDecimal(parametrBText);
 				zakres = new BigDecimal(zakresText);
 				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
-				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph, numberOfThread);
+				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph, numberOfThread, nrSSAA);
 			} else if (parametrAText == null)
 				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
 			else if (parametrBText == null)
