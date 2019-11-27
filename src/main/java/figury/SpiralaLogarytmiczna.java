@@ -1,6 +1,9 @@
 package figury;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		super(opisy, parametrA, parametrB, zakres, graph);
 		this.numberOfThread = numberOfThread;
 		wyznaczPunkty();
-		new Wykres(graph, punkty, zakres);
+		new Wykres(graph, krzywa, zakres);
 	}
 
 	@Override
@@ -62,8 +65,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 
 		// Próba znalezienia takiego a żeby mimo wszystko dało się narysować coś
-		// nie nie
-		// będącego oskryptowaną figurą, oraz wyznaczenie skali rysunku
+		// niebędącego oskryptowaną figurą, oraz wyznaczenie skali rysunku
 		while (skala == 0) {
 			double Xs = wartoscFunkcjiX(az, b, 0);
 			double Ys = wartoscFunkcjiY(az, b, 0);
@@ -86,9 +88,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		if (Double.isNaN(skala) && Math.abs(b) > 1) {
 			double kat = getRadWithoutPIMultiply(z);
 			if (kat >= 0)
-				drawLine(kat, graphW2, graphH2, punkty);
+				drawLine(kat, graphW2, graphH2, krzywa);
 			else {
-				drawLine(0, graphW2, graphH2, punkty);
+				drawLine(0, graphW2, graphH2, krzywa);
 				return;
 			}
 			double katy = getRadWithout2Multiply(zRad);
@@ -96,10 +98,10 @@ public class SpiralaLogarytmiczna extends Figury {
 			mirrorTransformForDegree(stopnie, graphW2, graphH2);
 			return;
 		} else if (Double.isNaN(skala) && Math.abs(b) < 1) {
-			drawCircle(graphW, graphH, punkty);
+			drawCircle(graphW, graphH, krzywa);
 			return;
 		} else if (Double.isNaN(skala) && Math.abs(b) == 1) {
-			drawArc(2 * Math.PI, graphW, graphH, punkty);
+			drawArc(2 * Math.PI, graphW, graphH, krzywa);
 			return;
 		}
 
@@ -121,16 +123,15 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		if (Math.abs(odlOstPKT - odl1PKT) < Math.abs(zRad) && Math.abs(odlOstPKT - odlPOstPKT) <= 4 && Math.abs(b) <= 1
 				&& Math.abs(zRad) >= 2) {
-			punkty.clear();
 			if (odlOstPKT < odl1PKT) {
 				double o = odlOstPKT;
 				odlOstPKT = odl1PKT;
 				odl1PKT = o;
 			}
-			drawRing(odl1PKT, odlOstPKT, graphW, graphH, punkty);
+			drawRing(odl1PKT, odlOstPKT, graphW, graphH, krzywa);
 			return;
 		} else if (Math.abs(odlOstPKT - odlPOstPKT) <= 2.1 && Math.abs(b) <= 1 && Math.abs(zRad) < 2) {
-			drawArc(z, graphW, graphH, punkty);
+			drawArc(z, graphW, graphH, krzywa);
 			return;
 		}
 
@@ -139,8 +140,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		boolean OK = false;
 		double probki = 0.5;
 		while (!OK) {
+			int iloscPKT = 0;
 			katy.clear();
-			punkty.clear();
+			krzywa = new BufferedImage(graphW, graphH, BufferedImage.TYPE_INT_ARGB);
 
 			Point start = new Point(), koniec = new Point();
 			getStartStopPoint(start, koniec, graphW, graphH);
@@ -217,10 +219,11 @@ public class SpiralaLogarytmiczna extends Figury {
 			for (int i = 1; i < katy.size(); i++) {
 				double odleglosc = mathDistanceOfPoints(katy.get(i).pkt, katy.get(i - 1).pkt);
 				if (odleglosc <= Math.sqrt(2)) {
-					punkty.add(katy.get(i).pkt);
+					iloscPKT++;
+					krzywa.setRGB(katy.get(i).pkt.x, katy.get(i).pkt.y, Color.BLUE.getRGB());
 				} else {
 					if (odleglosc < Math.sqrt(2) * 3) {
-						drawLine(katy.get(i).pkt, katy.get(i - 1).pkt, graphW2, graphH2, punkty);
+						drawLine(katy.get(i).pkt, katy.get(i - 1).pkt, graphW2, graphH2, krzywa);
 					} else {
 						licznikOdleglosciowy++;
 					}
@@ -228,11 +231,10 @@ public class SpiralaLogarytmiczna extends Figury {
 			}
 //			System.out.println("Czasy wykonywania aproksymowania= " + (System.currentTimeMillis() - czasPoczatkowy3));
 
-			clearDoubledPoints(punkty);
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
-			if (licznikOdleglosciowy > punkty.size() / 2 && probki >= 1.0 / 16 || punkty.size() == 0) {
-				new Wykres(graph, punkty, zakres);
+			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
+				new Wykres(graph, krzywa, zakres);
 				probki /= 2.0;
 				OK = false;
 			} else {
@@ -253,20 +255,40 @@ public class SpiralaLogarytmiczna extends Figury {
 	 */
 	private void mirrorTransformForDegree(double stopnie, int graphW2, int graphH2) {
 		if (stopnie > 90 && stopnie < 180) {
-			for (Point o : punkty) {
-				o.x = -(o.x - graphW2) + graphW2;
-			}
+			AffineTransform at = new AffineTransform();
+			at.concatenate(AffineTransform.getScaleInstance(-1, 1));
+			at.concatenate(AffineTransform.getTranslateInstance(-krzywa.getWidth(), 0));
+			BufferedImage tranImg = new BufferedImage(krzywa.getWidth(), krzywa.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = (Graphics2D) tranImg.getGraphics();
+			g2d.transform(at);
+			g2d.drawImage(krzywa, 0, 0, null);
+			g2d.dispose();
+			krzywa = tranImg;
 		}
 		if (stopnie >= 180 && stopnie < 270) {
-			for (Point o : punkty) {
-				o.x = -(o.x - graphW2) + graphW2;
-				o.y = -(o.y - graphH2) + graphH2;
-			}
+			AffineTransform at = new AffineTransform();
+			at.concatenate(AffineTransform.getScaleInstance(-1, -1));
+			at.concatenate(AffineTransform.getTranslateInstance(-krzywa.getWidth(), -krzywa.getHeight()));
+			BufferedImage tranImg = new BufferedImage(krzywa.getWidth(), krzywa.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = (Graphics2D) tranImg.getGraphics();
+			g2d.transform(at);
+			g2d.drawImage(krzywa, 0, 0, null);
+			g2d.dispose();
+			krzywa = tranImg;
 		}
 		if (stopnie >= 270 && stopnie < 360) {
-			for (Point o : punkty) {
-				o.y = -(o.y - graphH2) + graphH2;
-			}
+			AffineTransform at = new AffineTransform();
+			at.concatenate(AffineTransform.getScaleInstance(1, -1));
+			at.concatenate(AffineTransform.getTranslateInstance(0, -krzywa.getHeight()));
+			BufferedImage tranImg = new BufferedImage(krzywa.getWidth(), krzywa.getHeight(),
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = (Graphics2D) tranImg.getGraphics();
+			g2d.transform(at);
+			g2d.drawImage(krzywa, 0, 0, null);
+			g2d.dispose();
+			krzywa = tranImg;
 		}
 
 	}
@@ -454,7 +476,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		BigDecimal zakres = null;
 		BufferedImage graph = null;
 
-		int numberOfThread = 1;
+		int numberOfThread = 0;
 
 		@Override
 		public SpiralaLogarytmicznaBuilder setParametrA(String parametrA) {
@@ -494,6 +516,8 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		@Override
 		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
+			if (numberOfThread == 0)
+				numberOfThread = Runtime.getRuntime().availableProcessors();
 
 			Figury.setKomentarz(sprawdzParametry());
 

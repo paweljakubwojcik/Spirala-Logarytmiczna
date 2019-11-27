@@ -144,8 +144,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// Rysowanie obrazka startowego
 
 		long start = System.currentTimeMillis();
-		draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.000000001")
-				.setZakres("10").setGraph(graphImage).build().getImage());
+		draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.001")
+				.setZakres("400").setGraph(graphImage).build().getImage());
 		System.out.println("Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 
 	}
@@ -313,7 +313,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
 						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-						.setThreads(Runtime.getRuntime().availableProcessors()).build().getImage());
+						.build().getImage());
 
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");

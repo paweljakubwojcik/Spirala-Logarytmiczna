@@ -1,5 +1,6 @@
 package figury;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
@@ -39,7 +40,7 @@ public abstract class Figury {
 	BigDecimal parametrA;
 	BigDecimal parametrB;
 	BigDecimal zakres;
-	ArrayList<Point> punkty = new ArrayList<Point>();
+	BufferedImage krzywa;
 	BufferedImage graph;
 
 	/**
@@ -60,6 +61,7 @@ public abstract class Figury {
 		this.parametrB = parametrB;
 		this.zakres = zakres;
 		this.graph = graph;
+		krzywa = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		setOpis();
 	}
 
@@ -157,10 +159,9 @@ public abstract class Figury {
 	 * @param z      - zakres dla jakiego ma powstać łuk
 	 * @param graphW - szerokość okienka w którym będzie rysowany łuk
 	 * @param graphH - wysokość okienka w którym będzie rysowany łuk
-	 * @param punkty - ArrayLista<Point> w której będą dodawane punkty odpowiadające
-	 *               danemu łukowi
+	 * @param krzywa - BufferedImage w którym narysują się punkty
 	 */
-	public static void drawArc(double z, int graphW, int graphH, ArrayList<Point> punkty) {
+	public static void drawArc(double z, int graphW, int graphH, BufferedImage krzywa) {
 		double katStart;
 		double katStop;
 		if (z >= 0) {
@@ -184,7 +185,7 @@ public abstract class Figury {
 			y = r * Math.sin(katStart);
 			pkt = transformFunctionToPixels(x, y, skala, graphW, graphH);
 			if (isXYinImage(pkt, graphW, graphH)) {
-				punkty.add(pkt);
+				krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
 			}
 			katStart += probkowanie;
 		}
@@ -236,10 +237,10 @@ public abstract class Figury {
 	 * @param pkt2   - punkt 2
 	 * @param graphW - szerokość obszaru rysowania
 	 * @param graphH - wysokość obszaru rysownaia
-	 * @param punkty - ArrayList<Point> w której będą dodawane punkty
+	 * @param krzywa - BufferedImage w którym narysują się punkty
 	 */
-	public static void drawLine(Point pkt1, Point pkt2, int graphW, int graphH, ArrayList<Point> punkty) {
-		drawLine(pkt1.x, pkt1.y, pkt2.x, pkt2.y, graphW, graphH, punkty);
+	public static void drawLine(Point pkt1, Point pkt2, int graphW, int graphH, BufferedImage krzywa) {
+		drawLine(pkt1.x, pkt1.y, pkt2.x, pkt2.y, graphW, graphH, krzywa);
 	}
 
 	/**
@@ -250,10 +251,10 @@ public abstract class Figury {
 	 * @param y      - współrzędna y punktu 2
 	 * @param graphW - szerokość obszaru rysowania
 	 * @param graphH - wysokość obszaru rysownaia
-	 * @param punkty - ArrayList<Point> w której będą dodawane punkty
+	 * @param krzywa - BufferedImage w którym narysują się punkty
 	 */
-	public static void drawLine(Point pkt1, double x, double y, int graphW, int graphH, ArrayList<Point> punkty) {
-		drawLine(pkt1.x, pkt1.y, x, y, graphW, graphH, punkty);
+	public static void drawLine(Point pkt1, double x, double y, int graphW, int graphH, BufferedImage krzywa) {
+		drawLine(pkt1.x, pkt1.y, x, y, graphW, graphH, krzywa);
 	}
 
 	/**
@@ -265,10 +266,10 @@ public abstract class Figury {
 	 * @param y2     - współrzędna y punktu 2
 	 * @param graphW - szerokość obszaru rysowania
 	 * @param graphH - wysokość obszaru rysownaia
-	 * @param punkty - ArrayList<Point> w której będą dodawane punkty
+	 * @param krzywa - BufferedImage w którym narysują się punkty
 	 */
 	public static void drawLine(double x1, double y1, double x2, double y2, int graphW, int graphH,
-			ArrayList<Point> punkty) {
+			BufferedImage krzywa) {
 		double aa = (y2 - y1) / (x2 - x1);
 		double bb = (x2 - x1) / (y2 - y1);
 		Point pkt;
@@ -277,13 +278,13 @@ public abstract class Figury {
 				for (int DX = 1; DX < x2 - x1; DX++) {
 					pkt = new Point((int) (x1 + DX), (int) (aa * DX + y1));
 					if (isXYinImage(pkt, graphW, graphH))
-						punkty.add(pkt);
+						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
 				}
 			} else {
 				for (int DX = 1; DX < x1 - x2; DX++) {
 					pkt = new Point((int) (x2 + DX), (int) (aa * DX + y2));
 					if (isXYinImage(pkt, graphW, graphH))
-						punkty.add(pkt);
+						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
 				}
 			}
 		} else {
@@ -291,13 +292,13 @@ public abstract class Figury {
 				for (int DY = 1; DY < y2 - y1; DY++) {
 					pkt = new Point((int) (bb * DY + x1), (int) (y1 + DY));
 					if (isXYinImage(pkt, graphW, graphH))
-						punkty.add(pkt);
+						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
 				}
 			} else {
 				for (int DY = 1; DY < y1 - y2; DY++) {
 					pkt = new Point((int) (bb * DY + x2), (int) (y2 + DY));
 					if (isXYinImage(pkt, graphW, graphH))
-						punkty.add(pkt);
+						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
 				}
 			}
 		}
@@ -310,21 +311,21 @@ public abstract class Figury {
 	 * @param degree  - kąt pod jakim ma zostać narysowana linia
 	 * @param graphW2 - połowa szerokości rysowanego obszaru
 	 * @param graphH2 - połowa wysokości rysowanego obszaru
-	 * @param punkty  - ArrayList<Point> w której będą dodawane punkty
+	 * @param krzywa  - BufferedImage w którym narysują się punkty
 	 */
-	public static void drawLine(double degree, int graphW2, int graphH2, ArrayList<Point> punkty) {
+	public static void drawLine(double degree, int graphW2, int graphH2, BufferedImage krzywa) {
 		int roz = Math.min(graphW2, graphH2);
 		double aa = Math.abs(Math.tan(degree));
 		for (int x = 0; x < graphW2; x++) {
 			int y = (int) (aa * x);
 			if (mathDistanceOfPoint(x, y) < Math.sqrt(Math.pow(roz, 2))) {
-				punkty.add(new Point(x + graphW2, -y + graphH2));
+				krzywa.setRGB(x + graphW2, -y + graphH2, Color.BLUE.getRGB());
 			}
 		}
 		for (int y = 0; y < graphH2; y++) {
 			int x = (int) (y / aa);
 			if (mathDistanceOfPoint(x, y) < Math.sqrt(Math.pow(roz, 2))) {
-				punkty.add(new Point(x + graphW2, -y + graphH2));
+				krzywa.setRGB(x + graphW2, -y + graphH2, Color.BLUE.getRGB());
 			}
 		}
 	}
@@ -462,10 +463,9 @@ public abstract class Figury {
 	 *                  punktu
 	 * @param graphW    - szerokość obszaru rysowanego
 	 * @param graphH    - wysokość obszaru rysowanego
-	 * @param punkty    - ArrayList<Point> w której wyznaczone punkty zostaną
-	 *                  zapisane
+	 * @param krzywa    - BufferedImage w którym narysują się punkty
 	 */
-	public static void drawRing(double odl1PKT, double odlOstPKT, int graphW, int graphH, ArrayList<Point> punkty) {
+	public static void drawRing(double odl1PKT, double odlOstPKT, int graphW, int graphH, BufferedImage krzywa) {
 		int graphW2 = graphW / 2;
 		int graphH2 = graphH / 2;
 		Point start = new Point(), koniec = new Point();
@@ -475,7 +475,7 @@ public abstract class Figury {
 			for (int Y = start.y; Y < koniec.y; Y++) {
 				odl = mathDistanceOfPoints(X, Y, graphW2, graphH2);
 				if (odl + delta >= odl1PKT && odl - delta <= odlOstPKT) {
-					punkty.add(new Point(X, Y));
+					krzywa.setRGB(X, Y, Color.BLUE.getRGB());
 				}
 			}
 		}
@@ -486,10 +486,10 @@ public abstract class Figury {
 	 * 
 	 * @param graphW - szerokość obszaru rysowanego
 	 * @param graphH - wysokość obszaru rysowanego
-	 * @param punkty - ArrayList<Point> w której wyznaczone punkty zostaną zapisane
+	 * @param krzywa - BufferedImage w którym narysują się punkty
 	 */
-	public static void drawCircle(int graphW, int graphH, ArrayList<Point> punkty) {
-		drawRing(0.0, Math.min(graphW, graphH) / 2.0, graphW, graphH, punkty);
+	public static void drawCircle(int graphW, int graphH, BufferedImage krzywa) {
+		drawRing(0.0, Math.min(graphW, graphH) / 2.0, graphW, graphH, krzywa);
 	}
 
 	/**
