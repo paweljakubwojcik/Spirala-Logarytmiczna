@@ -31,7 +31,7 @@ public class Wykres {
 
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, graph.getWidth(), graph.getHeight());
-		
+
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);
 
@@ -52,7 +52,6 @@ public class Wykres {
 
 	private void drawBackground(Graphics2D g2d) {
 
-		
 	}
 
 	private void drawWykres() {

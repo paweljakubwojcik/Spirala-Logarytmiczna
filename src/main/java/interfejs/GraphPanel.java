@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 public class GraphPanel extends JPanel {
 
 	public Image image;
-	
 
 	/**
 	 * 
@@ -30,7 +29,7 @@ public class GraphPanel extends JPanel {
 		super.setSize(x, y);
 		if (image != null)
 			image = image.getScaledInstance(x, y, BufferedImage.SCALE_REPLICATE);
-		
+
 	}
 
 	/**

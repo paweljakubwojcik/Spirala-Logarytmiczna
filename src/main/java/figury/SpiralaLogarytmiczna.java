@@ -352,7 +352,7 @@ public class SpiralaLogarytmiczna extends Figury {
 //					"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
 //					"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
 //					"U+03C6 musi nale�e� do liczb rzeczywistych" };
-			int[] a = { 0, 0, 0, 0 ,0};
+			int[] a = { 0, 0, 0, 0, 0 };
 
 			if (parametrAText == null) // dodaj komentarz a nieustawione
 				a[0] = 1;

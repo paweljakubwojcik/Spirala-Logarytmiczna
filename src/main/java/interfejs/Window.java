@@ -316,7 +316,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			sizeWindowX = this.getWidth();
 			sizeWindowY = this.getHeight();
 			przeskalujOkienko();
-
 			graph.repaint();
 
 		}
@@ -361,7 +360,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		if (obj == przyciskCzysc) {
 
 			BufferedImage filler = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g = (Graphics2D)filler.getGraphics();
+			Graphics2D g = (Graphics2D) filler.getGraphics();
 			g.setColor(Color.black);
 			g.fillRect(0, 0, graph.getWidth(), graph.getHeight());
 			graph.setImage(filler);
