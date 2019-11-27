@@ -3,7 +3,6 @@ package figury;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
 import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -23,8 +22,8 @@ class SpiralaLogarytmicznaWydajnoscTestJUnit5 {
 	public static void setUpBeforeClass() {
 		BufferedImage graf = new BufferedImage(760, 400, BufferedImage.TYPE_INT_ARGB);
 		try {
-			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal(0.5))
-					.setParametrB(new BigDecimal(0.1)).setZakres(new BigDecimal(30)).setGraph(graf).build();
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.1")
+					.setZakres("30").setGraph(graf).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,13 +39,14 @@ class SpiralaLogarytmicznaWydajnoscTestJUnit5 {
 			"0.5, 0.3, 70", "0.5, 0, 200", "0.5, 1.1, 200.82", "0.5, 1.1, 201.49", "0.5, 1.1, 201.82",
 			"0.5, 1.1, -6.82", "0.5, 1.5, 201.23", "0.5, 1.15, 201.70", "0.5, 1, 200", "0.5, 2.5, 201",
 			"0.5, 5, 200.24", "0.5, 7.5, 200.50", "0.5, 10, 200.75", "0.5, -1.1, 6.82", "0.5, -1.1, -6.82",
-			"0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75" })
+			"0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75", "10, 0.1, 10.5", "10, 0.00001, 100000000", "10, 1, 100000000",
+			"10E403, 10.123, -1000.5" })
 	@DisplayName(value = "Testy wydajności spirali")
 	void testRysowania(String a, String b, String z) {
 		assertTimeout(Duration.ofMillis(2000), () -> {
 			try {
-				new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal(a))
-						.setParametrB(new BigDecimal(b)).setZakres(new BigDecimal(z)).setGraph(graph).build();
+				new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a).setParametrB(b).setZakres(z)
+						.setGraph(graph).build();
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.err.println(e.getMessage());

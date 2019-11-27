@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
+import java.rmi.AccessException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,14 +21,20 @@ import javax.swing.SwingConstants;
 
 import figury.SpiralaLogarytmiczna;
 
+/**
+ * Tworzy okienko, obsługuje przyciski, skaluje okienko.
+ * 
+ * @author pafeu
+ * @since 1.0
+ */
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
 	int sizeWindowX = 800;
 	int sizeWindowY = 600;
 
-	private Dimension poleSize = new Dimension(); // 100 , 30
-	private Dimension buttonSize = new Dimension();
+	private Dimension poleSize = new Dimension(50, 30); // 100 , 30
+	private Dimension buttonSize = new Dimension(100, 30);
 	private Dimension minimumSize = new Dimension(640, 300);
 
 	private static JPanel graph;
@@ -49,6 +56,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private BufferedImage graphImage;
 
 	public Window() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(NAZWAPROGRAMUTEXT);
 		setLocationRelativeTo(null);
@@ -123,7 +131,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		setVisible(true);
 
-		//////// Spanie jest po to żeby nie znikała szybko narysowana spirala ////////
+		//////// Spanie jest po to ĹĽeby nie znikaĹ‚a szybko narysowana spirala ////////
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e1) {
@@ -133,29 +141,19 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-		try {
-			long start = System.currentTimeMillis();
-			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(new BigDecimal("0.5"))
-					.setParametrB(new BigDecimal("0.000000001")).setZakres(new BigDecimal("10")).setGraph(graphImage)
-					.build().getImage());
-			System.out.println(
-					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getMessage());
-		}
+		// Rysowanie obrazka startowego
+
+		long start = System.currentTimeMillis();
+		draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.001")
+				.setZakres("400").setGraph(graphImage).build().getImage());
+		System.out.println("Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+
 	}
 
 	private void przeskalujOkienko() {
 
 		sizeWindowX = this.getWidth();
 		sizeWindowY = this.getHeight();
-
-		poleSize.width = 50;
-		poleSize.height = sizeWindowY / 30;
-
-		buttonSize.width = 100;
-		buttonSize.height = sizeWindowY / 30;
 
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -169,7 +167,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		int odstepY = sizeWindowY / 60;
 		int locationY = graph.getY() + graph.getHeight() + odstepY;
 		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
-													// 70+20+50+20+50+50+50+30+buttony
+
+		// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
 		napisParametry.setSize(70, poleSize.height);
 		napisParametry.setLocation(graph.getX(), locationY);
@@ -215,63 +214,58 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	}
 
-	private void draw(BufferedImage BI) {
+	private static void draw(BufferedImage BI) {
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
 		g2d.drawImage(BI, 0, 0, null);
 	}
 
-	private void draw() {
-		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-		g2d.drawImage(graphImage, 0, 0, null);
-	}
-
-	public static void setParametrAText(String parametrAText) throws Exception {
+	public static void setParametrAText(String parametrAText) throws AccessException {
 		if (napisParametrA != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
 				napisParametrA.setText(parametrAText);
 			else
-				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
 
-	public static void setParametrBText(String parametrBText) throws Exception {
+	public static void setParametrBText(String parametrBText) throws AccessException {
 		if (napisParametrB != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
 				napisParametrB.setText(parametrBText);
 			else
-				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
 
-	public static void setZakresText(String zakresText) throws Exception {
+	public static void setZakresText(String zakresText) throws AccessException {
 		if (napisZakres != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
 				napisZakres.setText(zakresText);
 			else
-				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
 
-	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws Exception {
+	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws AccessException {
 		if (napisZakresJednostka != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
 				napisZakresJednostka.setText(jednostkaZakresuText);
 			else
-				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
 
-	public static void setKomentarz(String komentarz) throws Exception {
+	public static void setKomentarz(String komentarz) throws AccessException {
 		if (poleKomentarz != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
 				poleKomentarz.setText(komentarz);
 			else
-				throw new Exception("Tylko klasa figury.Figury ma dostęp do tej metody");
+				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
 
@@ -290,7 +284,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// Jeśli tworzenie wykresu będzie zajmowało dużo czasu trzeba będzie ustawić
+			// JeĹ›li tworzenie wykresu bÄ™dzie zajmowaĹ‚o duĹĽo czasu trzeba bÄ™dzie
+			// ustawiÄ‡
 			// tutaj spanko
 			// System.out.println("resize");
 			przeskalujOkienko();
@@ -306,6 +301,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		JButton obj = (JButton) e.getSource();
 		if (obj == przyciskRysuj) {
 			graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -314,17 +310,29 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			g2d.drawImage(nic, 0, 0, null);
 			try {
 				long start = System.currentTimeMillis();
-				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder()
-						.setParametrA(new BigDecimal(poleParametrA.getText()))
-						.setParametrB(new BigDecimal(poleParametrB.getText()))
-						.setZakres(new BigDecimal(poleZakres.getText())).setGraph(graphImage).build().getImage());
+
+				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
+						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
+						.build().getImage());
+
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 			} catch (Exception exc) {
 				exc.printStackTrace();
 				System.err.println(exc.getMessage());
 			}
+			System.gc();
 		}
+
+		if (obj == przyciskCzysc) {
+			System.out.println("Czyscze");
+		}
+
+		if (obj == przyciskPelnyEkran) {
+			System.out.println("rOBIE PELNY EKRAN");
+			setFullScreen();
+		}
+
 	}
 
 }

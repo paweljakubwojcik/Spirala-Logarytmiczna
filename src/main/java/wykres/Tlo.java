@@ -4,6 +4,10 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 
+/**
+ * Generuje opisy i osie do Spirali
+ *
+ */
 public class Tlo {
 
 	private static BufferedImage tlo;
