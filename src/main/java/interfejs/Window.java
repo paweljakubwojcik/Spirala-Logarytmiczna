@@ -3,6 +3,7 @@ package interfejs;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -19,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import figury.SpiralaLogarytmiczna;
+import wykres.Wykres;
 
 /**
  * Tworzy okienko, obsługuje przyciski, skaluje okienko.
@@ -29,6 +31,8 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
+	private Dimension rozdzielczosc = Toolkit.getDefaultToolkit().getScreenSize();
+
 	int sizeWindowX = 800;
 	int sizeWindowY = 600;
 
@@ -36,7 +40,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private Dimension buttonSize = new Dimension(100, 30);
 	private Dimension minimumSize = new Dimension(640, 300);
 
-	private static JPanel graph;
+	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
 			napisZakresJednostka, poleKomentarz;
 
@@ -53,6 +57,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private static BigDecimal parametrA, parametrB, zakres;
 	private BufferedImage graphImage;
 
+	SpiralaLogarytmiczna spirala;
+
 	public Window() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +69,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		setLayout(null);
 		setMinimumSize(minimumSize);
 
-		graph = new JPanel();
+		graph = new GraphPanel();
 		add(graph);
 		graph.setBorder(BorderFactory.createLineBorder(Color.black));
 
@@ -145,8 +151,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// Rysowanie obrazka startowego
 		try {
 			long start = System.currentTimeMillis();
-			draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.000000001")
-					.setZakres("10").setGraph(graphImage).build().getImage());
+			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
+					.setParametrB("0.000000001").setZakres("10").setGraph(graphImage).build();
+			draw(spirala.getImage());
 			System.out.println(
 					"Wykonywanie Spirali trwaĹ‚o: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 		} catch (Exception e) {
@@ -157,9 +164,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	}
 
 	private void przeskalujOkienko() {
-
-		sizeWindowX = this.getWidth();
-		sizeWindowY = this.getHeight();
 
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -217,18 +221,28 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	}
 
 	private void setFullScreen() {
+		sizeWindowX = rozdzielczosc.width;
+		sizeWindowY = rozdzielczosc.height;
+		setSize(rozdzielczosc);
+		this.setLocation(0, 0);
+		przeskalujOkienko();
 
 	}
 
 	private void draw(BufferedImage BI) {
-		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-		g2d.drawImage(BI, 0, 0, null);
+//		Graphics2D g2d = (Graphics2D) graph.getGraphics();
+//		g2d.drawImage(BI, 0, 0, null);
+		graph.setImage(BI);
+		graph.repaint();
+
 	}
 
+	// czy to miało byc do resize? ///////////////////////
 	private void draw() {
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
 		g2d.drawImage(graphImage, 0, 0, null);
 	}
+	/////////////////////////////////
 
 	public static void setParametrAText(String parametrAText) throws Exception {
 		if (napisParametrA != null) {
@@ -299,7 +313,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			// ustawiÄ‡
 			// tutaj spanko
 			// System.out.println("resize");
+			sizeWindowX = this.getWidth();
+			sizeWindowY = this.getHeight();
 			przeskalujOkienko();
+
+			graph.repaint();
+
 		}
 
 	}
@@ -316,15 +335,20 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		JButton obj = (JButton) e.getSource();
 		if (obj == przyciskRysuj) {
 			graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
 			BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
+
 			Graphics2D g2d = (Graphics2D) graph.getGraphics();
-			g2d.drawImage(nic, 0, 0, null);
+
+			// g2d.drawImage(nic, 0, 0, null);
+
 			try {
 				long start = System.currentTimeMillis();
 
-				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
+				spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
 						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-						.build().getImage());
+						.build();
+				draw(spirala.getImage());
 
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
@@ -335,11 +359,17 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 
 		if (obj == przyciskCzysc) {
-			System.out.println("Czyscze");
+
+			BufferedImage filler = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = (Graphics2D)filler.getGraphics();
+			g.setColor(Color.black);
+			g.fillRect(0, 0, graph.getWidth(), graph.getHeight());
+			graph.setImage(filler);
+			graph.repaint();
+
 		}
 
 		if (obj == przyciskPelnyEkran) {
-			System.out.println("rOBIE PELNY EKRAN");
 			setFullScreen();
 		}
 

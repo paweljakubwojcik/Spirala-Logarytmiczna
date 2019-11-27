@@ -335,35 +335,42 @@ public class SpiralaLogarytmiczna extends Figury {
 				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
 				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph);
 			} else if (parametrAText == null)
-				throw new ExceptionInInitializerError("Parametr A nie zosta�� ustawiony");
+				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
 			else if (parametrBText == null)
-				throw new ExceptionInInitializerError("Parametr B nie zosta�� ustawiony");
+				throw new ExceptionInInitializerError("Parametr B nie został ustawiony");
 			else if (zakresText == null)
-				throw new ExceptionInInitializerError("Parametr zakres nie zosta�� ustawiony");
+				throw new ExceptionInInitializerError("Parametr zakres nie został ustawiony");
 			else if (graph == null)
-				throw new ExceptionInInitializerError("Parametr graph nie zosta� ustawiony");
+				throw new ExceptionInInitializerError("Parametr graph nie został ustawiony");
 			else
-				throw new ExceptionInInitializerError("B��d wprowadzonych parametr�w");
+				throw new ExceptionInInitializerError("Błąd wprowadzonych parametrów");
 		}
 
 		@Override
 		public int[] sprawdzParametry() {
-			int[] a = { 1, 0 };// 0 - ignoruje; 1- niepoprawne znaki; 2- a ujemne;
+//			String[] komentarz = { "Parametr a nie został ustawiony", "Parametr b nie został ustawiony",
+//					"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
+//					"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
+//					"U+03C6 musi nale�e� do liczb rzeczywistych" };
+			int[] a = { 0, 0, 0, 0 ,0};
 
 			if (parametrAText == null) // dodaj komentarz a nieustawione
-				;
+				a[0] = 1;
 			if (parametrBText == null) // dodaj komentarz b nieustawione
-				;
+				a[1] = 1;
 			if (zakresText == null) // dodaj komentarz z nieustawione
-				;
+				a[2] = 1;
+			if (isItANumber(parametrAText))
+				if (Double.valueOf(parametrAText) < 0)
+					a[4] = 1;
 
-			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
-				if (Double.valueOf(parametrAText) < 0) {
-					a[1] = 2; // dodaj komentarz a musi by� nieujemne
+			if (!(isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText)))
+				a[3] = 1;
+
+			for (int i = 0; i < a.length; i++)
+				if (a[i] == 1)
 					return a;
-				} else
-					return null;
-			return a;
+			return null;
 
 		}
 
@@ -383,8 +390,8 @@ public class SpiralaLogarytmiczna extends Figury {
 					i++;
 				if (string.charAt(0) == ".".charAt(0))
 					return false;
-				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48)
-						&& string.charAt(i) != ".".charAt(0) && string.charAt(i) != "E".charAt(0) )
+				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48) && string.charAt(i) != ".".charAt(0)
+						&& string.charAt(i) != "E".charAt(0))
 					return false;
 			}
 			return true;

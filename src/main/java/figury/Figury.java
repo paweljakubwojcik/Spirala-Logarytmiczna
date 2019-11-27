@@ -25,9 +25,10 @@ public abstract class Figury {
 	 * Zawiera komunikaty jakie majÄ… siÄ™ wyÅ›wietlaÄ‡ wedÅ‚ug kryterium zawartym w
 	 * wymaganiach
 	 */
-	private static final String[] komentarz = { "","Podano niepoprawne dane.\n", "a musi byæ wiêksze od zera\n",
-			"a musi nale¿eæ do liczb rzeczywistych\n", "b musi nale¿eæ do liczb rzeczywistych\n",
-			"U+03C6 musi nale¿eæ do liczb rzeczywistych" };
+	private static final String[] komentarz = { "Parametr a nie zostaÅ‚ ustawiony", "Parametr b nie zostaÅ‚ ustawiony",
+			"Zakres nie zostaÅ‚ ustawiony", "Podano niepoprawne dane.\n", "a musi byÄ‡ wiÄ™ksze od zera\n",
+			"a musi naleÅ¼eÄ‡ do liczb rzeczywistych\n", "b musi naleÅ¼eÄ‡ do liczb rzeczywistych\n",
+			"U+03C6 musi naleï¿½eï¿½ do liczb rzeczywistych" };
 	String[] opisy = { " ", " ", " ", " " };
 	BigDecimal parametrA;
 	BigDecimal parametrB;
@@ -100,7 +101,8 @@ public abstract class Figury {
 		String wysylanyKomentarz = "";
 		if (numer != null) {
 			for (int i = 0; i < numer.length; i++) {
-				wysylanyKomentarz += komentarz[numer[i]];
+				if (numer[i] == 1)
+					wysylanyKomentarz += komentarz[i];
 			}
 		}
 		try {
