@@ -485,7 +485,9 @@ public abstract class Figury {
 		for (int X = start.x; X < koniec.x; X++) {
 			for (int Y = start.y; Y < koniec.y; Y++) {
 				odl = mathDistanceOfPoints(X, Y, graphW2, graphH2);
-				if (odl + delta >= odl1PKT && odl - delta <= odlOstPKT) {
+				if (odl + delta >= odl1PKT && odl - delta <= odlOstPKT && isXYinImage(X, Y, graphW, graphH)) {
+					// TODO sprawdzić, czy może przypadkiem nie ucina jakiegoś obrazka po nowo
+					// dodanej funkcji
 					krzywa.setRGB(X, Y, Color.BLUE.getRGB());
 				}
 			}
