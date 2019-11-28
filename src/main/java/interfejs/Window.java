@@ -41,9 +41,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private int sizeWindowX = 800;
 	private int sizeWindowY = 600;
 
-	private Dimension poleSize = new Dimension(50, 30); 
-	private Dimension buttonSize = new Dimension(100, 30);
-	private Dimension minimumSize = new Dimension(640, 300);
+	private Dimension poleSize = new Dimension(50, 20); 
+	private Dimension buttonSize = new Dimension(80, 20);
+	private Dimension minimumSize = new Dimension(640, 600);
 
 	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
@@ -165,11 +165,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
 		napisNazwaProgramu.setLocation(0, 0);
 
-		int graphWidth = sizeWindowX - sizeWindowX / 20;
-		int graphX = sizeWindowX / 80;
+		int graphWidth = sizeWindowX - sizeWindowX / 20 ; //tak naprawde to jest szerokosc oknienka bez marginesow
+		int graphX = sizeWindowX/64; // margines
 
-		graph.setSize(sizeWindowY * 4 / 6, sizeWindowY * 4 / 6);
-		graph.setLocation(sizeWindowX / 80 + (graphWidth - sizeWindowY * 4 / 6) / 2, napisNazwaProgramu.getHeight());
+		graph.setSize(sizeWindowY * 9 / 12, sizeWindowY * 9 / 12);
+		graph.setLocation(sizeWindowX / 80 + (graphWidth - graph.getWidth()) / 2, napisNazwaProgramu.getHeight());
 		graph.setBorder(BorderFactory.createLineBorder(Color.red));
 
 		// graph.setAlignmentX(containerPanel.getWidth()-(sizeWindowY * 4 / 6));
@@ -211,7 +211,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskCzysc.setSize(buttonSize);
 		przyciskCzysc.setLocation(przyciskRysuj.getX() + przyciskRysuj.getWidth() + odstep, locationY);
 
-		przyciskPelnyEkran.setSize(buttonSize);
+		przyciskPelnyEkran.setSize(new Dimension(140,20));
 		przyciskPelnyEkran.setLocation(przyciskCzysc.getX() + przyciskCzysc.getWidth() + odstep, locationY);
 
 		poleKomentarz.setLocation(graphX, locationY + odstepY + poleSize.height);
@@ -241,6 +241,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 									// przeskalujOkienko()
 			// przeskalujOkienko(rozdzielczosc.width, rozdzielczosc.height);
 
+			przyciskPelnyEkran.setText("Wyłącz pełny ekran");
 			pelnyekran = true;
 
 		} else {
@@ -249,6 +250,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			setSize(sizePrzedFullscreenem);
 			setVisible(true);
 			requestFocus();
+			przyciskPelnyEkran.setText("PełnyEkran");
 			pelnyekran = false;
 
 		}
