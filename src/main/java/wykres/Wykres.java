@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 /**
  * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
  * 
+ * 
  * @author 7Adrian
  * @since 1.0
  */
@@ -18,6 +19,13 @@ public class Wykres {
 	private BufferedImage tlo;
 	private BufferedImage krzywa;
 
+	/**
+	 * konstruktor edytuje podane parametry
+	 * 
+	 * @param graph - BufferedImage na którym zostaje narysowany wykres.
+	 * @param krzywa - Obraz wykresu utworzony z wyznaczonych punktów
+	 * @param zakres - potrzebne do wykonania tła
+	 */
 	public Wykres(BufferedImage graph, BufferedImage krzywa, BigDecimal zakres) {
 		this.graph = graph;
 		this.krzywa = krzywa;
@@ -45,10 +53,6 @@ public class Wykres {
 	}
 
 	private void scalObrazki() {
-
-	}
-
-	private void drawBackground(Graphics2D g2d) {
 
 	}
 
