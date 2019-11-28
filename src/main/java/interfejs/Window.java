@@ -284,9 +284,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// JeĹ›li tworzenie wykresu bÄ™dzie zajmowaĹ‚o duĹĽo czasu trzeba bÄ™dzie
-			// ustawiÄ‡
-			// tutaj spanko
+			// Jeźli tworzenie wykresu będzie zajmowało dużo czasu trzeba będzie
+			// ustawić tutaj spanko, być może nawet obsługę myszki zaimplementować
 			// System.out.println("resize");
 			przeskalujOkienko();
 		}
