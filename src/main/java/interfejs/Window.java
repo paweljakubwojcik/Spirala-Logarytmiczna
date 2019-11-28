@@ -41,7 +41,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private int sizeWindowX = 800;
 	private int sizeWindowY = 600;
 
-	private Dimension poleSize = new Dimension(50, 20); 
+	private Dimension poleSize = new Dimension(50, 20);
 	private Dimension buttonSize = new Dimension(80, 20);
 	private Dimension minimumSize = new Dimension(640, 600);
 
@@ -165,8 +165,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
 		napisNazwaProgramu.setLocation(0, 0);
 
-		int graphWidth = sizeWindowX - sizeWindowX / 20 ; //tak naprawde to jest szerokosc oknienka bez marginesow
-		int graphX = sizeWindowX/64; // margines
+		int graphWidth = sizeWindowX - sizeWindowX / 20; // tak naprawde to jest szerokosc oknienka bez marginesow
+		int graphX = sizeWindowX / 64; // margines
 
 		graph.setSize(sizeWindowY * 9 / 12, sizeWindowY * 9 / 12);
 		graph.setLocation(sizeWindowX / 80 + (graphWidth - graph.getWidth()) / 2, napisNazwaProgramu.getHeight());
@@ -211,7 +211,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskCzysc.setSize(buttonSize);
 		przyciskCzysc.setLocation(przyciskRysuj.getX() + przyciskRysuj.getWidth() + odstep, locationY);
 
-		przyciskPelnyEkran.setSize(new Dimension(140,20));
+		przyciskPelnyEkran.setSize(new Dimension(140, 20));
 		przyciskPelnyEkran.setLocation(przyciskCzysc.getX() + przyciskCzysc.getWidth() + odstep, locationY);
 
 		poleKomentarz.setLocation(graphX, locationY + odstepY + poleSize.height);
@@ -219,7 +219,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 30);
 
 	}
-
 
 	private void setFullScreen() {
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -268,21 +267,14 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
 		g2d.drawImage(graphImage, 0, 0, null);
 	}
-	
-	
-	private void stworzSpirale()
-	{
+
+	private void stworzSpirale() {
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-		BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-
 		try {
 			long start = System.currentTimeMillis();
 
 			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
-					.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-					.build();
+					.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage).build();
 			draw(spirala.getImage());
 
 			System.out.println(
@@ -293,12 +285,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 		System.gc();
 	}
-	
-/**
- * 
- * @param parametrAText 
- * @throws AccessException - tylko klasa Figury ma dostęp
- */
+
+	/**
+	 * 
+	 * @param parametrAText
+	 * @throws AccessException - tylko klasa Figury ma dostęp
+	 */
 	public static void setParametrAText(String parametrAText) throws AccessException {
 
 		if (napisParametrA != null) {
@@ -309,11 +301,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
-/**
- * 
- * @param parametrBText
- * @throws AccessException tylko klasa Figury ma dostęp
- */
+
+	/**
+	 * 
+	 * @param parametrBText
+	 * @throws AccessException tylko klasa Figury ma dostęp
+	 */
 	public static void setParametrBText(String parametrBText) throws AccessException {
 		if (napisParametrB != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -323,11 +316,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
-/**
- * 
- * @param zakresText
- * @throws AccessException tylko klasa Figury ma dostęp
- */
+
+	/**
+	 * 
+	 * @param zakresText
+	 * @throws AccessException tylko klasa Figury ma dostęp
+	 */
 	public static void setZakresText(String zakresText) throws AccessException {
 		if (napisZakres != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -337,11 +331,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
-/**
- * 
- * @param jednostkaZakresuText
- * @throws AccessException tylko klasa Figury ma dostęp
- */
+
+	/**
+	 * 
+	 * @param jednostkaZakresuText
+	 * @throws AccessException tylko klasa Figury ma dostęp
+	 */
 	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws AccessException {
 		if (napisZakresJednostka != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
