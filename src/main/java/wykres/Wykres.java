@@ -2,6 +2,7 @@ package wykres;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 
@@ -32,10 +33,11 @@ public class Wykres {
 		this.zakres = zakres;
 		wykres = new BufferedImage(graph.getWidth(), graph.getWidth(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) wykres.getGraphics();
-
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, graph.getWidth(), graph.getHeight());
-
+		
+		Point graphSize= new Point(graph.getWidth(), graph.getWidth());
+		
+		g2d.drawImage(Tlo.getTlo(graphSize,zakres), null, 0, 0);
+		
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);
 
