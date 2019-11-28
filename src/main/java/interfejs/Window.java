@@ -41,12 +41,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private int sizeWindowX = 800;
 	private int sizeWindowY = 600;
 
-	private Dimension poleSize = new Dimension(50, 30); // 100 , 30
+	private Dimension poleSize = new Dimension(50, 30); 
 	private Dimension buttonSize = new Dimension(100, 30);
 	private Dimension minimumSize = new Dimension(640, 300);
 
 	private static GraphPanel graph;
-	private static JPanel containerPanel;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
 			napisZakresJednostka, poleKomentarz;
 
@@ -274,7 +273,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
-
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
 
 		try {
@@ -294,7 +292,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		System.gc();
 	}
 	
-
+/**
+ * 
+ * @param parametrAText 
+ * @throws AccessException - tylko klasa Figury ma dostęp
+ */
 	public static void setParametrAText(String parametrAText) throws AccessException {
 
 		if (napisParametrA != null) {
@@ -305,7 +307,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
-
+/**
+ * 
+ * @param parametrBText
+ * @throws AccessException tylko klasa Figury ma dostęp
+ */
 	public static void setParametrBText(String parametrBText) throws AccessException {
 		if (napisParametrB != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -315,7 +321,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
-
+/**
+ * 
+ * @param zakresText
+ * @throws AccessException tylko klasa Figury ma dostęp
+ */
 	public static void setZakresText(String zakresText) throws AccessException {
 		if (napisZakres != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -325,7 +335,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
 		}
 	}
-
+/**
+ * 
+ * @param jednostkaZakresuText
+ * @throws AccessException tylko klasa Figury ma dostęp
+ */
 	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws AccessException {
 		if (napisZakresJednostka != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -336,6 +350,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 	}
 
+	/**
+	 * 
+	 * @param komentarz - komentarz który ma być ustawiony w polu komentarzy
+	 * @throws AccessException - tylko klasa Figury ma dostęp
+	 */
 	public static void setKomentarz(String komentarz) throws AccessException {
 		if (poleKomentarz != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
