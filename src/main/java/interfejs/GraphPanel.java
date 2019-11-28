@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 public class GraphPanel extends JPanel {
 
 	public Image image;
+	public Image imageScaled;
 
 	/**
 	 * 
@@ -20,15 +21,18 @@ public class GraphPanel extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(image, 0, 0, null);
+		g2d.drawImage(imageScaled, 0, 0, null);
 		super.paintComponents(g);
 	}
 
 	@Override
 	public void setSize(int x, int y) {
 		super.setSize(x, y);
-		if (image != null)
-			image = image.getScaledInstance(x, y, BufferedImage.SCALE_REPLICATE);
+		if (image != null) {
+			imageScaled = image.getScaledInstance(x, y, BufferedImage.SCALE_REPLICATE);
+//			Graphics2D g2d = (Graphics2D) this.getGraphics();
+//			g2d.drawImage(imageScaled, 0, 0, null);
+		}
 
 	}
 
@@ -40,5 +44,6 @@ public class GraphPanel extends JPanel {
 	 */
 	public void setImage(BufferedImage g) {
 		this.image = g;
+		this.imageScaled = g;
 	}
 }

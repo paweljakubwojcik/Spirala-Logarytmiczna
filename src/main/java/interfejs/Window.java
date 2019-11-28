@@ -3,6 +3,7 @@ package interfejs;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +42,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private Dimension minimumSize = new Dimension(640, 300);
 
 	private static GraphPanel graph;
+	private static JPanel containerPanel;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
 			napisZakresJednostka, poleKomentarz;
 
@@ -70,8 +72,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		setMinimumSize(minimumSize);
 
 		graph = new GraphPanel();
+		
 		add(graph);
-		graph.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		// JText
 		poleParametrA = new JTextField();
@@ -94,7 +96,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// napisParametry.setBorder(BorderFactory.createLineBorder(Color.black));//
 		// testing
 
-		napisParametrA = new JLabel("a=");
+		napisParametrA = new JLabel();
+		napisParametrA.setText("");
 		add(napisParametrA);
 		// napisParametrA.setBorder(BorderFactory.createLineBorder(Color.black));//
 		// testing
@@ -131,35 +134,29 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		poleKomentarz = new JLabel();
 		add(poleKomentarz);
-		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));//
+		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
 		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
 
-		setVisible(true);
 
-		//////// Spanie jest po to ĹĽeby nie znikaĹ‚a szybko narysowana spirala ////////
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////
+		setVisible(true);
 
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		// Rysowanie obrazka startowego
-		try {
-			long start = System.currentTimeMillis();
-			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
-					.setParametrB("0.000000001").setZakres("10").setGraph(graphImage).build();
-			draw(spirala.getImage());
-			System.out.println(
-					"Wykonywanie Spirali trwaĹ‚o: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getMessage());
-		}
+		// TODO
+//		try {
+//			long start = System.currentTimeMillis();
+//			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
+//					.setParametrB("0.000000001").setZakres("10").setGraph(graphImage).build();
+//			draw(spirala.getImage());
+//			System.out.println(
+//					"Wykonywanie Spirali trwaĹ‚o: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.err.println(e.getMessage());
+//		}
 
 	}
 
@@ -170,18 +167,23 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
 		napisNazwaProgramu.setLocation(0, 0);
 
-		graph.setSize(sizeWindowX - sizeWindowX / 20, sizeWindowY * 4 / 6);
-		graph.setLocation(sizeWindowX / 80, napisNazwaProgramu.getHeight());
-		graph.setAlignmentX(100);
+		int graphWidth = sizeWindowX - sizeWindowX / 20;
+		int graphX = sizeWindowX / 80;
+
+		graph.setSize(sizeWindowY * 4 / 6, sizeWindowY * 4 / 6);
+		graph.setLocation(sizeWindowX / 80 + (graphWidth - sizeWindowY * 4 / 6) / 2, napisNazwaProgramu.getHeight());
+		graph.setBorder(BorderFactory.createLineBorder(Color.red));
+		
+		// graph.setAlignmentX(containerPanel.getWidth()-(sizeWindowY * 4 / 6));
 
 		int odstepY = sizeWindowY / 60;
 		int locationY = graph.getY() + graph.getHeight() + odstepY;
-		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
+		int odstep = (graphWidth - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
 
 		// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
 		napisParametry.setSize(70, poleSize.height);
-		napisParametry.setLocation(graph.getX(), locationY);
+		napisParametry.setLocation(graphX, locationY);
 
 		napisParametrA.setSize(20, poleSize.height);
 		napisParametrA.setLocation(napisParametry.getLocation().x + napisParametry.getSize().width + odstep, locationY);
@@ -214,13 +216,16 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskPelnyEkran.setSize(buttonSize);
 		przyciskPelnyEkran.setLocation(przyciskCzysc.getX() + przyciskCzysc.getWidth() + odstep, locationY);
 
-		poleKomentarz.setLocation(graph.getX(), locationY + odstepY + poleSize.height);
-		poleKomentarz.setSize(graph.getWidth(),
+		poleKomentarz.setLocation(graphX, locationY + odstepY + poleSize.height);
+		poleKomentarz.setSize(graphWidth,
 				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 30);
 
 	}
 
 	private void setFullScreen() {
+		// TODO
+		// PRZEKOPIOWAĆ Z SAMOLOTOSZCZELCA I OGARNĄC ŻEBY OTWIERAŁO SIE NA MONITORZE
+		// GDZIE JEST SRODEK OKIENKA
 		sizeWindowX = rozdzielczosc.width;
 		sizeWindowY = rozdzielczosc.height;
 		setSize(rozdzielczosc);
@@ -368,9 +373,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			graph.repaint();
 
 			poleKomentarz.setText("");
-			poleParametrA.setText("");
-			poleParametrA.setText("");
-			poleParametrA.setText("");
+			poleParametrA.setText("0.5");
+			poleParametrB.setText("0.1");
+			poleZakres.setText("30");
 
 		}
 

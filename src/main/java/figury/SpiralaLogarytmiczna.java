@@ -354,6 +354,8 @@ public class SpiralaLogarytmiczna extends Figury {
 //					"U+03C6 musi nale�e� do liczb rzeczywistych" };
 			int[] a = { 0, 0, 0, 0, 0 };
 
+			if (parametrAText == null || parametrBText == null || zakresText == null)
+				return null;
 			if (parametrAText.isEmpty()) // dodaj komentarz a nieustawione
 				a[0] = 1;
 			if (parametrBText.isEmpty()) // dodaj komentarz b nieustawione
