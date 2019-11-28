@@ -10,7 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -37,8 +37,8 @@ class SpiralaLogarytmicznaIFiguryTest {
 	static void setUpBeforeClass() throws Exception {
 		BufferedImage graf = new BufferedImage(760, 400, BufferedImage.TYPE_INT_ARGB);
 		try {
-			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
-					.setParametrB("0.1").setZakres("30").setGraph(graf).build();
+			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.1")
+					.setZakres("30").setGraph(graf).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,7 +81,8 @@ class SpiralaLogarytmicznaIFiguryTest {
 		fail("Not yet implemented"); // TODO
 	}
 
-	@DisplayName(value = "setOpis() sprawdza czy wykonanie nowerj spirali zmienia opis w interfejs.Window")
+	@DisplayName(value = "setOpis() sprawdza czy wykonanie nowej spirali zmienia opis w interfejs.Window")
+
 	@Test
 	void testSetOpis()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {

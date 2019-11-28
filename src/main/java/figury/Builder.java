@@ -1,7 +1,6 @@
 package figury;
 
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
 
 /**
  * Interface wzorca projektowego Budowniczy. Należy go zaimplementować kiedy
@@ -21,7 +20,7 @@ interface Builder {
 	/**
 	 * Ustawia parametr A funkcji
 	 * 
-	 * @param parametrA - parametr A funkcji  STRING Kt�ry da si� zamieni� na liczb�
+	 * @param parametrA - parametr A funkcji STRING Który da się zamienić na liczbę
 	 * @return - Wewnętrzna klasa Budowniczego
 	 */
 	public Object setParametrA(String parametrA);
@@ -29,7 +28,7 @@ interface Builder {
 	/**
 	 * Ustawia parametr B funkcji
 	 * 
-	 * @param parametrB - parametr B funkcji  STRING Kt�ry da si� zamieni� na liczb�
+	 * @param parametrB - parametr B funkcji STRING Który da się zamienić na liczbę
 	 * @return - Wewnętrzna klasa Budowniczego
 	 */
 	public Object setParametrB(String parametrB);
@@ -37,7 +36,8 @@ interface Builder {
 	/**
 	 * Ustawia zakres funkcji
 	 * 
-	 * @param zakres - zakres rysowania funkcji STRING Kt�ry da si� zamieni� na liczb�
+	 * @param zakres - zakres rysowania funkcji STRING Który da się zamienić na
+	 *               liczbę
 	 * @return - Wewnętrzna klasa Budowniczego
 	 */
 	public Object setZakres(String zakres);
@@ -63,7 +63,7 @@ interface Builder {
 	/**
 	 * Sprawdza wpisane dane czy można utworzyć z nich funkcję i generuje komentarz
 	 * 
-	 * @return - Numery indeksów komentarzy które się mają wyświetlić. 
+	 * @return - Numery indeksów komentarzy które się mają wyświetlić.
 	 */
 	int[] sprawdzParametry();
 
