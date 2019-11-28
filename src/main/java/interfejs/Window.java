@@ -3,7 +3,8 @@ package interfejs;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.LayoutManager;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,12 +18,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import figury.SpiralaLogarytmiczna;
-import wykres.Wykres;
 
 /**
  * Tworzy okienko, obsługuje przyciski, skaluje okienko.
@@ -34,9 +35,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private static final long serialVersionUID = 1L;
 
 	private Dimension rozdzielczosc = Toolkit.getDefaultToolkit().getScreenSize();
+	private Dimension sizePrzedFullscreenem = new Dimension();
+	private boolean pelnyekran = false;
 
-	int sizeWindowX = 800;
-	int sizeWindowY = 600;
+	private int sizeWindowX = 800;
+	private int sizeWindowY = 600;
 
 	private Dimension poleSize = new Dimension(50, 30); // 100 , 30
 	private Dimension buttonSize = new Dimension(100, 30);
@@ -73,7 +76,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		setMinimumSize(minimumSize);
 
 		graph = new GraphPanel();
-
 		add(graph);
 
 		// JText
@@ -121,17 +123,14 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskCzysc = new JButton(CZYSCTEXT);
 		przyciskCzysc.addActionListener(this);
 		add(przyciskCzysc);
-		przyciskCzysc.addActionListener(this);
 
 		przyciskRysuj = new JButton(RYSUJTEXT);
 		przyciskRysuj.addActionListener(this);
 		add(przyciskRysuj);
-		przyciskRysuj.addActionListener(this);
 
 		przyciskPelnyEkran = new JButton(PELNYEKRANTEXT);
 		przyciskPelnyEkran.addActionListener(this);
 		add(przyciskPelnyEkran);
-		przyciskPelnyEkran.addActionListener(this);
 
 		poleKomentarz = new JLabel();
 		add(poleKomentarz);
@@ -160,10 +159,15 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 //		}
 	}
 
+	/**
+	 * 
+	 * skaluje wszystkie elementy okienka
+	 * 
+	 * @author Pafeu
+	 * @param width
+	 * @param height
+	 */
 	private void przeskalujOkienko() {
-
-		sizeWindowX = this.getWidth();
-		sizeWindowY = this.getHeight();
 
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -229,11 +233,37 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// TODO
 		// PRZEKOPIOWAĆ Z SAMOLOTOSZCZELCA I OGARNĄC ŻEBY OTWIERAŁO SIE NA MONITORZE
 		// GDZIE JEST SRODEK OKIENKA
-		sizeWindowX = rozdzielczosc.width;
-		sizeWindowY = rozdzielczosc.height;
-		setSize(rozdzielczosc);
-		this.setLocation(0, 0);
-		przeskalujOkienko();
+
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice device = env.getDefaultScreenDevice();
+
+		if (!device.isFullScreenSupported() && pelnyekran == false) {
+			JOptionPane.showMessageDialog(this, "Twój komputer nie wspiera pełnego ekranu ;/");
+			requestFocus();
+		} else if (device.isFullScreenSupported() && pelnyekran == false) {
+
+			dispose();
+			setUndecorated(true);
+			setResizable(true);
+			device.setFullScreenWindow(this);
+			requestFocus();
+			setLocation(0, 0);
+			sizePrzedFullscreenem = new Dimension(sizeWindowX, sizeWindowY);
+			setSize(rozdzielczosc);// po setSize nie potrzeba wywoływać ponieważ wywołany zostaje ComponentResize()
+									// przeskalujOkienko()
+			// przeskalujOkienko(rozdzielczosc.width, rozdzielczosc.height);
+
+			pelnyekran = true;
+
+		} else {
+			dispose();
+			setUndecorated(false);
+			setSize(sizePrzedFullscreenem);
+			setVisible(true);
+			requestFocus();
+			pelnyekran = false;
+
+		}
 
 	}
 
@@ -248,7 +278,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
 		g2d.drawImage(graphImage, 0, 0, null);
 	}
-	/////////////////////////////////
 
 	public static void setParametrAText(String parametrAText) throws AccessException {
 
@@ -346,8 +375,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 			Graphics2D g2d = (Graphics2D) graph.getGraphics();
-
-			// g2d.drawImage(nic, 0, 0, null);
 
 			try {
 				long start = System.currentTimeMillis();
