@@ -58,6 +58,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static final String RYSUJTEXT = "RYSUJ";
 	public static final String CZYSCTEXT = "CZYŚĆ";
 	public static final String PELNYEKRANTEXT = "PEŁNY EKRAN";
+	public static final String DefaultA = "0.1";
+	public static final String DefaultB = "0.1";
+	public static final String DefaultZakres = "90";
 
 	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
 	private static BigDecimal parametrA, parametrB, zakres;
@@ -79,13 +82,13 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		add(graph);
 
 		// JText
-		poleParametrA = new JTextField();
+		poleParametrA = new JTextField(DefaultA);
 		add(poleParametrA);
 
-		poleParametrB = new JTextField();
+		poleParametrB = new JTextField(DefaultB);
 		add(poleParametrB);
 
-		poleZakres = new JTextField();
+		poleZakres = new JTextField(DefaultZakres);
 		add(poleZakres);
 
 		// JLabel
@@ -145,18 +148,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		// Rysowanie obrazka startowego
 
-		// TODO
-//		try {
-//			long start = System.currentTimeMillis();
-//			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5")
-//					.setParametrB("0.000000001").setZakres("10").setGraph(graphImage).build();
-//			draw(spirala.getImage());
-//			System.out.println(
-//					"Wykonywanie Spirali trwaĹ‚o: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.err.println(e.getMessage());
-//		}
+		stworzSpirale();
 	}
 
 	/**
@@ -229,11 +221,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	}
 
-	private void setFullScreen() {
-		// TODO
-		// PRZEKOPIOWAĆ Z SAMOLOTOSZCZELCA I OGARNĄC ŻEBY OTWIERAŁO SIE NA MONITORZE
-		// GDZIE JEST SRODEK OKIENKA
 
+	private void setFullScreen() {
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice device = env.getDefaultScreenDevice();
 
@@ -278,6 +267,33 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		Graphics2D g2d = (Graphics2D) graph.getGraphics();
 		g2d.drawImage(graphImage, 0, 0, null);
 	}
+	
+	
+	private void stworzSpirale()
+	{
+		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+		BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+		Graphics2D g2d = (Graphics2D) graph.getGraphics();
+
+		try {
+			long start = System.currentTimeMillis();
+
+			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
+					.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
+					.build();
+			draw(spirala.getImage());
+
+			System.out.println(
+					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+		} catch (Exception exc) {
+			exc.printStackTrace();
+			System.err.println(exc.getMessage());
+		}
+		System.gc();
+	}
+	
 
 	public static void setParametrAText(String parametrAText) throws AccessException {
 
@@ -370,27 +386,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		JButton obj = (JButton) e.getSource();
 		if (obj == przyciskRysuj) {
-			graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-			BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
-
-			Graphics2D g2d = (Graphics2D) graph.getGraphics();
-
-			try {
-				long start = System.currentTimeMillis();
-
-				spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
-						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-						.build();
-				draw(spirala.getImage());
-
-				System.out.println(
-						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
-			} catch (Exception exc) {
-				exc.printStackTrace();
-				System.err.println(exc.getMessage());
-			}
-			System.gc();
+			stworzSpirale();
 		}
 
 		if (obj == przyciskCzysc) {
@@ -403,9 +399,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			graph.repaint();
 
 			poleKomentarz.setText("");
-			poleParametrA.setText("0.5");
-			poleParametrB.setText("0.1");
-			poleZakres.setText("30");
+			poleParametrA.setText(DefaultA);
+			poleParametrB.setText(DefaultB);
+			poleZakres.setText(DefaultZakres);
 
 		}
 
