@@ -29,7 +29,7 @@ public class GraphPanel extends JPanel {
 	public void setSize(int x, int y) {
 		super.setSize(x, y);
 		if (image != null) {
-			imageScaled = image.getScaledInstance(x, y, BufferedImage.SCALE_REPLICATE);
+			imageScaled = image.getScaledInstance(x, y, BufferedImage.SCALE_SMOOTH);
 //			Graphics2D g2d = (Graphics2D) this.getGraphics();
 //			g2d.drawImage(imageScaled, 0, 0, null);
 		}
