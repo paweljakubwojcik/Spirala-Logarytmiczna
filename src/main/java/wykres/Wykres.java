@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 
+import figury.SpiralaLogarytmiczna;
+
 /**
  * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
  * 
@@ -15,7 +17,7 @@ import java.math.BigDecimal;
  */
 public class Wykres {
 	private BufferedImage graph;
-	private BigDecimal zakres;
+	private SpiralaLogarytmiczna spirala;
 	private BufferedImage wykres;
 	private BufferedImage tlo;
 	private BufferedImage krzywa;
@@ -23,21 +25,21 @@ public class Wykres {
 	/**
 	 * konstruktor edytuje podane parametry
 	 * 
-	 * @param graph - BufferedImage na którym zostaje narysowany wykres.
+	 * @param graph  - BufferedImage na którym zostaje narysowany wykres.
 	 * @param krzywa - Obraz wykresu utworzony z wyznaczonych punktów
 	 * @param zakres - potrzebne do wykonania tła
 	 */
-	public Wykres(BufferedImage graph, BufferedImage krzywa, BigDecimal zakres) {
+	public Wykres(BufferedImage graph, BufferedImage krzywa, SpiralaLogarytmiczna spirala) {
 		this.graph = graph;
 		this.krzywa = krzywa;
-		this.zakres = zakres;
+		this.spirala = spirala;
 		wykres = new BufferedImage(graph.getWidth(), graph.getWidth(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) wykres.getGraphics();
-		
-		Point graphSize= new Point(graph.getWidth(), graph.getWidth());
-		
-		g2d.drawImage(Tlo.getTlo(graphSize,zakres), null, 0, 0);
-		
+
+		Point graphSize = new Point(graph.getWidth(), graph.getWidth());
+
+		g2d.drawImage(Tlo.getTlo(graphSize, spirala), null, 0, 0);
+
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);
 

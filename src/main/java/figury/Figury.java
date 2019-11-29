@@ -552,4 +552,16 @@ public abstract class Figury {
 	public static double mathDistanceOfPoints(Point pkt1, Point pkt2) {
 		return Math.sqrt(Math.pow(pkt1.x - pkt2.x, 2) + Math.pow(pkt1.y - pkt2.y, 2));
 	}
+	
+	public BigDecimal getParametrA() {
+		return parametrA;
+	}
+
+	public BigDecimal getParametrB() {
+		return parametrB;
+	}
+
+	public BigDecimal getZakres() {
+		return zakres;
+	}
 }

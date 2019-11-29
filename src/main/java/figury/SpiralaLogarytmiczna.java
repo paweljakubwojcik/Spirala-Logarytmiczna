@@ -39,7 +39,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		super(opisy, parametrA, parametrB, zakres, graph);
 		this.numberOfThread = numberOfThread;
 		wyznaczPunkty();
-		new Wykres(graph, krzywa, zakres);
+		new Wykres(graph, krzywa, this);
 	}
 
 	@Override
@@ -244,7 +244,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
 			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
-				new Wykres(graph, krzywa, zakres);
+				new Wykres(graph, krzywa, this);
 
 				probki /= 2.0;
 				OK = false;
