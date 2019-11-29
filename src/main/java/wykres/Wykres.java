@@ -36,24 +36,21 @@ public class Wykres {
 		wykres = new BufferedImage(graph.getWidth(), graph.getWidth(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D) wykres.getGraphics();
 
-		Point graphSize = new Point(graph.getWidth(), graph.getWidth());
-
+		Point graphSize = new Point(graph.getWidth(), graph.getHeight());
 		g2d.drawImage(Tlo.getTlo(graphSize, spirala), null, 0, 0);
 
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);
 
+		Graphics2D g = (Graphics2D) graph.getGraphics();
+		g.drawImage(wykres, 0, 0, null);
+
 		// Generowanie obrazków do testów zostawić w spokoju te 5 linijek poniżej
 //		try {
-
-//			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[10,200.75].png"));
-
+//			ImageIO.write(graph, "png", new File("src/test/java/figury/Wykres[10,200.75].png"));
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-
-		Graphics2D g = (Graphics2D) graph.getGraphics();
-		g.drawImage(wykres, 0, 0, null);
 	}
 
 	private void scalObrazki() {
