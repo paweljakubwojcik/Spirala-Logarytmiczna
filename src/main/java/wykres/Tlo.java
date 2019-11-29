@@ -36,47 +36,74 @@ public class Tlo {
 	}
 
 	private static void drawOsie(Graphics2D g, SpiralaLogarytmiczna spirala) {
-		g.setColor(new Color(200, 200, 200, 200));
+		g.setColor(new Color(200, 200, 200, 150));
 		g.drawLine(0, graphSize.y / 2, graphSize.x, graphSize.y / 2); // oś x
 		g.drawLine(graphSize.x / 2, 0, graphSize.x / 2, graphSize.y); // oś Y
 
 		double wartoscOstatniejPodzialki, wartoscPierwszejPodzialki;
-		double z = spirala.getZakres().doubleValue();
+		double z = spirala.getZakres().doubleValue(); // ten zakres jest pomnozeony przez pi XD
 		double a = spirala.getParametrA().doubleValue();
 		double b = spirala.getParametrB().doubleValue();
 		double skala;
 		int podzialka;
 		double i = 0;
-		wartoscOstatniejPodzialki = a * Math.cos(z) * Math.exp(z * b);
+
+		double X = a * Math.cos(z) * Math.exp(z * b);
+		double Y = a * Math.sin(z) * Math.exp(z * b);
+
+		// proba radzenie sobie z nie wielokrotnosciami PI
+//		z = Math.abs(z);
+//		z = Math.round(z / Math.PI);
+//		System.out.println(z);
+//		z *= Math.PI;
+		/////////////////
+
+		wartoscOstatniejPodzialki = Math.hypot(X, Y);
 		wartoscPierwszejPodzialki = a;
 
 		skala = Math.abs((graphSize.x / 2) / wartoscOstatniejPodzialki);
 
-		while (skala <= 1) {
+		// jesli skala jest zbyt duza i podzialki sie nie mieszcza
+		// 10 - odstep pomiedzy podzialkami musi byc wiekszy niz 10px
+		while (skala <= 10) {
 			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki / 10;
 			skala = Math.abs((graphSize.x / 2) / wartoscOstatniejPodzialki);
 			i++;
 		}
+
+		// jesli skala jest zbyt mala i zadna podzialka nie bylaby widoczna
+		// podzielone na 10 zeby zawze bylo przynajmniej 10 podzialek
+		while (skala > (graphSize.x / 2)) {
+			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki * 10;
+			skala = Math.abs((graphSize.x / 2) / wartoscOstatniejPodzialki);
+			i--;
+		}
+
+		skala = Math.round(skala);
 		podzialka = (int) skala;
 
 		for (int x = graphSize.x / 2; x < graphSize.x; x += podzialka) {
-			g.drawLine(x, (graphSize.y / 2) + 3, x, (graphSize.y / 2) - 3);
+			g.drawLine(x, (graphSize.y / 2) + 6, x, (graphSize.y / 2) - 6);
+			// TODO MNIEJSZE LINIE POMIEDZY DUZYMI PODZIALKAMI
+//			for (int x2 = x; x2 < (x + podzialka); x2 += podzialka / 10)
+//				g.drawLine(x2, (graphSize.y / 2) + 3, x2, (graphSize.y / 2) - 3);
 		}
 		for (int x = graphSize.x / 2; x > 0; x -= podzialka) {
-			g.drawLine(x, (graphSize.y / 2) + 3, x, (graphSize.y / 2) - 3);
+			g.drawLine(x, (graphSize.y / 2) + 6, x, (graphSize.y / 2) - 6);
 		}
 		for (int y = graphSize.y / 2; y < graphSize.y; y += podzialka) {
-			g.drawLine(graphSize.x / 2 + 3, y, graphSize.x / 2 - 3, y);
+			g.drawLine(graphSize.x / 2 + 6, y, graphSize.x / 2 - 6, y);
 		}
 		for (int y = graphSize.y / 2; y > 0; y -= podzialka) {
-			g.drawLine(graphSize.x / 2 + 3, y, graphSize.x / 2 - 3, y);
+			g.drawLine(graphSize.x / 2 + 6, y, graphSize.x / 2 - 6, y);
 		}
 
-		wartoscPierwszejPodzialki *= Math.pow(10, i);
-		i = 1;
-		g.drawString(String.valueOf(wartoscOstatniejPodzialki), 10, 10);
-		g.drawString(String.valueOf(wartoscPierwszejPodzialki), 10, 30);
-		g.drawString(String.valueOf(podzialka), 10, 50);
+		double podzialkaWyswietlana = Math.pow(10, i);
+		wartoscOstatniejPodzialki = Math.hypot(X, Y);
+		i = 0;
+		g.drawString("r(zakres)= " + String.valueOf(wartoscOstatniejPodzialki), 10, 10);
+		g.drawString("Podzialka: " + String.valueOf(podzialkaWyswietlana), 10, 30);
+		// g.drawString(String.valueOf(podzialka), 10, 50);
 
 	}
 
