@@ -43,7 +43,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	private Dimension poleSize = new Dimension(50, 20);
 	private Dimension buttonSize = new Dimension(80, 20);
-	private Dimension minimumSize = new Dimension(640, 600);
+	private Dimension minimumSize = new Dimension(640, 400);
 
 	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
@@ -160,6 +160,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	 */
 	private void przeskalujOkienko() {
 
+		// TODO Uproscic zapisy posprzatac te funkcje na koniec bo jest syf ale
+		// nieszkodliwy
+
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
 		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
@@ -168,13 +171,15 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		int graphWidth = sizeWindowX - sizeWindowX / 20; // tak naprawde to jest szerokosc oknienka bez marginesow
 		int graphX = sizeWindowX / 64; // margines
 
-		graph.setSize(sizeWindowY * 9 / 12, sizeWindowY * 9 / 12);
+		if (sizeWindowY * 3 / 4 > sizeWindowX)
+			graph.setSize(sizeWindowX, sizeWindowX);
+		else
+			graph.setSize(sizeWindowY * 9 / 12, sizeWindowY * 9 / 12);
 		graph.setLocation(sizeWindowX / 80 + (graphWidth - graph.getWidth()) / 2, napisNazwaProgramu.getHeight());
-		graph.setBorder(BorderFactory.createLineBorder(Color.red));
 
 		// graph.setAlignmentX(containerPanel.getWidth()-(sizeWindowY * 4 / 6));
 
-		int odstepY = sizeWindowY / 60;
+		int odstepY = sizeWindowY / 240;
 		int locationY = graph.getY() + graph.getHeight() + odstepY;
 		int odstep = (graphWidth - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
 
