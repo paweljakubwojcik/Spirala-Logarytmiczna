@@ -49,9 +49,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 
 	@DisplayName(value = "Testy powstawania spirali Jednowątkowe")
 	void testRysowaniaJendowatkowe(String a, String b, String z) {
-
+//		SpiralaLogarytmiczna krzywa = null;
 		try {
-
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a).setParametrB(b).setZakres(z)
 					.setGraph(graph).setThreads(1).build();
 		} catch (Exception e) {
@@ -62,6 +61,11 @@ class SpiralaLogarytmicznaTestJUnit5 {
 		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); /// figury/images/Wykres dla
 																							/// javy
 
+//		try {
+//			ImageIO.write(krzywa.getImage(), "png", new File("src/test/java/figury/Wykres[" + b + "," + z + "].png"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		try {
 			spirala = ImageIO.read(url);
 		} catch (IOException e) {
