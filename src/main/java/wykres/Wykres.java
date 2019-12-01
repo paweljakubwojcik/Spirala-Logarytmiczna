@@ -25,11 +25,12 @@ public class Wykres {
 	/**
 	 * konstruktor edytuje podane parametry
 	 * 
-	 * @param graph  - BufferedImage na którym zostaje narysowany wykres.
-	 * @param krzywa - Obraz wykresu utworzony z wyznaczonych punktów
-	 * @param zakres - potrzebne do wykonania tła
+	 * @param graph     - BufferedImage na którym zostaje narysowany wykres.
+	 * @param krzywa    - Obraz wykresu utworzony z wyznaczonych punktów
+	 * @param podzialka - okresla co ile px rysowana bedzie podzialka osi
+	 * @param opisy     - opisy obrazka
 	 */
-	public Wykres(BufferedImage graph, BufferedImage krzywa, SpiralaLogarytmiczna spirala) {
+	public Wykres(BufferedImage graph, BufferedImage krzywa, int podzialka, String[] opisy) {
 		this.graph = graph;
 		this.krzywa = krzywa;
 		this.spirala = spirala;
@@ -37,7 +38,9 @@ public class Wykres {
 		Graphics2D g2d = (Graphics2D) wykres.getGraphics();
 
 		Point graphSize = new Point(graph.getWidth(), graph.getHeight());
-		g2d.drawImage(Tlo.getTlo(graphSize, spirala), null, 0, 0);
+		g2d.drawImage(Tlo.getTlo(graphSize), null, 0, 0);
+		g2d.drawImage(Tlo.getOsie(graphSize, podzialka), null, 0, 0);
+		g2d.drawImage(Tlo.getOpisyOsi(graphSize, opisy), null, 0, 0);
 
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);

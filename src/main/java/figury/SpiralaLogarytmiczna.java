@@ -23,6 +23,8 @@ public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
 	private int numberOfThread;
+	int podzialka;
+	String[] opisyOsi = new String[2];
 
 	/**
 	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
@@ -38,8 +40,67 @@ public class SpiralaLogarytmiczna extends Figury {
 			int numberOfThread) {
 		super(opisy, parametrA, parametrB, zakres, graph);
 		this.numberOfThread = numberOfThread;
+		wyznaczOsie();
 		wyznaczPunkty();
-		new Wykres(graph, krzywa, this);
+		new Wykres(graph, krzywa, podzialka, opisyOsi);
+	}
+
+	private void wyznaczOsie() {
+		double wartoscOstatniejPodzialki, wartoscPierwszejPodzialki;
+		double z = zakres.doubleValue(); // ten zakres jest pomnozeony przez pi XD
+		double a = parametrA.doubleValue();
+		double b = parametrB.doubleValue();
+		double skala;
+
+		// okresla ile razy zmniejszono/zwiekszono podzialke
+		double i = 0;
+
+		double X = a * Math.cos(z) * Math.exp(z * b);
+		double Y = a * Math.sin(z) * Math.exp(z * b);
+
+		wartoscOstatniejPodzialki = Math.hypot(X, Y);
+		wartoscPierwszejPodzialki = a;
+
+		// jesli wartosc ostatniego punktu na wykresie jest nieskonczona
+		if (Double.isInfinite(wartoscOstatniejPodzialki))
+			wartoscOstatniejPodzialki = Double.MAX_VALUE;
+
+		skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
+
+		// jesli skala jest zbyt duza i podzialki sie nie mieszcza
+		// 10 - odstep pomiedzy podzialkami musi byc wiekszy niz 10px
+		while (skala <= 10) {
+			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki / 10;
+			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
+			i++;
+			
+		}
+
+		// jesli skala jest zbyt mala i zadna podzialka nie bylaby widoczna
+		// podzielone na 10 zeby zawze bylo przynajmniej 10 podzialek
+		while (skala > (graph.getWidth() / 2)) {
+			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki * 10;
+			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
+			i--;
+			
+		}
+
+		// zapobiega bledom zwiazanym z konwersja z double na int
+		skala = Math.round(skala);
+		podzialka = (int) skala;
+
+		// do wyswietlenia wartosci podzialki
+		double podzialkaWyswietlana = Math.pow(10, i);
+		wartoscOstatniejPodzialki = Math.hypot(X, Y);
+
+		// zerowanie i
+		i = 0;
+
+		// tworzy opisy do osi
+		opisyOsi[0] = "r(zakres)= " + String.valueOf(wartoscOstatniejPodzialki);
+		opisyOsi[1] = "Podzialka: " + String.valueOf(podzialkaWyswietlana);
+
+		
 	}
 
 	@Override
@@ -244,7 +305,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
 			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
-				new Wykres(graph, krzywa, this);
+				new Wykres(graph, krzywa, podzialka, opisyOsi);
 
 				probki /= 2.0;
 				OK = false;
@@ -598,7 +659,7 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		private boolean isItANumber(String string) {
 
-			if (string == null)
+			if (string == null || string.isEmpty())
 				return false;
 
 			for (int i = 0; i < string.length(); i++) {
