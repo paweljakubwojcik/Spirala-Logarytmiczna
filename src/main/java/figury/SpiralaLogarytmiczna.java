@@ -67,6 +67,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		// jesli wartosc ostatniego punktu na wykresie jest nieskonczona
 		if (Double.isInfinite(wartoscOstatniejPodzialki))
 			wartoscOstatniejPodzialki = Double.MAX_VALUE;
+// jesli wartosc ostatniego pkt wychodzi0
+		if (wartoscOstatniejPodzialki == 0)
+			wartoscOstatniejPodzialki = Double.MIN_VALUE;
 
 		skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
 
@@ -608,16 +611,21 @@ public class SpiralaLogarytmiczna extends Figury {
 //					"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
 //					"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
 //					"U+03C6 musi należeć do liczb rzeczywistych" };
-			int[] a = { 0, 0, 0, 0, 0 };
+			int[] a = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			if (parametrAText == null || parametrBText == null || zakresText == null)
 				return null;
+
 			parametrAText = parametrAText.replace(',', '.');
-			if (parametrAText.charAt(0) == '.')
+			if (parametrAText.charAt(0) == '.') {
 				parametrAText = parametrAText.replace(".", "0.");
+				System.out.println(parametrAText);
+			}
+
 			parametrBText = parametrBText.replace(',', '.');
 			if (parametrBText.charAt(0) == '.')
 				parametrBText = parametrBText.replace(".", "0.");
+
 			zakresText = zakresText.replace(',', '.');
 			if (zakresText.charAt(0) == '.')
 				zakresText = zakresText.replace(".", "0.");
@@ -633,8 +641,18 @@ public class SpiralaLogarytmiczna extends Figury {
 					a[3] = 1;
 					a[4] = 1;
 				}
-			if (!(isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText)))
+			if (!(isItANumber(parametrAText))) {
 				a[3] = 1;
+				a[5] = 1;
+			}
+			if (!(isItANumber(parametrBText))) {
+				a[3] = 1;
+				a[6] = 1;
+			}
+			if (!(isItANumber(zakresText))) {
+				a[3] = 1;
+				a[7] = 1;
+			}
 
 			for (int i = 0; i < a.length; i++)
 				if (a[i] == 1)
@@ -651,6 +669,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		 * @author Pafeu
 		 */
 		private boolean isItANumber(String string) {
+
+			int j = 0;
 			if (string == null || string.isEmpty())
 				return false;
 			for (int i = 0; i < string.length(); i++) {
@@ -661,7 +681,11 @@ public class SpiralaLogarytmiczna extends Figury {
 				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48) && string.charAt(i) != ".".charAt(0)
 						&& string.charAt(i) != "E".charAt(0))
 					return false;
+				if (string.charAt(i) == ".".charAt(0))
+					j++;
 			}
+			if (j > 1)
+				return false;
 			return true;
 		}
 
