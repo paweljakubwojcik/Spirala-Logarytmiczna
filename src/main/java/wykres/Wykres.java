@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 
 /**
- * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
+ * Zarządza gotowym wyglądem wykresu. Scala obrazki, rysuje i dodaje tło.
  * 
  * @author 7Adrian
  * @since 1.0

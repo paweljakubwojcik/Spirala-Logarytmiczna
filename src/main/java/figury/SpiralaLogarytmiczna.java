@@ -27,15 +27,14 @@ public class SpiralaLogarytmiczna extends Figury {
 	private boolean SSAA;
 
 	/**
-	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
-	 * pracy wielowątkowej.
+	 * Konstuktor Spirali Logarytmicznej
 	 * 
 	 * @param parametrA      - parametr A spirali
 	 * @param parametrB      - parametr B spirali
 	 * @param zakres         - zakres rysowania spirali
 	 * @param graph          - BufferedImage na którym ma się spirala narysować
 	 * @param numberOfThread - liczba wątków utworzona do rysowania
-	 * @param nrSSAA         - liczba próbek na pixel
+	 * @param nrSSAA         - pierwiastek liczby próbek na pixel
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph,
 			int numberOfThread, int nrSSAA) {
@@ -260,7 +259,8 @@ public class SpiralaLogarytmiczna extends Figury {
 	}
 
 	/**
-	 * Odbicie lustrzane rysunku w zależności od ćwiartki
+	 * Odbicie lustrzane rysunku w zależności od ćwiartki w której leżą 'stopnie'.
+	 * Zmiany następują w obrazku 'krzywa'.
 	 * 
 	 * @param stopnie - kąt do którego docelowo funkcja ma się transformować
 	 * @param graphW2 - połowa szerokości rysowanego okienka

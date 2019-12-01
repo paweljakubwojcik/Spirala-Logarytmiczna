@@ -13,8 +13,8 @@ import interfejs.Window;
 /**
  * Klasa Figury zawiera informacje o metodach i polach które muszą zawierać
  * dziedziczące klasy. Dodatkowo są dostępne metody pomocne przy tworzenieniu
- * rysunku innych figur. Ponaddto tylko ta klasa ma możliwość zmiany opisów poł
- * w klasie interfejs.Window.
+ * rysunku innych figur. Ponadto tylko ta klasa ma możliwość zmiany opisów poł w
+ * klasie interfejs.Window.
  * 
  * @author 7Adrian
  * @since 1.0
@@ -66,7 +66,7 @@ public abstract class Figury {
 	}
 
 	/**
-	 * Generuje punkty spirali i zapisuje je w ArrayList<Punkty> punkty
+	 * Generuje punkty krzywej i zapisuje je np. w ArrayList<Punkty> punkty
 	 */
 	abstract void wyznaczPunkty();
 
@@ -154,7 +154,7 @@ public abstract class Figury {
 	}
 
 	/**
-	 * Rysuje łuk
+	 * Rysuje łuk (wycinek okręgu)
 	 * 
 	 * @param z      - zakres dla jakiego ma powstać łuk
 	 * @param graphW - szerokość okienka w którym będzie rysowany łuk
@@ -331,7 +331,7 @@ public abstract class Figury {
 	}
 
 	/**
-	 * Odejmuje wielokrotność PI
+	 * Odejmuje wielokrotność PI. np. 3.5PI zwróci 0.5PI
 	 * 
 	 * @param rad - kąt od którego ma być odjęta wielokrotność PI
 	 * @return - kąt bez wielokrotności liczby PI
@@ -341,7 +341,7 @@ public abstract class Figury {
 	}
 
 	/**
-	 * Odejmuje wielokrotność 2 PI
+	 * Odejmuje wielokrotność 2 PI. np. 3.5PI zwróci 1.5PI
 	 * 
 	 * @param rad - kąt od którego ma być odjęta wielokrotność 2 PI
 	 * @return - kąt bez wielokrotności liczby 2 PI
@@ -351,7 +351,7 @@ public abstract class Figury {
 	}
 
 	/**
-	 * Odjemuje wielokrtoność 2
+	 * Odjemuje wielokrtoność 2. np. 7.75 zwróci 1.75
 	 * 
 	 * @param rad - kąt od którego ma być odjęta wielokrotność 2
 	 * @return - kąt bez wielokrotności liczby 2
@@ -454,8 +454,8 @@ public abstract class Figury {
 	}
 
 	/**
-	 * Rysuje pierścień o szerokości różnicy odległości pierwszego i ostatniego
-	 * punktu
+	 * Rysuje pierścień o szerokości różnicy odległości od środka pierwszego i
+	 * ostatniego punktu
 	 * 
 	 * @param odl1PKT   - odległość od środka układu biegunowego do pierwszego
 	 *                  punktu

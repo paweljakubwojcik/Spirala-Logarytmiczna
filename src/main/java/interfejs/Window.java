@@ -284,8 +284,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// Jeźli tworzenie wykresu będzie zajmowało dużo czasu trzeba będzie
-			// ustawić tutaj spanko, być może nawet obsługę myszki zaimplementować
 			// System.out.println("resize");
 			przeskalujOkienko();
 		}
@@ -309,11 +307,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			g2d.drawImage(nic, 0, 0, null);
 			try {
 				long start = System.currentTimeMillis();
-
 				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
 						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
 						.setSSAA(2).build().getImage());
-
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 			} catch (Exception exc) {
