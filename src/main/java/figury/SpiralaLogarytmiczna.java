@@ -45,6 +45,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		new Wykres(graph, krzywa, podzialka, opisyOsi);
 	}
 
+	/**
+	 * wyznacza podzialke dla osi oraz opisy
+	 */
 	private void wyznaczOsie() {
 		double wartoscOstatniejPodzialki;
 		double z = Math.abs(zakres.doubleValue()); // ten zakres jest pomnozeony przez pi XD

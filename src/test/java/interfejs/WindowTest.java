@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
@@ -317,12 +318,18 @@ class WindowTest {
 		assertTrue(true);
 	}
 
-	@DisplayName(value = "Wciśnięcie przycisku w JFrame")
+	@DisplayName(value = "Wciśnięcie przycisku Rysuj w JFrame")
 	@Disabled
 	@Test
-	void testActionPerformed() {
+	void testActionPerformedRysuj()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		// GIVEN
+		Class<?> okno2 = okno.getClass();
+		Field rysuj = okno2.getDeclaredField("przyciskRysuj");
+		rysuj.setAccessible(true);
+		JButton przyciskRysuj = (JButton) rysuj.get(okno);
 		// WHEN
+		okno.actionPerformed(new ActionEvent(przyciskRysuj, ActionEvent.ACTION_PERFORMED, "Test"));
 		// THEN
 		fail("Not yet implemented"); // TODO test wciskania przycisku w okienku
 	}
