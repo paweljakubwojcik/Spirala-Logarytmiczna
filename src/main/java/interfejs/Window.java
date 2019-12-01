@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
 import java.rmi.AccessException;
 
 import javax.swing.BorderFactory;
@@ -20,7 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -62,8 +60,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static final String DefaultB = "0.1";
 	public static final String DefaultZakres = "90";
 
-	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
-	private static BigDecimal parametrA, parametrB, zakres;
 	private BufferedImage graphImage;
 
 	private Font defaultFont;
@@ -282,15 +278,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	}
 
 	private void draw(BufferedImage BI) {
-//		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-//		g2d.drawImage(BI, 0, 0, null);
 		graph.setImage(BI);
 		graph.repaint();
-	}
-
-	private void draw() {
-		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-		g2d.drawImage(graphImage, 0, 0, null);
 	}
 
 	private void stworzSpirale() {
@@ -390,14 +379,10 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -417,8 +402,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

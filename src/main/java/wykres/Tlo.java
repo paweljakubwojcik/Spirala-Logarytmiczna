@@ -5,9 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
-
-import figury.SpiralaLogarytmiczna;
 
 /**
  * Generuje opisy i osie do Spirali
@@ -18,10 +15,8 @@ public class Tlo {
 	private static BufferedImage tlo;
 	private static BufferedImage osie;
 	private static BufferedImage opisyOsi;
-	private static Point graphSize;
 
 	static BufferedImage getTlo(Point graphSize) {
-
 		// graphSize = graphSize1;
 		tlo = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) tlo.getGraphics();
@@ -31,10 +26,6 @@ public class Tlo {
 		return tlo;
 	}
 
-	private void scalObrazki() {
-
-	}
-
 	/**
 	 * 
 	 * @param graphSize
@@ -42,7 +33,6 @@ public class Tlo {
 	 * @return obraz osi
 	 */
 	static BufferedImage getOsie(Point graphSize, int podzialka) {
-
 		osie = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) osie.getGraphics();
 		g.setColor(new Color(200, 200, 200, 150));
@@ -69,7 +59,6 @@ public class Tlo {
 	}
 
 	public static BufferedImage getOpisyOsi(Point graphSize, String[] opisy) {
-
 		opisyOsi = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) opisyOsi.getGraphics();
 

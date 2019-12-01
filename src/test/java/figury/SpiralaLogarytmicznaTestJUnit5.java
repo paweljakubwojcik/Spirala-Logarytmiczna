@@ -58,8 +58,7 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			System.err.println(e.getMessage());
 		}
 		BufferedImage spirala = new BufferedImage(width, height, imageType);
-		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); /// figury/images/Wykres dla
-																							/// javy
+		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png");
 
 //		try {
 //			ImageIO.write(krzywa.getImage(), "png", new File("src/test/java/figury/Wykres[" + b + "," + z + "].png"));
@@ -72,7 +71,7 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			e.printStackTrace();
 		}
 
-		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
+		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 0.5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
 	}
 
 	@ParameterizedTest(name = "A= {0} + B= {1} + C= {2}")
@@ -95,8 +94,7 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			System.err.println(e.getMessage());
 		}
 		BufferedImage spirala = new BufferedImage(width, height, imageType);
-		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); /// figury/images/Wykres dla
-																							/// javy
+		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png");
 
 		try {
 			spirala = ImageIO.read(url);
@@ -104,7 +102,7 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			e.printStackTrace();
 		}
 
-		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
+		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 0.5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
 	}
 
 	double porownajObrazki(BufferedImage spirala, BufferedImage graph) {
@@ -118,12 +116,11 @@ class SpiralaLogarytmicznaTestJUnit5 {
 				for (int y = 0; y < spirala.getHeight(); y++) {
 					spiralaColor = spirala.getRGB(x, y);
 					graphColor = graph.getRGB(x, y);
-					if (spiralaColor != 0) {
+					// -16777216 czarny; -9013642 osiowy; -16776961 wykresowy; -1 biały?
+					if (graphColor != 0 && spiralaColor != -1 && spiralaColor != -16777216) {
 						iloscPixeli++;
 					}
-					if (graphColor == -16777216)
-						graphColor = 0;
-					if (spiralaColor != graphColor) {
+					if (spiralaColor != graphColor && spiralaColor != -1 && spiralaColor != -16777216) {
 						iloscBlednychPixeli++;
 					}
 				}
