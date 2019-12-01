@@ -107,7 +107,6 @@ public abstract class Figury {
 			for (int i = 0; i < numer.length; i++) {
 				if (numer[i] == 1)
 					wysylanyKomentarz += komentarz[i];
-
 			}
 		}
 		try {
@@ -281,17 +280,13 @@ public abstract class Figury {
 				for (int DX = 1; DX < x2 - x1; DX++) {
 					pkt = new Point((int) (x1 + DX), (int) (aa * DX + y1));
 					if (isXYinImage(pkt, graphW, graphH))
-
 						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
-
 				}
 			} else {
 				for (int DX = 1; DX < x1 - x2; DX++) {
 					pkt = new Point((int) (x2 + DX), (int) (aa * DX + y2));
 					if (isXYinImage(pkt, graphW, graphH))
-
 						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
-
 				}
 			}
 		} else {
@@ -299,17 +294,13 @@ public abstract class Figury {
 				for (int DY = 1; DY < y2 - y1; DY++) {
 					pkt = new Point((int) (bb * DY + x1), (int) (y1 + DY));
 					if (isXYinImage(pkt, graphW, graphH))
-
 						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
-
 				}
 			} else {
 				for (int DY = 1; DY < y1 - y2; DY++) {
 					pkt = new Point((int) (bb * DY + x2), (int) (y2 + DY));
 					if (isXYinImage(pkt, graphW, graphH))
-
 						krzywa.setRGB(pkt.x, pkt.y, Color.BLUE.getRGB());
-
 				}
 			}
 		}
@@ -486,8 +477,6 @@ public abstract class Figury {
 			for (int Y = start.y; Y < koniec.y; Y++) {
 				odl = mathDistanceOfPoints(X, Y, graphW2, graphH2);
 				if (odl + delta >= odl1PKT && odl - delta <= odlOstPKT && isXYinImage(X, Y, graphW, graphH)) {
-					// TODO sprawdzić, czy może przypadkiem nie ucina jakiegoś obrazka po nowo
-					// dodanej funkcji
 					krzywa.setRGB(X, Y, Color.BLUE.getRGB());
 				}
 			}
@@ -502,7 +491,6 @@ public abstract class Figury {
 	 * 
 	 * @param krzywa - BufferedImage w którym narysują się punkty
 	 */
-
 	public static void drawCircle(int graphW, int graphH, BufferedImage krzywa) {
 		drawRing(0.0, Math.min(graphW, graphH) / 2.0, graphW, graphH, krzywa);
 
@@ -552,7 +540,7 @@ public abstract class Figury {
 	public static double mathDistanceOfPoints(Point pkt1, Point pkt2) {
 		return Math.sqrt(Math.pow(pkt1.x - pkt2.x, 2) + Math.pow(pkt1.y - pkt2.y, 2));
 	}
-	
+
 	public BigDecimal getParametrA() {
 		return parametrA;
 	}

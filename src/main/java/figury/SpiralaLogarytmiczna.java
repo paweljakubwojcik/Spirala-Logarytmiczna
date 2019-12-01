@@ -23,8 +23,8 @@ public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
 	private int numberOfThread;
-	int podzialka;
-	String[] opisyOsi = new String[2];
+	private int podzialka;
+	private String[] opisyOsi = new String[2];
 
 	/**
 	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
@@ -42,12 +42,11 @@ public class SpiralaLogarytmiczna extends Figury {
 		this.numberOfThread = numberOfThread;
 		wyznaczOsie();
 		wyznaczPunkty();
-
 		new Wykres(graph, krzywa, podzialka, opisyOsi);
 	}
 
 	private void wyznaczOsie() {
-		double wartoscOstatniejPodzialki, wartoscPierwszejPodzialki;
+		double wartoscOstatniejPodzialki;
 		double z = Math.abs(zakres.doubleValue()); // ten zakres jest pomnozeony przez pi XD
 		double a = parametrA.doubleValue();
 		double b = parametrB.doubleValue();
@@ -57,11 +56,10 @@ public class SpiralaLogarytmiczna extends Figury {
 		double i = 0;
 
 		// tutaj jesli z jest ujemne to X i Y = NaN
-		double X = a * Math.cos(z) * Math.exp(z * b);
-		double Y = a * Math.sin(z) * Math.exp(z * b);
+		double X = wartoscFunkcjiX(a, b, z);
+		double Y = wartoscFunkcjiY(a, b, z);
 
 		wartoscOstatniejPodzialki = Math.hypot(X, Y);
-		wartoscPierwszejPodzialki = a;
 
 		// jesli wartosc ostatniego punktu na wykresie jest nieskonczona
 		if (Double.isInfinite(wartoscOstatniejPodzialki))
@@ -75,7 +73,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki / 10;
 			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
 			i++;
-
 		}
 
 		// jesli skala jest zbyt mala i zadna podzialka nie bylaby widoczna
@@ -84,7 +81,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki * 10;
 			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
 			i--;
-
 		}
 
 		// zapobiega bledom zwiazanym z konwersja z double na int
@@ -95,13 +91,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		double podzialkaWyswietlana = Math.pow(10, i);
 		wartoscOstatniejPodzialki = Math.hypot(X, Y);
 
-		// zerowanie i
-		i = 0;
-
 		// tworzy opisy do osi
 		opisyOsi[0] = "r(zakres)= " + String.valueOf(wartoscOstatniejPodzialki);
 		opisyOsi[1] = "Podzialka: " + String.valueOf(podzialkaWyswietlana);
-
 	}
 
 	@Override
@@ -153,7 +145,6 @@ public class SpiralaLogarytmiczna extends Figury {
 		if (Double.isNaN(skala) && Math.abs(b) > 1) {
 			double kat = getRadWithoutPIMultiply(z);
 			if (kat >= 0)
-
 				drawLine(kat, graphW2, graphH2, krzywa);
 			else {
 				drawLine(0, graphW2, graphH2, krzywa);
@@ -164,13 +155,10 @@ public class SpiralaLogarytmiczna extends Figury {
 			mirrorTransformForDegree(stopnie, graphW2, graphH2);
 			return;
 		} else if (Double.isNaN(skala) && Math.abs(b) < 1) {
-
 			drawCircle(graphW, graphH, krzywa);
 			return;
 		} else if (Double.isNaN(skala) && Math.abs(b) == 1) {
-
 			drawArc(2 * Math.PI, graphW, graphH, krzywa);
-
 			return;
 		}
 
@@ -192,7 +180,6 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		if (Math.abs(odlOstPKT - odl1PKT) < Math.abs(zRad) && Math.abs(odlOstPKT - odlPOstPKT) <= 4 && Math.abs(b) <= 1
 				&& Math.abs(zRad) >= 2) {
-
 			if (odlOstPKT < odl1PKT) {
 				double o = odlOstPKT;
 				odlOstPKT = odl1PKT;
@@ -201,7 +188,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			drawRing(odl1PKT, odlOstPKT, graphW, graphH, krzywa);
 			return;
 		} else if (Math.abs(odlOstPKT - odlPOstPKT) <= 2.1 && Math.abs(b) <= 1 && Math.abs(zRad) < 2) {
-
 			drawArc(z, graphW, graphH, krzywa);
 			return;
 		}
@@ -236,6 +222,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				for (int i = 0; i < numberOfThread; i++) {
 					katPunktWatek.add(new ArrayList<KatPunkt>());
 				}
+
 				// Ustawienie każdego wątku według pracy którą musi wykonać
 				for (MultiDraw watek : watki) {
 					watek.setArguments(probki, new Point(start.x + perCore * counter + offset, start.y),
@@ -261,6 +248,7 @@ public class SpiralaLogarytmiczna extends Figury {
 						}
 					}
 				}
+
 //				System.out.println("Czasy wykonywania wieluwątków= " + (System.currentTimeMillis() - czasPoczatkowy));
 			} else { // Wykonywanie rysowania jednowątkowo
 				double katFI;
@@ -274,6 +262,7 @@ public class SpiralaLogarytmiczna extends Figury {
 
 					}
 				}
+
 //				long czasPoczatkowy2 = System.currentTimeMillis();
 				Collections.sort(katy, new Comparator<KatPunkt>() {
 					@Override
@@ -293,10 +282,8 @@ public class SpiralaLogarytmiczna extends Figury {
 					iloscPKT++;
 					krzywa.setRGB(katy.get(i).pkt.x, katy.get(i).pkt.y, Color.BLUE.getRGB());
 				} else {
-
 					if (odleglosc < Math.sqrt(2) * 3) {
 						drawLine(katy.get(i).pkt, katy.get(i - 1).pkt, graphW2, graphH2, krzywa);
-
 					} else {
 						licznikOdleglosciowy++;
 					}
@@ -309,7 +296,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			// próbkowania
 			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
 				new Wykres(graph, krzywa, podzialka, opisyOsi);
-
 				probki /= 2.0;
 				OK = false;
 			} else {
@@ -319,7 +305,6 @@ public class SpiralaLogarytmiczna extends Figury {
 		}
 
 		System.out.println("Czas szukania punktów metodą próbkowania: " + (System.currentTimeMillis() - czasStart));
-
 	}
 
 	/**
@@ -331,7 +316,6 @@ public class SpiralaLogarytmiczna extends Figury {
 	 */
 	private void mirrorTransformForDegree(double stopnie, int graphW2, int graphH2) {
 		if (stopnie > 90 && stopnie < 180) {
-
 			AffineTransform at = new AffineTransform();
 			at.concatenate(AffineTransform.getScaleInstance(-1, 1));
 			at.concatenate(AffineTransform.getTranslateInstance(-krzywa.getWidth(), 0));
@@ -342,10 +326,8 @@ public class SpiralaLogarytmiczna extends Figury {
 			g2d.drawImage(krzywa, 0, 0, null);
 			g2d.dispose();
 			krzywa = tranImg;
-
 		}
 		if (stopnie >= 180 && stopnie < 270) {
-
 			AffineTransform at = new AffineTransform();
 			at.concatenate(AffineTransform.getScaleInstance(-1, -1));
 			at.concatenate(AffineTransform.getTranslateInstance(-krzywa.getWidth(), -krzywa.getHeight()));
@@ -368,9 +350,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			g2d.drawImage(krzywa, 0, 0, null);
 			g2d.dispose();
 			krzywa = tranImg;
-
 		}
-
 	}
 
 	/**
@@ -559,8 +539,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		int numberOfThread = 0;
 
 		@Override
-		public SpiralaLogarytmicznaBuilder setParametrA(String parametrA) {
-			this.parametrAText = parametrA;
+		public SpiralaLogarytmicznaBuilder setParametrA(String parametrAText) {
+			this.parametrAText = parametrAText;
 			return this;
 		}
 
@@ -573,7 +553,6 @@ public class SpiralaLogarytmiczna extends Figury {
 		@Override
 		public SpiralaLogarytmicznaBuilder setZakres(String zakresText) {
 			this.zakresText = zakresText;
-
 			return this;
 		}
 
@@ -596,7 +575,6 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		@Override
 		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
-
 			if (numberOfThread == 0)
 				numberOfThread = Runtime.getRuntime().availableProcessors();
 
@@ -623,15 +601,17 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		@Override
 		public int[] sprawdzParametry() {
-
 //			String[] komentarz = { "Parametr a nie został ustawiony", "Parametr b nie został ustawiony",
 //					"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
 //					"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
-//					"U+03C6 musi nale�e� do liczb rzeczywistych" };
+//					"U+03C6 musi należeć do liczb rzeczywistych" };
 			int[] a = { 0, 0, 0, 0, 0 };
 
 			if (parametrAText == null || parametrBText == null || zakresText == null)
 				return null;
+			parametrAText = parametrAText.replace(',', '.');
+			parametrBText = parametrBText.replace(',', '.');
+			zakresText = zakresText.replace(',', '.');
 			if (parametrAText.isEmpty()) // dodaj komentarz a nieustawione
 				a[0] = 1;
 			if (parametrBText.isEmpty()) // dodaj komentarz b nieustawione
@@ -641,7 +621,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			if (isItANumber(parametrAText))
 				if (Double.valueOf(parametrAText) < 0)
 					a[4] = 1;
-
 			if (!(isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText)))
 				a[3] = 1;
 
@@ -659,12 +638,9 @@ public class SpiralaLogarytmiczna extends Figury {
 		 * @return true jeśli string da się przekonwetować na liczbę
 		 * @author Pafeu
 		 */
-
 		private boolean isItANumber(String string) {
-
 			if (string == null || string.isEmpty())
 				return false;
-
 			for (int i = 0; i < string.length(); i++) {
 				if (string.charAt(0) == "-".charAt(0) && i == 0)
 					i++;
