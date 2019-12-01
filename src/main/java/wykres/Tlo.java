@@ -16,6 +16,11 @@ public class Tlo {
 	private static BufferedImage osie;
 	private static BufferedImage opisyOsi;
 
+	/**
+	 * 
+	 * @param graphSize - rozmiar obrazka na ktorym ma byc tlo
+	 * @return obraz tla
+	 */
 	static BufferedImage getTlo(Point graphSize) {
 		// graphSize = graphSize1;
 		tlo = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
@@ -58,6 +63,12 @@ public class Tlo {
 		return osie;
 	}
 
+	/**
+	 * 
+	 * @param graphSize - rozmmiar obrazka
+	 * @param opisy     - opisy które maja zostac wyswietlone
+	 * @return BufferedImage z npisami w odpowiednim miejscu
+	 */
 	public static BufferedImage getOpisyOsi(Point graphSize, String[] opisy) {
 		opisyOsi = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) opisyOsi.getGraphics();
