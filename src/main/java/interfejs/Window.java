@@ -2,6 +2,7 @@ package interfejs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -41,8 +42,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private int sizeWindowX = 800;
 	private int sizeWindowY = 600;
 
-	private Dimension poleSize = new Dimension(50, 20);
-	private Dimension buttonSize = new Dimension(80, 20);
+	private Dimension poleSize = new Dimension(50, 30);
+	private Dimension buttonSize = new Dimension(75, 30);
 	private Dimension minimumSize = new Dimension(640, 400);
 
 	private static GraphPanel graph;
@@ -64,6 +65,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
 	private static BigDecimal parametrA, parametrB, zakres;
 	private BufferedImage graphImage;
+
+	private Font defaultFont;
 
 	SpiralaLogarytmiczna spirala;
 
@@ -160,68 +163,85 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	 */
 	private void przeskalujOkienko() {
 
+		sizeWindowX = this.getWidth() - 16; // z jakiegos powodu jframe zabiera te 16 px
+		sizeWindowY = this.getHeight();
+
 		// TODO Uproscic zapisy posprzatac te funkcje na koniec bo jest syf ale
 		// nieszkodliwy
 
+		defaultFont = new Font("Dialog", Font.BOLD, 12);
+		napisNazwaProgramu.setFont(new Font("Dialog", Font.BOLD, 15));
+
+		napisParametrA.setFont(defaultFont);
+		napisParametrB.setFont(defaultFont);
+		napisZakres.setFont(defaultFont);
+		napisZakresJednostka.setFont(defaultFont);
+		poleKomentarz.setFont(defaultFont);
+		przyciskCzysc.setFont(defaultFont);
+		przyciskPelnyEkran.setFont(defaultFont);
+		przyciskRysuj.setFont(defaultFont);
+		napisParametry.setFont(defaultFont);
+
+		// getFontMetrics(defaultFont).stringWidth(napisParametry.getText());
+
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
-		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
+		napisNazwaProgramu.setSize(sizeWindowX, getFontMetrics(napisNazwaProgramu.getFont()).getHeight());
 		napisNazwaProgramu.setLocation(0, 0);
 
-		int graphWidth = sizeWindowX - sizeWindowX / 20; // tak naprawde to jest szerokosc oknienka bez marginesow
-		int graphX = sizeWindowX / 64; // margines
+		int margines = sizeWindowX / 60;
+		int graphWidth = sizeWindowX - 2 * margines; //
+		int graphHeight = sizeWindowY * 3 / 4;
+		int graphX = margines; // margines
+		int graphY = napisNazwaProgramu.getHeight();
 
-		if (sizeWindowY * 3 / 4 > sizeWindowX)
-			graph.setSize(sizeWindowX, sizeWindowX);
+		// aby rysunek nie wyszedl poza okienko
+		if (graphHeight > graphWidth)
+			graph.setSize(graphWidth, graphWidth);
 		else
-			graph.setSize(sizeWindowY * 9 / 12, sizeWindowY * 9 / 12);
-		graph.setLocation(sizeWindowX / 80 + (graphWidth - graph.getWidth()) / 2, napisNazwaProgramu.getHeight());
+			graph.setSize(graphHeight, graphHeight);
 
-		// graph.setAlignmentX(containerPanel.getWidth()-(sizeWindowY * 4 / 6));
+		graph.setLocation(margines + (graphWidth - graphHeight) / 2, graphY);
+
+		napisParametry.setSize(getFontMetrics(defaultFont).stringWidth(napisParametry.getText()), poleSize.height);
+		napisParametrA.setSize(getFontMetrics(defaultFont).stringWidth(napisParametrA.getText()), poleSize.height);
+		poleParametrA.setSize(poleSize);
+		napisParametrB.setSize(getFontMetrics(defaultFont).stringWidth(napisParametrB.getText()), poleSize.height);
+		poleParametrB.setSize(poleSize);
+		napisZakres.setSize(getFontMetrics(defaultFont).stringWidth(napisZakres.getText()), poleSize.height);
+		poleZakres.setSize(poleSize);
+		napisZakresJednostka.setSize(getFontMetrics(defaultFont).stringWidth(napisZakresJednostka.getText()),
+				poleSize.height);
+		przyciskRysuj.setSize(buttonSize);
+		przyciskCzysc.setSize(buttonSize);
+		przyciskPelnyEkran.setSize(150, 30);
 
 		int odstepY = sizeWindowY / 240;
-		int locationY = graph.getY() + graph.getHeight() + odstepY;
-		int odstep = (graphWidth - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
-
+		int locationY = graph.getY() + graph.getHeight() + odstepY; // polozenie Y przyciskow i pol
+		int odstep = (graphWidth - (napisParametry.getWidth() + napisParametrA.getWidth() + poleParametrA.getWidth()
+				+ napisParametrB.getWidth() + poleParametrB.getWidth() + napisZakres.getWidth() + poleZakres.getWidth()
+				+ napisZakresJednostka.getWidth() + przyciskRysuj.getWidth() + przyciskCzysc.getWidth()
+				+ przyciskPelnyEkran.getWidth())) / 6;
+		// (szerokosc graph - suma długośc elementów) ilosc odstepow
 		// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
-		napisParametry.setSize(70, poleSize.height);
-		napisParametry.setLocation(graphX, locationY);
 
-		napisParametrA.setSize(20, poleSize.height);
+		napisParametry.setLocation(margines, locationY);
 		napisParametrA.setLocation(napisParametry.getLocation().x + napisParametry.getSize().width + odstep, locationY);
-
-		poleParametrA.setSize(poleSize);
 		poleParametrA.setLocation(napisParametrA.getLocation().x + napisParametrA.getSize().width, locationY);
-
-		napisParametrB.setSize(20, poleSize.height);
 		napisParametrB.setLocation(poleParametrA.getLocation().x + poleParametrA.getSize().width + odstep, locationY);
-
-		poleParametrB.setSize(poleSize);
 		poleParametrB.setLocation(napisParametrB.getX() + napisParametrB.getWidth(), locationY);
-
-		napisZakres.setSize(50, poleSize.height);
 		napisZakres.setLocation(poleParametrB.getLocation().x + poleParametrB.getSize().width + odstep, locationY);
-
-		poleZakres.setSize(poleSize);
 		poleZakres.setLocation(napisZakres.getX() + napisZakres.getWidth(), locationY);
-
-		napisZakresJednostka.setSize(30, poleSize.height);
 		napisZakresJednostka.setLocation(poleZakres.getLocation().x + poleZakres.getSize().width, locationY);
 
-		// jbUTTON
-		przyciskRysuj.setSize(buttonSize);
 		przyciskRysuj.setLocation(napisZakresJednostka.getX() + napisZakresJednostka.getWidth() + odstep, locationY);
-
-		przyciskCzysc.setSize(buttonSize);
 		przyciskCzysc.setLocation(przyciskRysuj.getX() + przyciskRysuj.getWidth() + odstep, locationY);
-
-		przyciskPelnyEkran.setSize(new Dimension(140, 20));
 		przyciskPelnyEkran.setLocation(przyciskCzysc.getX() + przyciskCzysc.getWidth() + odstep, locationY);
 
-		poleKomentarz.setLocation(graphX, locationY + odstepY + poleSize.height);
+		poleKomentarz.setLocation(margines, locationY + odstepY + poleSize.height);
 		poleKomentarz.setSize(graphWidth,
-				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 30);
+				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 40);
 
 	}
 
@@ -387,8 +407,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			// ustawiÄ‡
 			// tutaj spanko
 			// System.out.println("resize");
-			sizeWindowX = this.getWidth();
-			sizeWindowY = this.getHeight();
+
 			przeskalujOkienko();
 			graph.repaint();
 
