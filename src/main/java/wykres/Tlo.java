@@ -1,6 +1,7 @@
 package wykres;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -72,8 +73,9 @@ public class Tlo {
 		opisyOsi = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) opisyOsi.getGraphics();
 
+		g.setFont(new Font("Dialog", Font.PLAIN, graphSize.x * 25 / 1000));
 		for (int i = 0; i < opisy.length; i++)
-			g.drawString(opisy[i], 5, 10 + i * 20);
+			g.drawString(opisy[i], 5, 15 + i * g.getFontMetrics().getHeight());
 
 		return opisyOsi;
 	}
