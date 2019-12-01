@@ -36,7 +36,7 @@ public abstract class Figury {
 	private static final String[] komentarz = { "Parametr a nie został ustawiony \n ",
 			"Parametr b nie został ustawiony \n ", "Zakres nie został ustawiony \n ", "Podano niepoprawne dane.\n",
 			"a musi być większe od zera\n", "a musi należeć do liczb rzeczywistych\n",
-			"b musi należeć do liczb rzeczywistych\n", "U+03C6 musi nale�e� do liczb rzeczywistych" };
+			"b musi należeć do liczb rzeczywistych\n", "U+03C6 musi należeć do liczb rzeczywistych" };
 	String[] opisy = { " ", " ", " ", " " };
 	BigDecimal parametrA;
 	BigDecimal parametrB;
@@ -539,17 +539,5 @@ public abstract class Figury {
 	 */
 	public static double mathDistanceOfPoints(Point pkt1, Point pkt2) {
 		return Math.sqrt(Math.pow(pkt1.x - pkt2.x, 2) + Math.pow(pkt1.y - pkt2.y, 2));
-	}
-
-	public BigDecimal getParametrA() {
-		return parametrA;
-	}
-
-	public BigDecimal getParametrB() {
-		return parametrB;
-	}
-
-	public BigDecimal getZakres() {
-		return zakres;
 	}
 }
