@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 
 /**
- * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
+ * Zarządza gotowym wyglądem wykresu. Scala obrazki, rysuje i dodaje tło.
  * 
  * @author 7Adrian
  * @since 1.0
@@ -26,7 +26,7 @@ public class Wykres {
 		Graphics2D g2d = (Graphics2D) wykres.getGraphics();
 
 		g2d.setColor(Color.BLACK);
-		g2d.drawRect(0, 0, graph.getWidth(), graph.getHeight());
+		g2d.fillRect(0, 0, graph.getWidth(), graph.getHeight());
 
 		g2d.setColor(Color.BLUE);
 		g2d.drawImage(krzywa, 0, 0, null);

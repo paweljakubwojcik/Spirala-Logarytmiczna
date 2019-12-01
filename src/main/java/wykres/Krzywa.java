@@ -13,6 +13,14 @@ import java.util.ArrayList;
 public class Krzywa {
 	private static BufferedImage krzywa;
 
+	/**
+	 * Tworzy BufferowanyObrazek rozmiarów podanych w graphSize oraz koloruje pixele
+	 * według listy punkty
+	 * 
+	 * @param graphSize - Rozmiar obrazka w jakim mają być narysowane punkty
+	 * @param punkty    - Lista pixeli które mają zostać pokolorowane
+	 * @return - Obrazek z pokolorowanymi punktami oraz mający przezroczyste tło
+	 */
 	static BufferedImage getKrzywa(Point graphSize, ArrayList<Point> punkty) {
 		krzywa = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		while (punkty.size() > 0) {

@@ -241,13 +241,6 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 	@Test
 	void setParametr() {
 		// GIVEN
-//		AccessException thrownParametrA = null;
-//		AccessException thrownParametrB = null;
-//		AccessException thrownParametrZakres = null;
-//		AccessException thrownParametrJednostkaZakres = null;
-//		AccessException thrownParametrKomentarz = null;
-//		String[] a = { "" };
-//		String b = "";
 		String[] thrownParametr = new String[5];
 		// WHEN
 		try {

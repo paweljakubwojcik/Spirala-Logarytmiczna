@@ -144,8 +144,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// Rysowanie obrazka startowego
 
 		long start = System.currentTimeMillis();
-		draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.001")
-				.setZakres("400").setGraph(graphImage).build().getImage());
+		draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("0.1")
+				.setZakres("40").setGraph(graphImage).setSSAA(1).build().getImage());
 		System.out.println("Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 
 	}
@@ -284,9 +284,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// JeĹ›li tworzenie wykresu bÄ™dzie zajmowaĹ‚o duĹĽo czasu trzeba bÄ™dzie
-			// ustawiÄ‡
-			// tutaj spanko
 			// System.out.println("resize");
 			przeskalujOkienko();
 		}
@@ -310,11 +307,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			g2d.drawImage(nic, 0, 0, null);
 			try {
 				long start = System.currentTimeMillis();
-
 				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
 						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-						.build().getImage());
-
+						.setSSAA(2).build().getImage());
 				System.out.println(
 						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
 			} catch (Exception exc) {
