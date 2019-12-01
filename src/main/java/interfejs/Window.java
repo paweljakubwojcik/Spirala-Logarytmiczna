@@ -42,7 +42,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	private Dimension poleSize = new Dimension(50, 30);
 	private Dimension buttonSize = new Dimension(75, 30);
-	private Dimension minimumSize = new Dimension(640, 400);
+	private Dimension minimumSize = new Dimension(640, 550);
 
 	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
