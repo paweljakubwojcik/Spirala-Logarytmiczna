@@ -42,12 +42,13 @@ public class SpiralaLogarytmiczna extends Figury {
 		this.numberOfThread = numberOfThread;
 		wyznaczOsie();
 		wyznaczPunkty();
+
 		new Wykres(graph, krzywa, podzialka, opisyOsi);
 	}
 
 	private void wyznaczOsie() {
 		double wartoscOstatniejPodzialki, wartoscPierwszejPodzialki;
-		double z = zakres.doubleValue(); // ten zakres jest pomnozeony przez pi XD
+		double z = Math.abs(zakres.doubleValue()); // ten zakres jest pomnozeony przez pi XD
 		double a = parametrA.doubleValue();
 		double b = parametrB.doubleValue();
 		double skala;
@@ -55,6 +56,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		// okresla ile razy zmniejszono/zwiekszono podzialke
 		double i = 0;
 
+		// tutaj jesli z jest ujemne to X i Y = NaN
 		double X = a * Math.cos(z) * Math.exp(z * b);
 		double Y = a * Math.sin(z) * Math.exp(z * b);
 
@@ -73,7 +75,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki / 10;
 			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
 			i++;
-			
+
 		}
 
 		// jesli skala jest zbyt mala i zadna podzialka nie bylaby widoczna
@@ -82,7 +84,7 @@ public class SpiralaLogarytmiczna extends Figury {
 			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki * 10;
 			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
 			i--;
-			
+
 		}
 
 		// zapobiega bledom zwiazanym z konwersja z double na int
@@ -100,12 +102,13 @@ public class SpiralaLogarytmiczna extends Figury {
 		opisyOsi[0] = "r(zakres)= " + String.valueOf(wartoscOstatniejPodzialki);
 		opisyOsi[1] = "Podzialka: " + String.valueOf(podzialkaWyswietlana);
 
-		
 	}
 
 	@Override
 	void wyznaczPunkty() {
 		double a = parametrA.doubleValue();
+		if (Double.isInfinite(a))
+			a = Double.MAX_VALUE;
 		double b = parametrB.doubleValue();
 		double z = zakres.doubleValue();
 		double zRad = z / Math.PI;
