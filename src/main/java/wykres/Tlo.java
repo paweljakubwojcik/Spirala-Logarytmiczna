@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 /**
  * Generuje opisy i osie do Spirali
  *
+ * @since 1.2
+ * @author Pafeu
  */
 public class Tlo {
 
@@ -17,12 +19,12 @@ public class Tlo {
 	private static BufferedImage opisyOsi;
 
 	/**
+	 * Funkcja zwraca obrazek tła (czarny prostkąt)
 	 * 
 	 * @param graphSize - rozmiar obrazka na ktorym ma byc tlo
 	 * @return obraz tla
 	 */
 	static BufferedImage getTlo(Point graphSize) {
-		// graphSize = graphSize1;
 		tlo = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) tlo.getGraphics();
 		g.setColor(Color.black);
@@ -32,6 +34,7 @@ public class Tlo {
 	}
 
 	/**
+	 * Fucnkja zwraca obrazek osi (X Y oraz podziałki)
 	 * 
 	 * @param graphSize
 	 * @param podzialka - co ile pixeli ma byc narysowana podzialka
