@@ -22,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -45,8 +44,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private int sizeWindowY = 600;
 
 	private Dimension poleSize = new Dimension(50, 30);
-	private Dimension buttonSize = new Dimension(75, 30);
-	private Dimension minimumSize = new Dimension(640, 550); // 640 ,550
+	private Dimension buttonSize = new Dimension(80, 30);
+	private Dimension minimumSize = new Dimension(750, 550); // 640 ,550
 
 	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
@@ -211,7 +210,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 				poleSize.height);
 		przyciskRysuj.setSize(buttonSize);
 		przyciskCzysc.setSize(buttonSize);
-		przyciskPelnyEkran.setSize(150, 30);
+		przyciskPelnyEkran.setSize(170, 30);
 
 		int odstepY = sizeWindowY / 240;
 		int locationY = graph.getY() + graph.getHeight() + odstepY; // polozenie Y przyciskow i pol
@@ -406,9 +405,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 			przeskalujOkienko();
 			graph.repaint();
-
 		}
-
 	}
 
 	@Override
