@@ -7,6 +7,15 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+/**
+ * 
+ * klasa dziedziczy po JPanel, w której można ustawić obraz który bedzie się
+ * skalował razem z obiektem
+ * 
+ * @author Pafeu
+ * @see JPanel
+ *
+ */
 public class GraphPanel extends JPanel {
 
 	public Image image;
@@ -17,6 +26,10 @@ public class GraphPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 
+	 * metoda jest wywolywana wewnetrznie przy kazdej zmianie rozmiaru obiektu
+	 */
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -24,6 +37,9 @@ public class GraphPanel extends JPanel {
 		super.paintComponents(g);
 	}
 
+	/**
+	 * metoda skaluje obraz do odpowiedniej wielkosci
+	 */
 	@Override
 	public void setSize(int x, int y) {
 		super.setSize(x, y);
@@ -37,7 +53,7 @@ public class GraphPanel extends JPanel {
 
 	/**
 	 * Funkcja dzieki której resize komponentu powoduje automatyczny resize grafiki
-	 * Po ustawieniu g nalezy wywołać ffunkkcje repaint()
+	 * Po ustawieniu g nalezy wywołać funkkcje repaint()
 	 * 
 	 * @param g - image to paint on component
 	 */
