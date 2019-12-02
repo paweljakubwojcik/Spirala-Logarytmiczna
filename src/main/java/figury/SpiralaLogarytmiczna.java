@@ -670,7 +670,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		 */
 		private boolean isItANumber(String string) {
 
-			int j = 0;
+			int iloscKropek = 0;
+			int iloscE = 0;
 			if (string == null || string.isEmpty())
 				return false;
 			for (int i = 0; i < string.length(); i++) {
@@ -682,9 +683,13 @@ public class SpiralaLogarytmiczna extends Figury {
 						&& string.charAt(i) != "E".charAt(0))
 					return false;
 				if (string.charAt(i) == ".".charAt(0))
-					j++;
+					iloscKropek++;
+				if (string.charAt(i) == "E".charAt(0))
+					iloscE++;
 			}
-			if (j > 1)
+			if (iloscKropek > 1)
+				return false;
+			if (iloscE > 1)
 				return false;
 			return true;
 		}
