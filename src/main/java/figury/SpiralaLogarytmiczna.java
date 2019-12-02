@@ -616,42 +616,48 @@ public class SpiralaLogarytmiczna extends Figury {
 			if (parametrAText == null || parametrBText == null || zakresText == null)
 				return null;
 
-			parametrAText = parametrAText.replace(',', '.');
-			if (parametrAText.charAt(0) == '.') {
-				parametrAText = parametrAText.replace(".", "0.");
-				System.out.println(parametrAText);
-			}
-
-			parametrBText = parametrBText.replace(',', '.');
-			if (parametrBText.charAt(0) == '.')
-				parametrBText = parametrBText.replace(".", "0.");
-
-			zakresText = zakresText.replace(',', '.');
-			if (zakresText.charAt(0) == '.')
-				zakresText = zakresText.replace(".", "0.");
-
 			if (parametrAText.isEmpty()) // dodaj komentarz a nieustawione
 				a[0] = 1;
+			else {
+				parametrAText = parametrAText.replace(',', '.');
+				if (parametrAText.charAt(0) == '.') {
+					parametrAText = parametrAText.replace(".", "0.");
+
+					if (isItANumber(parametrAText))
+						if (Double.valueOf(parametrAText) < 0) {
+							a[3] = 1;
+							a[4] = 1;
+						}
+					if (!(isItANumber(parametrAText))) {
+						a[3] = 1;
+						a[5] = 1;
+					}
+				}
+			}
+
 			if (parametrBText.isEmpty()) // dodaj komentarz b nieustawione
 				a[1] = 1;
+			else {
+				parametrBText = parametrBText.replace(',', '.');
+				if (parametrBText.charAt(0) == '.')
+					parametrBText = parametrBText.replace(".", "0.");
+				if (!(isItANumber(parametrBText))) {
+					a[3] = 1;
+					a[6] = 1;
+				}
+			}
+
 			if (zakresText.isEmpty()) // dodaj komentarz z nieustawione
 				a[2] = 1;
-			if (isItANumber(parametrAText))
-				if (Double.valueOf(parametrAText) < 0) {
+			else {
+				zakresText = zakresText.replace(',', '.');
+				if (zakresText.charAt(0) == '.')
+					zakresText = zakresText.replace(".", "0.");
+				if (!(isItANumber(zakresText))) {
 					a[3] = 1;
-					a[4] = 1;
+					a[7] = 1;
 				}
-			if (!(isItANumber(parametrAText))) {
-				a[3] = 1;
-				a[5] = 1;
-			}
-			if (!(isItANumber(parametrBText))) {
-				a[3] = 1;
-				a[6] = 1;
-			}
-			if (!(isItANumber(zakresText))) {
-				a[3] = 1;
-				a[7] = 1;
+
 			}
 
 			for (int i = 0; i < a.length; i++)
