@@ -622,6 +622,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				parametrAText = parametrAText.replace(',', '.');
 				if (parametrAText.charAt(0) == '.')
 					parametrAText = parametrAText.replace(".", "0.");
+				if (parametrAText.charAt(0) == 'E')
+					parametrAText = parametrAText.replace("E", "1E");
 
 				if (isItANumber(parametrAText))
 					if (Double.valueOf(parametrAText) <= 1E-120) {
@@ -641,6 +643,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				parametrBText = parametrBText.replace(',', '.');
 				if (parametrBText.charAt(0) == '.')
 					parametrBText = parametrBText.replace(".", "0.");
+				if (parametrBText.charAt(0) == 'E')
+					parametrBText = parametrBText.replace("E", "1E");
 				if (!(isItANumber(parametrBText))) {
 					a[3] = 1;
 					a[6] = 1;
@@ -653,6 +657,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				zakresText = zakresText.replace(',', '.');
 				if (zakresText.charAt(0) == '.')
 					zakresText = zakresText.replace(".", "0.");
+				if (zakresText.charAt(0) == 'E')
+					zakresText = zakresText.replace("E", "1E");
 				if (!(isItANumber(zakresText))) {
 					a[3] = 1;
 					a[7] = 1;
