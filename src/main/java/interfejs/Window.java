@@ -42,7 +42,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	private Dimension poleSize = new Dimension(50, 30);
 	private Dimension buttonSize = new Dimension(75, 30);
-	private Dimension minimumSize = new Dimension(640, 550);
+	private Dimension minimumSize = new Dimension(640 ,550); // 640 ,550
 
 	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
@@ -197,7 +197,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		else
 			graph.setSize(graphHeight, graphHeight);
 
-		graph.setLocation(margines + (graphWidth - graphHeight) / 2, graphY);
+		graph.setLocation(margines + (graphWidth - graph.getWidth()) / 2, graphY);
 
 		napisParametry.setSize(getFontMetrics(defaultFont).stringWidth(napisParametry.getText()), poleSize.height);
 		napisParametrA.setSize(getFontMetrics(defaultFont).stringWidth(napisParametrA.getText()), poleSize.height);
@@ -256,9 +256,10 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			device.setFullScreenWindow(this);
 			requestFocus();
 			setLocation(0, 0);
-			sizePrzedFullscreenem = new Dimension(sizeWindowX, sizeWindowY);
-			setSize(rozdzielczosc);// po setSize nie potrzeba wywoływać ponieważ wywołany zostaje ComponentResize()
-									// przeskalujOkienko()
+			// sizePrzedFullscreenem = new Dimension(sizeWindowX, sizeWindowY);
+			// setSize(rozdzielczosc);// po setSize nie potrzeba wywoływać ponieważ wywołany
+			// zostaje ComponentResize()
+			// przeskalujOkienko()
 			// przeskalujOkienko(rozdzielczosc.width, rozdzielczosc.height);
 
 			przyciskPelnyEkran.setText("Wyłącz pełny ekran");
@@ -267,7 +268,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		} else {
 			dispose();
 			setUndecorated(false);
-			setSize(sizePrzedFullscreenem);
+			// setSize(sizePrzedFullscreenem);
 			setVisible(true);
 			requestFocus();
 			przyciskPelnyEkran.setText("PełnyEkran");
@@ -408,8 +409,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public void actionPerformed(ActionEvent e) {
 
 		JButton obj = (JButton) e.getSource();
+
 		if (obj == przyciskRysuj) {
+
 			stworzSpirale();
+
 		}
 
 		if (obj == przyciskCzysc) {
