@@ -9,7 +9,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -36,8 +35,6 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	private Dimension rozdzielczosc = Toolkit.getDefaultToolkit().getScreenSize();
-	private Dimension sizePrzedFullscreenem = new Dimension();
 	private boolean pelnyekran = false;
 
 	private int sizeWindowX = 800;
@@ -153,16 +150,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	}
 
 	/**
-	 * 
 	 * skaluje wszystkie elementy okienka
-	 * 
-	 * @param width
-	 * @param height
-	 * @author Pafeu
 	 */
 	private void przeskalujOkienko() {
 
-		sizeWindowX = this.getWidth() - 16; // z jakiegos powodu jframe zabiera te 16 px
+		sizeWindowX = this.getWidth() - 16;
 		sizeWindowY = this.getHeight();
 
 		defaultFont = new Font("Dialog", Font.BOLD, 12);
@@ -178,8 +170,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskRysuj.setFont(defaultFont);
 		napisParametry.setFont(defaultFont);
 
-		// getFontMetrics(defaultFont).stringWidth(napisParametry.getText());
-
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
 		napisNazwaProgramu.setSize(sizeWindowX, getFontMetrics(napisNazwaProgramu.getFont()).getHeight());
@@ -188,7 +178,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		int margines = sizeWindowX / 60;
 		int graphWidth = sizeWindowX - 2 * margines; //
 		int graphHeight = sizeWindowY * 3 / 4;
-		int graphX = margines; // margines
 		int graphY = napisNazwaProgramu.getHeight();
 
 		// aby rysunek nie wyszedl poza okienko
@@ -268,13 +257,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			setResizable(true);
 			device.setFullScreenWindow(this);
 			requestFocus();
-			// setLocation(0, 0);
-
-			// sizePrzedFullscreenem = new Dimension(sizeWindowX, sizeWindowY);
-			// setSize(rozdzielczosc);// po setSize nie potrzeba wywoływać ponieważ wywołany
-			// zostaje ComponentResize()
-			// przeskalujOkienko()
-			// przeskalujOkienko(rozdzielczosc.width, rozdzielczosc.height);
 
 			przyciskPelnyEkran.setText("Wyłącz pełny ekran");
 			pelnyekran = true;
@@ -282,7 +264,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		} else {
 			dispose();
 			setUndecorated(false);
-			// setSize(sizePrzedFullscreenem);
 			setVisible(true);
 			requestFocus();
 			przyciskPelnyEkran.setText("PełnyEkran");
@@ -401,8 +382,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// System.out.println("resize");
-
 			przeskalujOkienko();
 			graph.repaint();
 		}
@@ -414,17 +393,13 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		JButton obj = (JButton) e.getSource();
 
 		if (obj == przyciskRysuj) {
-
 			stworzSpirale();
-
 		}
 
 		if (obj == przyciskCzysc) {
-
 			BufferedImage filler = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = (Graphics2D) filler.getGraphics();
 			g.setColor(Color.black);
@@ -436,14 +411,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			poleParametrA.setText(DefaultA);
 			poleParametrB.setText(DefaultB);
 			poleZakres.setText(DefaultZakres);
-
 		}
 
 		if (obj == przyciskPelnyEkran) {
-
 			setFullScreen();
 		}
-
 	}
 
 }

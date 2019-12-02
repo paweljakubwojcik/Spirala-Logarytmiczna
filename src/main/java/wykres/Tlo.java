@@ -67,10 +67,11 @@ public class Tlo {
 	}
 
 	/**
+	 * Funkcja zwraca obrazek zawierający opisy osi
 	 * 
 	 * @param graphSize - rozmmiar obrazka
 	 * @param opisy     - opisy które maja zostac wyswietlone
-	 * @return BufferedImage z npisami w odpowiednim miejscu
+	 * @return BufferedImage z napisami w odpowiednim miejscu
 	 */
 	public static BufferedImage getOpisyOsi(Point graphSize, String[] opisy) {
 		opisyOsi = new BufferedImage(graphSize.x, graphSize.y, BufferedImage.TYPE_INT_ARGB);

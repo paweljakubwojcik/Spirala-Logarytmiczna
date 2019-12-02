@@ -17,7 +17,7 @@ public class Wykres {
 	private BufferedImage krzywa;
 
 	/**
-	 * konstruktor edytuje podane parametry
+	 * konstruktor Rysuje w graph - tło, krzywą oraz osie i ich opisy
 	 * 
 	 * @param graph     - BufferedImage na którym zostaje narysowany wykres.
 	 * @param krzywa    - Obraz wykresu utworzony z wyznaczonych punktów
@@ -54,7 +54,7 @@ public class Wykres {
 	}
 
 	/**
-	 * Generuje tło do krzywej
+	 * Generuje tło do krzywej w kolejności: 1) tło, 2) osie, 3) opisy osi
 	 * 
 	 * @param podzialka - okresla co ile px rysowana bedzie podzialka osi
 	 * @param opisy     - opisy obrazka

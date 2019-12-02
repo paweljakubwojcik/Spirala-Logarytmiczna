@@ -13,22 +13,20 @@ import javax.swing.JPanel;
  * skalował razem z obiektem
  * 
  * @author Pafeu
+ * @since 1.2
  * @see JPanel
- *
  */
 public class GraphPanel extends JPanel {
 
 	public Image image;
 	public Image imageScaled;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Metoda jest wywolywana wewnetrznie przy kazdej zmianie rozmiaru obiektu
 	 * 
-	 * metoda jest wywolywana wewnetrznie przy kazdej zmianie rozmiaru obiektu
+	 * @param g - Graphics który będzie malował obrazek
 	 */
 	@Override
 	public void paint(Graphics g) {
@@ -38,15 +36,16 @@ public class GraphPanel extends JPanel {
 	}
 
 	/**
-	 * metoda skaluje obraz do odpowiedniej wielkosci
+	 * Metoda skaluje obraz do odpowiedniej wielkosci
+	 * 
+	 * @param x - szerokość
+	 * @param y - wysokość
 	 */
 	@Override
 	public void setSize(int x, int y) {
 		super.setSize(x, y);
 		if (image != null) {
 			imageScaled = image.getScaledInstance(x, y, BufferedImage.SCALE_SMOOTH);
-//			Graphics2D g2d = (Graphics2D) this.getGraphics();
-//			g2d.drawImage(imageScaled, 0, 0, null);
 		}
 
 	}
