@@ -219,7 +219,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\na musi należeć do liczb rzeczywistych\\n", komentarzText);
+		assertEquals("Podano niepoprawne dane.\na musi należeć do liczb rzeczywistych\n", komentarzText);
 	}
 
 	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy B nie jest liczbą")
@@ -240,7 +240,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\nb musi należeć do liczb rzeczywistych\\n", komentarzText);
+		assertEquals("Podano niepoprawne dane.\nb musi należeć do liczb rzeczywistych\n", komentarzText);
 	}
 
 	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy Zakres nie jest liczbą")
@@ -326,7 +326,9 @@ class WindowTest {
 		// GIVEN
 		Class<?> okno2 = okno.getClass();
 		Field rysuj = okno2.getDeclaredField("przyciskRysuj");
+
 		rysuj.setAccessible(true);
+
 		JButton przyciskRysuj = (JButton) rysuj.get(okno);
 		// WHEN
 		okno.actionPerformed(new ActionEvent(przyciskRysuj, ActionEvent.ACTION_PERFORMED, "Test"));

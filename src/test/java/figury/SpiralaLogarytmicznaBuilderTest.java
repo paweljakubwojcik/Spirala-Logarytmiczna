@@ -113,13 +113,13 @@ class SpiralaLogarytmicznaBuilderTest {
 	void testTworzenieSpiraliParametrAPodwojnaKropka() {
 		// Given
 		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-		Exception thrown = null;
+		ExceptionInInitializerError thrown = null;
 		// When
 		try {
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("..10").setParametrB("1500")
 					.setZakres("2").setGraph(graphImage).build();
 
-		} catch (Exception e) {
+		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
 		// Then
@@ -131,13 +131,13 @@ class SpiralaLogarytmicznaBuilderTest {
 	void testTworzenieSpiraliParametrBPodwojnaKropka() {
 		// Given
 		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-		Exception thrown = null;
+		ExceptionInInitializerError thrown = null;
 		// When
 		try {
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("..1").setZakres("2")
 					.setGraph(graphImage).build();
 
-		} catch (Exception e) {
+		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
 		// Then
@@ -149,13 +149,13 @@ class SpiralaLogarytmicznaBuilderTest {
 	void testTworzenieSpiraliParametrZakresPodwojnaKropka() {
 		// Given
 		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-		Exception thrown = null;
+		ExceptionInInitializerError thrown = null;
 		// When
 		try {
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("4500")
 					.setZakres("..2").setGraph(graphImage).build();
 
-		} catch (Exception e) {
+		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
 		// Then
