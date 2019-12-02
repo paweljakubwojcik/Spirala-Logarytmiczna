@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.rmi.AccessException;
 
@@ -18,9 +20,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import figury.SpiralaLogarytmiczna;
+
 @DisplayName(value = "Testy klasy interfejs.Window")
-class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach tekstowych to czy
-					// pojawi się stosowny komentarz do tego
+class WindowTest {
 	static Window okno;
 	ComponentEvent s = null;
 
@@ -48,6 +51,7 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 	@Test
 	void testWindow() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		// Given
+		okno = new Window();
 		Class<?> okno2 = okno.getClass();
 
 		Field ParamA = okno2.getDeclaredField("napisParametrA");
@@ -176,6 +180,90 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 		assertEquals("", komentarzText);
 	}
 
+	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy A jest ujemne")
+	@Test
+	void testSetKomentarzKiedyAJestUjemne()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// GIVEN
+		Class<?> okno2 = okno.getClass();
+		Field komentarz = okno2.getDeclaredField("poleKomentarz");
+		komentarz.setAccessible(true);
+		JLabel poleKomentarz = (JLabel) komentarz.get(okno);
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		// WHEN
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("-10").setParametrB("1500")
+					.setZakres("2").setGraph(graphImage).build();
+		} catch (ExceptionInInitializerError e) {
+		}
+		String komentarzText = poleKomentarz.getText();
+		// THEN
+		assertEquals("Podano niepoprawne dane.\n a musi być większe od zera\n ", komentarzText);
+	}
+
+	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy A nie jest liczbą")
+	@Test
+	void testSetKomentarzKiedyANieJestLiczba()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// GIVEN
+		Class<?> okno2 = okno.getClass();
+		Field komentarz = okno2.getDeclaredField("poleKomentarz");
+		komentarz.setAccessible(true);
+		JLabel poleKomentarz = (JLabel) komentarz.get(okno);
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		// WHEN
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("sto").setParametrB("1500")
+					.setZakres("2").setGraph(graphImage).build();
+		} catch (ExceptionInInitializerError e) {
+		}
+		String komentarzText = poleKomentarz.getText();
+		// THEN
+		assertEquals("Podano niepoprawne dane.\n a musi należeć do liczb rzeczywistych\n ", komentarzText);
+	}
+
+	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy B nie jest liczbą")
+	@Test
+	void testSetKomentarzKiedyBNieJestLiczba()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// GIVEN
+		Class<?> okno2 = okno.getClass();
+		Field komentarz = okno2.getDeclaredField("poleKomentarz");
+		komentarz.setAccessible(true);
+		JLabel poleKomentarz = (JLabel) komentarz.get(okno);
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		// WHEN
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("sto").setZakres("2")
+					.setGraph(graphImage).build();
+		} catch (ExceptionInInitializerError e) {
+		}
+		String komentarzText = poleKomentarz.getText();
+		// THEN
+		assertEquals("Podano niepoprawne dane.\n b musi należeć do liczb rzeczywistych\n ", komentarzText);
+	}
+
+	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy Zakres nie jest liczbą")
+	@Test
+	void testSetKomentarzKiedyZakresNieJestLiczba()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// GIVEN
+		Class<?> okno2 = okno.getClass();
+		Field komentarz = okno2.getDeclaredField("poleKomentarz");
+		komentarz.setAccessible(true);
+		JLabel poleKomentarz = (JLabel) komentarz.get(okno);
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		// WHEN
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("1500")
+					.setZakres("sto").setGraph(graphImage).build();
+		} catch (ExceptionInInitializerError e) {
+		}
+		String komentarzText = poleKomentarz.getText();
+		// THEN
+		assertEquals("Podano niepoprawne dane.\n \u03C6 musi należeć do liczb rzeczywistych ", komentarzText);
+	}
+
 	@DisplayName(value = "testComponentHidden")
 	@Test
 	void testComponentHidden() {
@@ -209,6 +297,9 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 	@Disabled
 	@Test
 	void testComponentResized() {
+		// GIVEN
+		// WHEN
+		// THEN
 		fail("Not yet implemented"); // TODO test skalowania się okienka
 	}
 
@@ -227,12 +318,20 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 		assertTrue(true);
 	}
 
-	@DisplayName(value = "Wciśnięcie przycisku w JFrame")
+	@DisplayName(value = "Wciśnięcie przycisku Rysuj w JFrame")
 	@Disabled
 	@Test
-	void testActionPerformed() {
+	void testActionPerformedRysuj()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		// GIVEN
+		Class<?> okno2 = okno.getClass();
+		Field rysuj = okno2.getDeclaredField("przyciskRysuj");
+
+		rysuj.setAccessible(true);
+
+		JButton przyciskRysuj = (JButton) rysuj.get(okno);
 		// WHEN
+		okno.actionPerformed(new ActionEvent(przyciskRysuj, ActionEvent.ACTION_PERFORMED, "Test"));
 		// THEN
 		fail("Not yet implemented"); // TODO test wciskania przycisku w okienku
 	}
@@ -241,6 +340,13 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 	@Test
 	void setParametr() {
 		// GIVEN
+//		AccessException thrownParametrA = null;
+//		AccessException thrownParametrB = null;
+//		AccessException thrownParametrZakres = null;
+//		AccessException thrownParametrJednostkaZakres = null;
+//		AccessException thrownParametrKomentarz = null;
+//		String[] a = { "" };
+//		String b = "";
 		String[] thrownParametr = new String[5];
 		// WHEN
 		try {
@@ -280,6 +386,7 @@ class WindowTest { // TODO sprawdzanie czy jak się da złe parametry w polach t
 						"Błąd przy parametrzeJednostkaZakres"),
 				() -> assertEquals("Tylko klasa figury.Figury ma dostęp do tej metody", thrownParametr[4],
 						"Błąd przy parametrzeKomentarz"));
+
 	}
 
 }

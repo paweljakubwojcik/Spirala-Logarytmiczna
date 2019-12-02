@@ -17,11 +17,8 @@ class SpiralaLogarytmicznaBuilderTest {
 		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
 		SpiralaLogarytmiczna spirala = null;
 		// When
-		try {
-			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("1500")
-					.setZakres("2").setGraph(graphImage).build();
-		} catch (Exception e) {
-		}
+		spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("1500")
+				.setZakres("2").setGraph(graphImage).build();
 		// Then
 		assertEquals(SpiralaLogarytmiczna.class, spirala.getClass());
 	}
@@ -93,9 +90,9 @@ class SpiralaLogarytmicznaBuilderTest {
 		assertEquals("Parametr graph nie został ustawiony", thrown.getMessage());
 	}
 
-	@DisplayName(value = "Sprawdzanie błędu złych parametrów")
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (A ujemne)")
 	@Test
-	void testTworzenieSpiraliParametrNull() {
+	void testTworzenieSpiraliParametrAUjemny() {
 		// Given
 		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
 		ExceptionInInitializerError thrown = null;
@@ -103,11 +100,105 @@ class SpiralaLogarytmicznaBuilderTest {
 		try {
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("-10").setParametrB("1500")
 					.setZakres("2").setGraph(graphImage).build();
+
 		} catch (ExceptionInInitializerError e) {
 			thrown = e;
 		}
 		// Then
 		assertEquals("Błąd wprowadzonych parametrów", thrown.getMessage());
+	}
+
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (A zawierające dwie '.')")
+	@Test
+	void testTworzenieSpiraliParametrAPodwojnaKropka() {
+		// Given
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		ExceptionInInitializerError thrown = null;
+		// When
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("..10").setParametrB("1500")
+					.setZakres("2").setGraph(graphImage).build();
+
+		} catch (ExceptionInInitializerError e) {
+			thrown = e;
+		}
+		// Then
+		assertEquals("Błąd wprowadzonych parametrów", thrown.getMessage());
+	}
+
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (B zawierające dwie '.')")
+	@Test
+	void testTworzenieSpiraliParametrBPodwojnaKropka() {
+		// Given
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		ExceptionInInitializerError thrown = null;
+		// When
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("..1").setZakres("2")
+					.setGraph(graphImage).build();
+
+		} catch (ExceptionInInitializerError e) {
+			thrown = e;
+		}
+		// Then
+		assertEquals("Błąd wprowadzonych parametrów", thrown.getMessage());
+	}
+
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (Zakres zawierający dwie '.')")
+	@Test
+	void testTworzenieSpiraliParametrZakresPodwojnaKropka() {
+		// Given
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		ExceptionInInitializerError thrown = null;
+		// When
+		try {
+			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("4500")
+					.setZakres("..2").setGraph(graphImage).build();
+
+		} catch (ExceptionInInitializerError e) {
+			thrown = e;
+		}
+		// Then
+		assertEquals("Błąd wprowadzonych parametrów", thrown.getMessage());
+	}
+
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (A zaczynające się od ',')")
+	@Test
+	void testTworzenieSpiraliParametrAPrzecinek() {
+		// Given
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		SpiralaLogarytmiczna spirala = null;
+		// When
+		spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(",1").setParametrB("4500")
+				.setZakres("2").setGraph(graphImage).build();
+		// Then
+		assertEquals(SpiralaLogarytmiczna.class, spirala.getClass());
+	}
+
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (B zaczynające się od ',')")
+	@Test
+	void testTworzenieSpiraliParametrBPrzecinek() {
+		// Given
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		SpiralaLogarytmiczna spirala = null;
+		// When
+		spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB(",4500")
+				.setZakres("2").setGraph(graphImage).build();
+		// Then
+		assertEquals(SpiralaLogarytmiczna.class, spirala.getClass());
+	}
+
+	@DisplayName(value = "Sprawdzanie błędu złych parametrów (Zakres zaczynający się od ',')")
+	@Test
+	void testTworzenieSpiraliParametrZakresPrzecinek() {
+		// Given
+		BufferedImage graphImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+		SpiralaLogarytmiczna spirala = null;
+		// When
+		spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("4500")
+				.setZakres(",2").setGraph(graphImage).build();
+		// Then
+		assertEquals(SpiralaLogarytmiczna.class, spirala.getClass());
 	}
 
 }

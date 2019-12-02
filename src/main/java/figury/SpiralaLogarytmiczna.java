@@ -25,6 +25,8 @@ public class SpiralaLogarytmiczna extends Figury {
 	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
 	private int numberOfThread;
 	private boolean SSAA;
+	private int podzialka;
+	private String[] opisyOsi = new String[2];
 
 	/**
 	 * Konstuktor Spirali Logarytmicznej
@@ -41,26 +43,86 @@ public class SpiralaLogarytmiczna extends Figury {
 		super(opisy, parametrA, parametrB, zakres, graph);
 		this.numberOfThread = numberOfThread;
 		SSAA = false;
+		wyznaczOsie();
 		wyznaczPunkty();
-		new Wykres(graph, krzywa, zakres);
+		new Wykres(graph, krzywa, podzialka, opisyOsi);
 		if (nrSSAA > 1) {
 			SSAA = true;
 			BufferedImage krzywaSSAA = new BufferedImage(graph.getWidth() * nrSSAA, graph.getHeight() * nrSSAA,
 					BufferedImage.TYPE_INT_ARGB);
 			krzywa = krzywaSSAA;
 			wyznaczPunkty();
-			new Wykres(graph, AntiAliazing.SSAAMonoColor(krzywa, nrSSAA), zakres);
+			new Wykres(graph, AntiAliazing.SSAAMonoColor(krzywa, nrSSAA), podzialka, opisyOsi);
 		}
+	}
+
+	/**
+	 * wyznacza podzialke dla osi oraz opisy
+	 */
+	private void wyznaczOsie() {
+		double wartoscOstatniejPodzialki;
+		double z = Math.abs(zakres.doubleValue()); // ten zakres jest pomnozeony przez pi XD
+		double a = parametrA.doubleValue();
+		double b = parametrB.doubleValue();
+		double skala;
+
+		// okresla ile razy zmniejszono/zwiekszono podzialke
+		double i = 0;
+
+		// tutaj jesli z jest ujemne to X i Y = NaN
+		double X = wartoscFunkcjiX(a, b, z);
+		double Y = wartoscFunkcjiY(a, b, z);
+
+		wartoscOstatniejPodzialki = Math.hypot(X, Y);
+
+		// jesli wartosc ostatniego punktu na wykresie jest nieskonczona
+		if (Double.isInfinite(wartoscOstatniejPodzialki))
+			wartoscOstatniejPodzialki = Double.MAX_VALUE;
+// jesli wartosc ostatniego pkt wychodzi0
+		if (wartoscOstatniejPodzialki == 0)
+			wartoscOstatniejPodzialki = Double.MIN_VALUE;
+
+		skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
+
+		// jesli skala jest zbyt duza i podzialki sie nie mieszcza
+		// 10 - odstep pomiedzy podzialkami musi byc wiekszy niz 10px
+		while (skala <= 10) {
+			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki / 10;
+			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
+			i++;
+		}
+
+		// jesli skala jest zbyt mala i zadna podzialka nie bylaby widoczna
+		// podzielone na 10 zeby zawze bylo przynajmniej 10 podzialek
+		while (skala > (graph.getWidth() / 2)) {
+			wartoscOstatniejPodzialki = wartoscOstatniejPodzialki * 10;
+			skala = Math.abs((graph.getWidth() / 2) / wartoscOstatniejPodzialki);
+			i--;
+		}
+
+		// zapobiega bledom zwiazanym z konwersja z double na int
+		skala = Math.round(skala);
+		podzialka = (int) skala;
+
+		// do wyswietlenia wartosci podzialki
+		double podzialkaWyswietlana = Math.pow(10, i);
+		wartoscOstatniejPodzialki = Math.hypot(X, Y);
+
+		// tworzy opisy do osi
+		opisyOsi[0] = "r(zakres)= " + String.valueOf(wartoscOstatniejPodzialki);
+		opisyOsi[1] = "Podzialka: " + String.valueOf(podzialkaWyswietlana);
 	}
 
 	@Override
 	void wyznaczPunkty() {
 		double a = parametrA.doubleValue();
+		if (Double.isInfinite(a))
+			a = Double.MAX_VALUE;
 		double b = parametrB.doubleValue();
 		double z = zakres.doubleValue();
 		double zRad = z / Math.PI;
-		int graphW = krzywa.getWidth();
-		int graphH = krzywa.getHeight();
+		int graphW = graph.getWidth();
+		int graphH = graph.getHeight();
 		int graphW2 = graphW / 2;
 		int graphH2 = graphH / 2;
 		double az = a;
@@ -176,6 +238,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				for (int i = 0; i < numberOfThread; i++) {
 					katPunktWatek.add(new ArrayList<KatPunkt>());
 				}
+
 				// Ustawienie każdego wątku według pracy którą musi wykonać
 				for (MultiDraw watek : watki) {
 					watek.setArguments(probki, new Point(start.x + perCore * counter + offset, start.y),
@@ -201,12 +264,12 @@ public class SpiralaLogarytmiczna extends Figury {
 						}
 					}
 				}
+
 //				System.out.println("Czasy wykonywania wieluwątków= " + (System.currentTimeMillis() - czasPoczatkowy));
 			} else { // Wykonywanie rysowania jednowątkowo
 				double katFI;
 				for (double X = start.x; X < koniec.x; X += probki) {
 					for (double Y = start.y; Y < koniec.y; Y += probki) {
-
 						katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
 						if (katFI <= katStop && katFI >= katStart) {
 							addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
@@ -244,9 +307,9 @@ public class SpiralaLogarytmiczna extends Figury {
 
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
-			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
+			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 4 || iloscPKT == 0 && probki >= 1.0 / 8) {
 				if (!SSAA)
-					new Wykres(graph, krzywa, zakres);
+					new Wykres(graph, krzywa, podzialka, opisyOsi);
 				probki /= 2.0;
 				OK = false;
 			} else {
@@ -303,7 +366,6 @@ public class SpiralaLogarytmiczna extends Figury {
 			g2d.dispose();
 			krzywa = tranImg;
 		}
-
 	}
 
 	/**
@@ -493,8 +555,8 @@ public class SpiralaLogarytmiczna extends Figury {
 		int nrSSAA = 0;
 
 		@Override
-		public SpiralaLogarytmicznaBuilder setParametrA(String parametrA) {
-			this.parametrAText = parametrA;
+		public SpiralaLogarytmicznaBuilder setParametrA(String parametrAText) {
+			this.parametrAText = parametrAText;
 			return this;
 		}
 
@@ -507,7 +569,6 @@ public class SpiralaLogarytmiczna extends Figury {
 		@Override
 		public SpiralaLogarytmicznaBuilder setZakres(String zakresText) {
 			this.zakresText = zakresText;
-
 			return this;
 		}
 
@@ -569,22 +630,72 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		@Override
 		public int[] sprawdzParametry() {
-			int[] a = { 1, 0 };// 0 - ignoruje; 1- niepoprawne znaki; 2- a ujemne;
+//			String[] komentarz = { "Parametr a nie został ustawiony", "Parametr b nie został ustawiony",
+//					"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
+//					"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
+//					"U+03C6 musi należeć do liczb rzeczywistych"," zakres nie moze byc zerowy ", "zakres jest zbyt duży " };
+			int[] a = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-			if (parametrAText == null) // dodaj komentarz a nieustawione
-				a = new int[] { 1, 3 };
-			if (parametrBText == null) // dodaj komentarz b nieustawione
-				a = new int[] { 1, 4 };
-			if (zakresText == null) // dodaj komentarz z nieustawione
-				a = new int[] { 1, 5 };
+			if (parametrAText == null || parametrBText == null || zakresText == null)
+				return null;
 
-			if (isItANumber(parametrAText) && isItANumber(zakresText) && isItANumber(parametrBText))
-				if (Double.valueOf(parametrAText) < 0) {
-					a[1] = 2; // dodaj komentarz a musi być nieujemne
+			if (parametrAText.isEmpty()) // dodaj komentarz a nieustawione
+				a[0] = 1;
+			else {
+				parametrAText = parametrAText.replace(',', '.');
+				if (parametrAText.charAt(0) == '.')
+					parametrAText = parametrAText.replace(".", "0.");
+				if (parametrAText.charAt(0) == 'E')
+					parametrAText = parametrAText.replace("E", "1E");
+
+				if (isItANumber(parametrAText))
+					if (Double.valueOf(parametrAText) <= 1E-120) {
+						a[3] = 1;
+						a[4] = 1;
+					}
+				if (!(isItANumber(parametrAText))) {
+					a[3] = 1;
+					a[5] = 1;
+				}
+
+			}
+
+			if (parametrBText.isEmpty()) // dodaj komentarz b nieustawione
+				a[1] = 1;
+			else {
+				parametrBText = parametrBText.replace(',', '.');
+				if (parametrBText.charAt(0) == '.')
+					parametrBText = parametrBText.replace(".", "0.");
+				if (parametrBText.charAt(0) == 'E')
+					parametrBText = parametrBText.replace("E", "1E");
+				if (!(isItANumber(parametrBText))) {
+					a[3] = 1;
+					a[6] = 1;
+				}
+			}
+
+			if (zakresText.isEmpty()) // dodaj komentarz z nieustawione
+				a[2] = 1;
+			else {
+				zakresText = zakresText.replace(',', '.');
+				if (zakresText.charAt(0) == '.')
+					zakresText = zakresText.replace(".", "0.");
+				if (zakresText.charAt(0) == 'E')
+					zakresText = zakresText.replace("E", "1E");
+				if (!(isItANumber(zakresText))) {
+					a[3] = 1;
+					a[7] = 1;
+				} else if (Double.valueOf(zakresText) == 0)
+					a[8] = 1;
+				else if (Double.isInfinite(Double.valueOf(zakresText)))
+					a[9] = 1;
+
+			}
+
+			for (int i = 0; i < a.length; i++)
+				if (a[i] == 1)
 					return a;
-				} else
-					return null;
-			return a;
+			return null;
 
 		}
 
@@ -597,18 +708,36 @@ public class SpiralaLogarytmiczna extends Figury {
 		 */
 		private boolean isItANumber(String string) {
 
-			if (string == null)
+			int iloscKropek = 0;
+			int iloscE = 0;
+			if (string == null || string.isEmpty())
+				return false;
+
+			if (string.charAt(0) == ".".charAt(0))
 				return false;
 
 			for (int i = 0; i < string.length(); i++) {
-				if (string.charAt(0) == "-".charAt(0) && i == 0)
-					i++;
-				if (string.charAt(0) == ".".charAt(0))
-					return false;
+				if (string.charAt(i) == "-".charAt(0))
+					if (i == 0)
+						i++;
+					else if (string.charAt(i - 1) == "E".charAt(0))
+						i++;
+
+				// liczenie kropek i E
+				if (string.charAt(i) == ".".charAt(0))
+					iloscKropek++;
+				if (string.charAt(i) == "E".charAt(0))
+					iloscE++;
+				// jesli bedzie znak inny niz liczba lub "." lub "E" to false
 				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48) && string.charAt(i) != ".".charAt(0)
 						&& string.charAt(i) != "E".charAt(0))
 					return false;
+
 			}
+			if (iloscKropek > 1)
+				return false;
+			if (iloscE > 1)
+				return false;
 			return true;
 		}
 

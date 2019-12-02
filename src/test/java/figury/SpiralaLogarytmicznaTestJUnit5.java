@@ -44,8 +44,10 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			"0.5, 5, 200.24", "0.5, 7.5, 200.50", "0.5, 10, 200.75", "0.5, -1.1, 6.82", "0.5, -1.1, -6.82",
 			"0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75", "10, 0.00001, 100000000", "10, 1, 100000000",
 			"10E403, 10.123, -1000.5" })
+
 	@DisplayName(value = "Testy powstawania spirali Jednowątkowe")
 	void testRysowaniaJendowatkowe(String a, String b, String z) {
+//		SpiralaLogarytmiczna krzywa = null;
 		try {
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a).setParametrB(b).setZakres(z)
 					.setGraph(graph).setThreads(1).build();
@@ -54,15 +56,20 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			System.err.println(e.getMessage());
 		}
 		BufferedImage spirala = new BufferedImage(width, height, imageType);
-		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); /// figury/images/Wykres dla
-																							/// javy
+		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png");
+
+//		try {
+//			ImageIO.write(krzywa.getImage(), "png", new File("src/test/java/figury/Wykres[" + b + "," + z + "].png"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		try {
 			spirala = ImageIO.read(url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
+		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 0.5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
 	}
 
 	@ParameterizedTest(name = "A= {0} + B= {1} + C= {2}")
@@ -85,15 +92,15 @@ class SpiralaLogarytmicznaTestJUnit5 {
 			System.err.println(e.getMessage());
 		}
 		BufferedImage spirala = new BufferedImage(width, height, imageType);
-		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png"); /// figury/images/Wykres dla
-																							/// javy
+		URL url = getClass().getResource("/figury/images/Wykres[" + b + "," + z + "].png");
+
 		try {
 			spirala = ImageIO.read(url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
+		assertEquals(0.0, porownajObrazki(spirala, graph) * 100, 0.5, "Spirala A=" + a + ", B=" + b + ", zakres=" + z);
 	}
 
 	double porownajObrazki(BufferedImage spirala, BufferedImage graph) {
@@ -107,12 +114,11 @@ class SpiralaLogarytmicznaTestJUnit5 {
 				for (int y = 0; y < spirala.getHeight(); y++) {
 					spiralaColor = spirala.getRGB(x, y);
 					graphColor = graph.getRGB(x, y);
-					if (spiralaColor != 0) {
+					// -16777216 czarny; -9013642 osiowy; -16776961 wykresowy; -1 biały?
+					if (graphColor != 0 && spiralaColor != -1 && spiralaColor != -16777216) {
 						iloscPixeli++;
 					}
-					if (graphColor == -16777216)
-						graphColor = 0;
-					if (spiralaColor != graphColor) {
+					if (spiralaColor != graphColor && spiralaColor != -1 && spiralaColor != -16777216) {
 						iloscBlednychPixeli++;
 					}
 				}

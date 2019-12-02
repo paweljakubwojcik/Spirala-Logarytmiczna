@@ -2,20 +2,25 @@ package interfejs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
 import java.rmi.AccessException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -30,14 +35,16 @@ import figury.SpiralaLogarytmiczna;
 public class Window extends JFrame implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;
 
-	int sizeWindowX = 800;
-	int sizeWindowY = 600;
+	private boolean pelnyekran = false;
 
-	private Dimension poleSize = new Dimension(50, 30); // 100 , 30
-	private Dimension buttonSize = new Dimension(100, 30);
-	private Dimension minimumSize = new Dimension(640, 300);
+	private int sizeWindowX = 800;
+	private int sizeWindowY = 600;
 
-	private static JPanel graph;
+	private Dimension poleSize = new Dimension(50, 30);
+	private Dimension buttonSize = new Dimension(80, 30);
+	private Dimension minimumSize = new Dimension(750, 550); // 640 ,550
+
+	private static GraphPanel graph;
 	private static JLabel napisNazwaProgramu, napisParametry, napisParametrA, napisParametrB, napisZakres,
 			napisZakresJednostka, poleKomentarz;
 
@@ -49,11 +56,15 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static final String RYSUJTEXT = "RYSUJ";
 	public static final String CZYSCTEXT = "CZYŚĆ";
 	public static final String PELNYEKRANTEXT = "PEŁNY EKRAN";
-
-	private static String zakresText, jednostkaZakresuText, parametrAText, parametrBText, komentarz;
-	private static BigDecimal parametrA, parametrB, zakres;
+	public static final String DefaultA = "0.1";
+	public static final String DefaultB = "0.1";
+	public static final String DefaultZakres = "90";
 
 	private BufferedImage graphImage;
+
+	private Font defaultFont;
+
+	SpiralaLogarytmiczna spirala;
 
 	public Window() {
 
@@ -65,18 +76,17 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		setLayout(null);
 		setMinimumSize(minimumSize);
 
-		graph = new JPanel();
+		graph = new GraphPanel();
 		add(graph);
-		graph.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		// JText
-		poleParametrA = new JTextField();
+		poleParametrA = new JTextField(DefaultA);
 		add(poleParametrA);
 
-		poleParametrB = new JTextField();
+		poleParametrB = new JTextField(DefaultB);
 		add(poleParametrB);
 
-		poleZakres = new JTextField();
+		poleZakres = new JTextField(DefaultZakres);
 		add(poleZakres);
 
 		// JLabel
@@ -90,7 +100,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		// napisParametry.setBorder(BorderFactory.createLineBorder(Color.black));//
 		// testing
 
-		napisParametrA = new JLabel("a=");
+		napisParametrA = new JLabel();
+		napisParametrA.setText("a=");
 		add(napisParametrA);
 		// napisParametrA.setBorder(BorderFactory.createLineBorder(Color.black));//
 		// testing
@@ -124,102 +135,172 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		poleKomentarz = new JLabel();
 		add(poleKomentarz);
-		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));//
+		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));
+		poleKomentarz.setVerticalTextPosition(SwingConstants.BOTTOM);
 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
 		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
 
 		setVisible(true);
 
-		//////// Spanie jest po to ĹĽeby nie znikaĹ‚a szybko narysowana spirala ////////
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////
-
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		// Rysowanie obrazka startowego
-
-		long start = System.currentTimeMillis();
-		draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("10").setParametrB("0.1")
-				.setZakres("40").setGraph(graphImage).setSSAA(1).build().getImage());
-		System.out.println("Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
-
+		stworzSpirale();
 	}
 
+	/**
+	 * skaluje wszystkie elementy okienka
+	 */
 	private void przeskalujOkienko() {
 
-		sizeWindowX = this.getWidth();
+		sizeWindowX = this.getWidth() - 16;
 		sizeWindowY = this.getHeight();
+
+		defaultFont = new Font("Dialog", Font.BOLD, 12);
+		napisNazwaProgramu.setFont(new Font("Dialog", Font.BOLD, 15));
+
+		napisParametrA.setFont(defaultFont);
+		napisParametrB.setFont(defaultFont);
+		napisZakres.setFont(defaultFont);
+		napisZakresJednostka.setFont(defaultFont);
+		poleKomentarz.setFont(defaultFont);
+		przyciskCzysc.setFont(defaultFont);
+		przyciskPelnyEkran.setFont(defaultFont);
+		przyciskRysuj.setFont(defaultFont);
+		napisParametry.setFont(defaultFont);
 
 		////////////////////////////////////////
 		napisNazwaProgramu.setHorizontalAlignment(SwingConstants.CENTER);
-		napisNazwaProgramu.setSize(sizeWindowX, sizeWindowY / 20);
+		napisNazwaProgramu.setSize(sizeWindowX, getFontMetrics(napisNazwaProgramu.getFont()).getHeight());
 		napisNazwaProgramu.setLocation(0, 0);
 
-		graph.setSize(sizeWindowX - sizeWindowX / 20, sizeWindowY * 4 / 6);
-		graph.setLocation(sizeWindowX / 80, napisNazwaProgramu.getHeight());
-		graph.setAlignmentX(100);
+		int margines = sizeWindowX / 60;
+		int graphWidth = sizeWindowX - 2 * margines; //
+		int graphHeight = sizeWindowY * 3 / 4;
+		int graphY = napisNazwaProgramu.getHeight();
 
-		int odstepY = sizeWindowY / 60;
-		int locationY = graph.getY() + graph.getHeight() + odstepY;
-		int odstep = (graph.getWidth() - 640) / 6; // (szerokosc graph - suma długości elementów)/ilosc elementów
+		// aby rysunek nie wyszedl poza okienko
+		if (graphHeight > graphWidth)
+			graph.setSize(graphWidth, graphWidth);
+		else
+			graph.setSize(graphHeight, graphHeight);
 
+		graph.setLocation(margines + (graphWidth - graph.getWidth()) / 2, graphY);
+
+		napisParametry.setSize(getFontMetrics(defaultFont).stringWidth(napisParametry.getText()), poleSize.height);
+		napisParametrA.setSize(getFontMetrics(defaultFont).stringWidth(napisParametrA.getText()), poleSize.height);
+		poleParametrA.setSize(poleSize);
+		napisParametrB.setSize(getFontMetrics(defaultFont).stringWidth(napisParametrB.getText()), poleSize.height);
+		poleParametrB.setSize(poleSize);
+		napisZakres.setSize(getFontMetrics(defaultFont).stringWidth(napisZakres.getText()), poleSize.height);
+		poleZakres.setSize(poleSize);
+		napisZakresJednostka.setSize(getFontMetrics(defaultFont).stringWidth(napisZakresJednostka.getText()),
+				poleSize.height);
+		przyciskRysuj.setSize(buttonSize);
+		przyciskCzysc.setSize(buttonSize);
+		przyciskPelnyEkran.setSize(170, 30);
+
+		int odstepY = sizeWindowY / 240;
+		int locationY = graph.getY() + graph.getHeight() + odstepY; // polozenie Y przyciskow i pol
+		int odstep = (graphWidth - (napisParametry.getWidth() + napisParametrA.getWidth() + poleParametrA.getWidth()
+				+ napisParametrB.getWidth() + poleParametrB.getWidth() + napisZakres.getWidth() + poleZakres.getWidth()
+				+ napisZakresJednostka.getWidth() + przyciskRysuj.getWidth() + przyciskCzysc.getWidth()
+				+ przyciskPelnyEkran.getWidth())) / 6;
+		// (szerokosc graph - suma długośc elementów) ilosc odstepow
 		// 70+20+50+20+50+50+50+30+buttony
 		// w kolejnosci od lewej do prawej
-		napisParametry.setSize(70, poleSize.height);
-		napisParametry.setLocation(graph.getX(), locationY);
 
-		napisParametrA.setSize(20, poleSize.height);
+		napisParametry.setLocation(margines, locationY);
 		napisParametrA.setLocation(napisParametry.getLocation().x + napisParametry.getSize().width + odstep, locationY);
-
-		poleParametrA.setSize(poleSize);
 		poleParametrA.setLocation(napisParametrA.getLocation().x + napisParametrA.getSize().width, locationY);
-
-		napisParametrB.setSize(20, poleSize.height);
 		napisParametrB.setLocation(poleParametrA.getLocation().x + poleParametrA.getSize().width + odstep, locationY);
-
-		poleParametrB.setSize(poleSize);
 		poleParametrB.setLocation(napisParametrB.getX() + napisParametrB.getWidth(), locationY);
-
-		napisZakres.setSize(50, poleSize.height);
 		napisZakres.setLocation(poleParametrB.getLocation().x + poleParametrB.getSize().width + odstep, locationY);
-
-		poleZakres.setSize(poleSize);
 		poleZakres.setLocation(napisZakres.getX() + napisZakres.getWidth(), locationY);
-
-		napisZakresJednostka.setSize(30, poleSize.height);
 		napisZakresJednostka.setLocation(poleZakres.getLocation().x + poleZakres.getSize().width, locationY);
 
-		// jbUTTON
-		przyciskRysuj.setSize(buttonSize);
 		przyciskRysuj.setLocation(napisZakresJednostka.getX() + napisZakresJednostka.getWidth() + odstep, locationY);
-
-		przyciskCzysc.setSize(buttonSize);
 		przyciskCzysc.setLocation(przyciskRysuj.getX() + przyciskRysuj.getWidth() + odstep, locationY);
-
-		przyciskPelnyEkran.setSize(buttonSize);
 		przyciskPelnyEkran.setLocation(przyciskCzysc.getX() + przyciskCzysc.getWidth() + odstep, locationY);
 
-		poleKomentarz.setLocation(graph.getX(), locationY + odstepY + poleSize.height);
-		poleKomentarz.setSize(graph.getWidth(),
-				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 30);
+		poleKomentarz.setLocation(margines, locationY + odstepY + poleSize.height);
+		poleKomentarz.setSize(graphWidth,
+				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 40);
 
 	}
 
+	/**
+	 * Uruchamia i zamyka tryb pełnoekranowy
+	 */
 	private void setFullScreen() {
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice device = env.getDefaultScreenDevice();
+		GraphicsDevice[] devices = env.getScreenDevices();
+		for (GraphicsDevice dev : devices) {
+			Rectangle screenLocation = dev.getDefaultConfiguration().getBounds();
+			Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+			if (mouseLocation.x >= screenLocation.x && mouseLocation.x <= screenLocation.x + screenLocation.width
+					&& mouseLocation.y >= screenLocation.y
+					&& mouseLocation.y <= screenLocation.y + screenLocation.height) {
+				device = dev;
+				break;
+			}
+		}
 
+		if (!device.isFullScreenSupported() && pelnyekran == false) {
+			JOptionPane.showMessageDialog(this, "Twój komputer nie wspiera pełnego ekranu ;/");
+			requestFocus();
+		} else if (device.isFullScreenSupported() && pelnyekran == false) {
+			dispose();
+			setUndecorated(true);
+			setResizable(true);
+			device.setFullScreenWindow(this);
+			requestFocus();
+
+			przyciskPelnyEkran.setText("Wyłącz pełny ekran");
+			pelnyekran = true;
+
+		} else {
+			dispose();
+			setUndecorated(false);
+			setVisible(true);
+			requestFocus();
+			przyciskPelnyEkran.setText("PełnyEkran");
+			pelnyekran = false;
+		}
 	}
 
-	private static void draw(BufferedImage BI) {
-		Graphics2D g2d = (Graphics2D) graph.getGraphics();
-		g2d.drawImage(BI, 0, 0, null);
+	private void draw(BufferedImage BI) {
+		graph.setImage(BI);
+		graph.repaint();
 	}
 
+	private void stworzSpirale() {
+		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		try {
+			long start = System.currentTimeMillis();
+
+			spirala = new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
+					.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage).build();
+			draw(spirala.getImage());
+
+			System.out.println(
+					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+		} catch (Exception exc) {
+			exc.printStackTrace();
+			System.err.println(exc.getMessage());
+		}
+		System.gc();
+	}
+
+	/**
+	 * 
+	 * @param parametrAText
+	 * @throws AccessException - tylko klasa Figury ma dostęp
+	 */
 	public static void setParametrAText(String parametrAText) throws AccessException {
+
 		if (napisParametrA != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
@@ -229,6 +310,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 	}
 
+	/**
+	 * 
+	 * @param parametrBText
+	 * @throws AccessException tylko klasa Figury ma dostęp
+	 */
 	public static void setParametrBText(String parametrBText) throws AccessException {
 		if (napisParametrB != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -239,6 +325,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 	}
 
+	/**
+	 * 
+	 * @param zakresText
+	 * @throws AccessException tylko klasa Figury ma dostęp
+	 */
 	public static void setZakresText(String zakresText) throws AccessException {
 		if (napisZakres != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -249,6 +340,11 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 	}
 
+	/**
+	 * 
+	 * @param jednostkaZakresuText
+	 * @throws AccessException tylko klasa Figury ma dostęp
+	 */
 	public static void setJednostkaZakresuText(String jednostkaZakresuText) throws AccessException {
 		if (napisZakresJednostka != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -259,10 +355,16 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		}
 	}
 
+	/**
+	 * 
+	 * @param komentarz - komentarz który ma być ustawiony w polu komentarzy
+	 * @throws AccessException - tylko klasa Figury ma dostęp
+	 */
 	public static void setKomentarz(String komentarz) throws AccessException {
 		if (poleKomentarz != null) {
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-			if (stackTraceElements[2].getClassName().equals("figury.Figury"))
+			if (stackTraceElements[2].getClassName().equals("figury.Figury")
+					|| stackTraceElements[2].getClassName().equals("interfejs.Window"))
 				poleKomentarz.setText(komentarz);
 			else
 				throw new AccessException("Tylko klasa figury.Figury ma dostęp do tej metody");
@@ -271,63 +373,49 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// System.out.println("resize");
 			przeskalujOkienko();
+			graph.repaint();
 		}
-
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		JButton obj = (JButton) e.getSource();
+
 		if (obj == przyciskRysuj) {
-			graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			BufferedImage nic = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = (Graphics2D) graph.getGraphics();
-			g2d.drawImage(nic, 0, 0, null);
-			try {
-				long start = System.currentTimeMillis();
-				draw(new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(poleParametrA.getText())
-						.setParametrB(poleParametrB.getText()).setZakres(poleZakres.getText()).setGraph(graphImage)
-						.setSSAA(2).build().getImage());
-				System.out.println(
-						"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
-			} catch (Exception exc) {
-				exc.printStackTrace();
-				System.err.println(exc.getMessage());
-			}
-			System.gc();
+			stworzSpirale();
 		}
 
 		if (obj == przyciskCzysc) {
-			System.out.println("Czyscze");
+			BufferedImage filler = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = (Graphics2D) filler.getGraphics();
+			g.setColor(Color.black);
+			g.fillRect(0, 0, graph.getWidth(), graph.getHeight());
+			graph.setImage(filler);
+			graph.repaint();
+
+			poleKomentarz.setText("");
+			poleParametrA.setText(DefaultA);
+			poleParametrB.setText(DefaultB);
+			poleZakres.setText(DefaultZakres);
 		}
 
 		if (obj == przyciskPelnyEkran) {
-			System.out.println("rOBIE PELNY EKRAN");
 			setFullScreen();
 		}
-
 	}
 
 }

@@ -1,9 +1,8 @@
 package wykres;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.math.BigDecimal;
 
 /**
  * Zarządza gotowym wyglądem wykresu. Scala obrazki, rysuje i dodaje tło.
@@ -13,41 +12,59 @@ import java.math.BigDecimal;
  */
 public class Wykres {
 	private BufferedImage graph;
-	private BigDecimal zakres;
 	private BufferedImage wykres;
 	private BufferedImage tlo;
 	private BufferedImage krzywa;
 
-	public Wykres(BufferedImage graph, BufferedImage krzywa, BigDecimal zakres) {
+	/**
+	 * konstruktor Rysuje w graph - tło, krzywą oraz osie i ich opisy
+	 * 
+	 * @param graph     - BufferedImage na którym zostaje narysowany wykres.
+	 * @param krzywa    - Obraz wykresu utworzony z wyznaczonych punktów
+	 * @param podzialka - okresla co ile px rysowana bedzie podzialka osi
+	 * @param opisy     - opisy obrazka
+	 */
+	public Wykres(BufferedImage graph, BufferedImage krzywa, int podzialka, String[] opisy) {
 		this.graph = graph;
 		this.krzywa = krzywa;
-		this.zakres = zakres;
 		wykres = new BufferedImage(graph.getWidth(), graph.getWidth(), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D) wykres.getGraphics();
+		tlo = new BufferedImage(graph.getWidth(), graph.getWidth(), BufferedImage.TYPE_INT_ARGB);
 
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0, 0, graph.getWidth(), graph.getHeight());
+		stworzTlo(podzialka, opisy);
+		scalObrazki();
+		drawWykres();
+	}
 
-		g2d.setColor(Color.BLUE);
-		g2d.drawImage(krzywa, 0, 0, null);
+	/**
+	 * Scala wszystkie obrazki w jeden w kolejności: 1) tlo, 2) krzywa
+	 */
+	private void scalObrazki() {
+		Graphics2D g = (Graphics2D) wykres.getGraphics();
+		g.drawImage(tlo, 0, 0, null);
+		g.drawImage(krzywa, 0, 0, null);
+	}
 
-		// Generowanie obrazków do testów zostawić w spokoju te 5 linijek poniżej
-//		try {
-//			ImageIO.write(krzywa, "png", new File("src/test/java/figury/Wykres[10,200.75].png"));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-
+	/**
+	 * Umieszcza obrazek z wykresem (wykres) na obrazku na którym ma zostać finalnie
+	 * narysowany (graph)
+	 */
+	private void drawWykres() {
 		Graphics2D g = (Graphics2D) graph.getGraphics();
 		g.drawImage(wykres, 0, 0, null);
 	}
 
-	private void scalObrazki() {
-
-	}
-
-	private void drawWykres() {
-
+	/**
+	 * Generuje tło do krzywej w kolejności: 1) tło, 2) osie, 3) opisy osi
+	 * 
+	 * @param podzialka - okresla co ile px rysowana bedzie podzialka osi
+	 * @param opisy     - opisy obrazka
+	 */
+	private void stworzTlo(int podzialka, String[] opisy) {
+		Graphics2D g = (Graphics2D) tlo.getGraphics();
+		Point graphSize = new Point(graph.getWidth(), graph.getHeight());
+		g.drawImage(Tlo.getTlo(graphSize), null, 0, 0);
+		g.drawImage(Tlo.getOsie(graphSize, podzialka), null, 0, 0);
+		g.drawImage(Tlo.getOpisyOsi(graphSize, opisy), null, 0, 0);
 	}
 
 }

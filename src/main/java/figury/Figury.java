@@ -13,8 +13,8 @@ import interfejs.Window;
 /**
  * Klasa Figury zawiera informacje o metodach i polach które muszą zawierać
  * dziedziczące klasy. Dodatkowo są dostępne metody pomocne przy tworzenieniu
- * rysunku innych figur. Ponadto tylko ta klasa ma możliwość zmiany opisów poł w
- * klasie interfejs.Window.
+ * rysunku innych figur. Ponaddto tylko ta klasa ma możliwość zmiany opisów pól
+ * w klasie interfejs.Window.
  * 
  * @author 7Adrian
  * @since 1.0
@@ -33,9 +33,11 @@ public abstract class Figury {
 	 * @param 5 - "U+03C6 musi należeć do liczb rzeczywistych"
 	 * 
 	 */
-	private static final String[] komentarz = { "", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
-			"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
-			"U+03C6 musi należeć do liczb rzeczywistych" };
+	private static final String[] komentarz = { "Parametr a nie został ustawiony \n ",
+			"Parametr b nie został ustawiony \n ", "Zakres nie został ustawiony \n ", "Podano niepoprawne dane.\n ",
+			"a musi być większe od zera\n ", "a musi należeć do liczb rzeczywistych\n ",
+			"b musi należeć do liczb rzeczywistych\n ", "\u03C6 musi należeć do liczb rzeczywistych ",
+			"zakres nie moze być zerowy ", " zakres jest zbyt duży " };
 	String[] opisy = { " ", " ", " ", " " };
 	BigDecimal parametrA;
 	BigDecimal parametrB;
@@ -104,7 +106,8 @@ public abstract class Figury {
 		String wysylanyKomentarz = "";
 		if (numer != null) {
 			for (int i = 0; i < numer.length; i++) {
-				wysylanyKomentarz += komentarz[numer[i]];
+				if (numer[i] == 1)
+					wysylanyKomentarz += komentarz[i];
 			}
 		}
 		try {
@@ -474,7 +477,7 @@ public abstract class Figury {
 		for (int X = start.x; X < koniec.x; X++) {
 			for (int Y = start.y; Y < koniec.y; Y++) {
 				odl = mathDistanceOfPoints(X, Y, graphW2, graphH2);
-				if (odl + delta >= odl1PKT && odl - delta <= odlOstPKT) {
+				if (odl + delta >= odl1PKT && odl - delta <= odlOstPKT && isXYinImage(X, Y, graphW, graphH)) {
 					krzywa.setRGB(X, Y, Color.BLUE.getRGB());
 				}
 			}
@@ -490,6 +493,7 @@ public abstract class Figury {
 	 */
 	public static void drawCircle(int graphW, int graphH, BufferedImage krzywa) {
 		drawRing(0.0, Math.min(graphW, graphH) / 2.0, graphW, graphH, krzywa);
+
 	}
 
 	/**

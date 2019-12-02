@@ -40,16 +40,15 @@ class SpiralaLogarytmicznaWydajnoscTestJUnit5 {
 			"0.5, 1.1, -6.82", "0.5, 1.5, 201.23", "0.5, 1.15, 201.70", "0.5, 1, 200", "0.5, 2.5, 201",
 			"0.5, 5, 200.24", "0.5, 7.5, 200.50", "0.5, 10, 200.75", "0.5, -1.1, 6.82", "0.5, -1.1, -6.82",
 			"0.5, 0.0001, 0.75", "0.5, 0.0001, -0.75", "10, 0.1, 10.5", "10, 0.00001, 100000000", "10, 1, 100000000",
-			"10E403, 10.123, -1000.5" })
+			"10E403, 10.123, -1000.5", "10, 10E1000, 20", "10, 10, 20E1000", "10E-500, 10, 10", "10, 10E-500, 10",
+			"10, 10, 10E-500" })
 	@DisplayName(value = "Testy wydajności spirali")
 	void testRysowania(String a, String b, String z) {
 		assertTimeout(Duration.ofMillis(2000), () -> {
 			try {
 				new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a).setParametrB(b).setZakres(z)
 						.setGraph(graph).build();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getMessage());
+			} catch (ExceptionInInitializerError e) {
 			}
 		});
 
@@ -65,9 +64,7 @@ class SpiralaLogarytmicznaWydajnoscTestJUnit5 {
 			try {
 				new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA(a).setParametrB(b).setZakres(z)
 						.setGraph(graph).setSSAA(2).build();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getMessage());
+			} catch (ExceptionInInitializerError e) {
 			}
 		});
 

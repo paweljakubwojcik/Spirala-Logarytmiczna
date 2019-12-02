@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -16,7 +15,6 @@ import javax.swing.JLabel;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,13 +72,27 @@ class SpiralaLogarytmicznaIFiguryTest {
 		assertEquals(-99.823500, wynik, 0.00001);
 	}
 
-	@Disabled
 	@Test
-	void testSetKomentarz() {
-		fail("Not yet implemented"); // TODO
+	void testSetKomentarz()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// GIVEN
+		int[] a = { 0, 0, 0, 1, 1 };
+		Window okno = new Window();
+		okno.setVisible(false);
+		Class<?> okno2 = okno.getClass();
+		Field komentarz = okno2.getDeclaredField("poleKomentarz");
+		komentarz.setAccessible(true);
+		JLabel poleKomentarz = (JLabel) komentarz.get(okno);
+		// WHEN
+		SpiralaLogarytmiczna.setKomentarz(a);
+		String komentarzText = poleKomentarz.getText();
+		// THEN
+		okno.dispose();
+		assertEquals("Podano niepoprawne dane.\n a musi być większe od zera\n ", komentarzText);
 	}
 
 	@DisplayName(value = "setOpis() sprawdza czy wykonanie nowej spirali zmienia opis w interfejs.Window")
+
 	@Test
 	void testSetOpis()
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -106,6 +118,7 @@ class SpiralaLogarytmicznaIFiguryTest {
 		String ZT = PZT.getText();
 		String JZT = PJZT.getText();
 		// Then
+		okno.dispose();
 		assertAll("Sprawdza czy opisy w interfejs.Window zostały ustawione", () -> assertEquals("a=", A),
 				() -> assertEquals("b=", B), () -> assertEquals("zakres=", ZT), () -> assertEquals("rad", JZT));
 	}
