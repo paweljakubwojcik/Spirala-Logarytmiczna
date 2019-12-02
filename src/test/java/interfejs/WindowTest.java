@@ -198,7 +198,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\na musi być większe od zera\n", komentarzText);
+		assertEquals("Podano niepoprawne dane.\n a musi być większe od zera\n ", komentarzText);
 	}
 
 	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy A nie jest liczbą")
@@ -219,7 +219,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\na musi należeć do liczb rzeczywistych\n", komentarzText);
+		assertEquals("Podano niepoprawne dane.\n a musi należeć do liczb rzeczywistych\n ", komentarzText);
 	}
 
 	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy B nie jest liczbą")
@@ -240,7 +240,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\nb musi należeć do liczb rzeczywistych\n", komentarzText);
+		assertEquals("Podano niepoprawne dane.\n b musi należeć do liczb rzeczywistych\n ", komentarzText);
 	}
 
 	@DisplayName(value = "Ustawianie komentarzy w JFrame kiedy Zakres nie jest liczbą")
@@ -261,7 +261,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\nU+03C6 musi należeć do liczb rzeczywistych", komentarzText);
+		assertEquals("Podano niepoprawne dane.\n U+03C6 musi należeć do liczb rzeczywistych ", komentarzText);
 	}
 
 	@DisplayName(value = "testComponentHidden")

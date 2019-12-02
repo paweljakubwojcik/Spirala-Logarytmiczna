@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -139,6 +140,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		poleKomentarz = new JLabel();
 		add(poleKomentarz);
 		poleKomentarz.setBorder(BorderFactory.createLineBorder(Color.black));
+		poleKomentarz.setVerticalTextPosition(SwingConstants.BOTTOM);
 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
 		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
@@ -163,9 +165,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		sizeWindowX = this.getWidth() - 16; // z jakiegos powodu jframe zabiera te 16 px
 		sizeWindowY = this.getHeight();
-
-		// TODO Uproscic zapisy posprzatac te funkcje na koniec bo jest syf ale
-		// nieszkodliwy
 
 		defaultFont = new Font("Dialog", Font.BOLD, 12);
 		napisNazwaProgramu.setFont(new Font("Dialog", Font.BOLD, 15));

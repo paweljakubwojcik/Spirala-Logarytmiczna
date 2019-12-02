@@ -88,7 +88,7 @@ class SpiralaLogarytmicznaIFiguryTest {
 		String komentarzText = poleKomentarz.getText();
 		// THEN
 		okno.dispose();
-		assertEquals("Podano niepoprawne dane.\na musi być większe od zera\n", komentarzText);
+		assertEquals("Podano niepoprawne dane.\n a musi być większe od zera\n ", komentarzText);
 	}
 
 	@DisplayName(value = "setOpis() sprawdza czy wykonanie nowej spirali zmienia opis w interfejs.Window")
