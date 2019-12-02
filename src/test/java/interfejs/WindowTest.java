@@ -261,7 +261,7 @@ class WindowTest {
 		}
 		String komentarzText = poleKomentarz.getText();
 		// THEN
-		assertEquals("Podano niepoprawne dane.\n U+03C6 musi należeć do liczb rzeczywistych ", komentarzText);
+		assertEquals("Podano niepoprawne dane.\n \u03C6 musi należeć do liczb rzeczywistych ", komentarzText);
 	}
 
 	@DisplayName(value = "testComponentHidden")

@@ -36,7 +36,7 @@ public abstract class Figury {
 	private static final String[] komentarz = { "Parametr a nie został ustawiony \n ",
 			"Parametr b nie został ustawiony \n ", "Zakres nie został ustawiony \n ", "Podano niepoprawne dane.\n ",
 			"a musi być większe od zera\n ", "a musi należeć do liczb rzeczywistych\n ",
-			"b musi należeć do liczb rzeczywistych\n ", "U+03C6 musi należeć do liczb rzeczywistych ",
+			"b musi należeć do liczb rzeczywistych\n ", "\u03C6 musi należeć do liczb rzeczywistych ",
 			"zakres nie moze być zerowy ", " zakres jest zbyt duży " };
 	String[] opisy = { " ", " ", " ", " " };
 	BigDecimal parametrA;
