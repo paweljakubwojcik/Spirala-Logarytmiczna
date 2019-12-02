@@ -300,7 +300,7 @@ public class SpiralaLogarytmiczna extends Figury {
 
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
-			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 16 || iloscPKT == 0) {
+			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 4 || iloscPKT == 0 && probki >= 1.0 / 8) {
 				new Wykres(graph, krzywa, podzialka, opisyOsi);
 				probki /= 2.0;
 				OK = false;
@@ -624,7 +624,7 @@ public class SpiralaLogarytmiczna extends Figury {
 					parametrAText = parametrAText.replace(".", "0.");
 
 				if (isItANumber(parametrAText))
-					if (Double.valueOf(parametrAText) < 0) {
+					if (Double.valueOf(parametrAText) <= 1E-120) {
 						a[3] = 1;
 						a[4] = 1;
 					}
@@ -653,7 +653,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				zakresText = zakresText.replace(',', '.');
 				if (zakresText.charAt(0) == '.')
 					zakresText = zakresText.replace(".", "0.");
-				if (!(isItANumber(zakresText))) {
+				if (!(isItANumber(zakresText)) || Double.isInfinite(Double.valueOf(zakresText))
+						|| Double.valueOf(zakresText) == 0) {
 					a[3] = 1;
 					a[7] = 1;
 				}
