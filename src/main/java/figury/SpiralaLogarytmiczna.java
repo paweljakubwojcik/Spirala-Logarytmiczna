@@ -674,18 +674,27 @@ public class SpiralaLogarytmiczna extends Figury {
 			int iloscE = 0;
 			if (string == null || string.isEmpty())
 				return false;
+
+			if (string.charAt(0) == ".".charAt(0))
+				return false;
+
 			for (int i = 0; i < string.length(); i++) {
-				if (string.charAt(0) == "-".charAt(0) && i == 0)
-					i++;
-				if (string.charAt(0) == ".".charAt(0))
-					return false;
-				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48) && string.charAt(i) != ".".charAt(0)
-						&& string.charAt(i) != "E".charAt(0))
-					return false;
+				if (string.charAt(i) == "-".charAt(0))
+					if (i == 0)
+						i++;
+					else if (string.charAt(i - 1) == "E".charAt(0))
+						i++;
+
+				// liczenie kropek i E
 				if (string.charAt(i) == ".".charAt(0))
 					iloscKropek++;
 				if (string.charAt(i) == "E".charAt(0))
 					iloscE++;
+				// jesli bedzie znak inny niz liczba lub "." lub "E" to false
+				if (!((int) string.charAt(i) <= 57 && (int) string.charAt(i) >= 48) && string.charAt(i) != ".".charAt(0)
+						&& string.charAt(i) != "E".charAt(0))
+					return false;
+
 			}
 			if (iloscKropek > 1)
 				return false;
