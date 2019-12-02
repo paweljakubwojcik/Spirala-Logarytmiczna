@@ -78,7 +78,7 @@ public class Tlo {
 
 		g.setFont(new Font("Dialog", Font.PLAIN, graphSize.x * 25 / 1000));
 		for (int i = 0; i < opisy.length; i++)
-			g.drawString(opisy[i], 5, 15 + i * g.getFontMetrics().getHeight());
+			g.drawString(opisy[i], 5, (i + 1) * g.getFontMetrics().getHeight());
 
 		return opisyOsi;
 	}
