@@ -620,19 +620,19 @@ public class SpiralaLogarytmiczna extends Figury {
 				a[0] = 1;
 			else {
 				parametrAText = parametrAText.replace(',', '.');
-				if (parametrAText.charAt(0) == '.') {
+				if (parametrAText.charAt(0) == '.')
 					parametrAText = parametrAText.replace(".", "0.");
 
-					if (isItANumber(parametrAText))
-						if (Double.valueOf(parametrAText) < 0) {
-							a[3] = 1;
-							a[4] = 1;
-						}
-					if (!(isItANumber(parametrAText))) {
+				if (isItANumber(parametrAText))
+					if (Double.valueOf(parametrAText) < 0) {
 						a[3] = 1;
-						a[5] = 1;
+						a[4] = 1;
 					}
+				if (!(isItANumber(parametrAText))) {
+					a[3] = 1;
+					a[5] = 1;
 				}
+
 			}
 
 			if (parametrBText.isEmpty()) // dodaj komentarz b nieustawione
