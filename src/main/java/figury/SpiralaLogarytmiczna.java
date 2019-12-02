@@ -610,8 +610,8 @@ public class SpiralaLogarytmiczna extends Figury {
 //			String[] komentarz = { "Parametr a nie został ustawiony", "Parametr b nie został ustawiony",
 //					"Zakres nie został ustawiony", "Podano niepoprawne dane.\n", "a musi być większe od zera\n",
 //					"a musi należeć do liczb rzeczywistych\n", "b musi należeć do liczb rzeczywistych\n",
-//					"U+03C6 musi należeć do liczb rzeczywistych" };
-			int[] a = { 0, 0, 0, 0, 0, 0, 0, 0 };
+//					"U+03C6 musi należeć do liczb rzeczywistych"," zakres niemoze byc zerowy" };
+			int[] a = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			if (parametrAText == null || parametrBText == null || zakresText == null)
 				return null;
@@ -656,7 +656,8 @@ public class SpiralaLogarytmiczna extends Figury {
 				if (!(isItANumber(zakresText))) {
 					a[3] = 1;
 					a[7] = 1;
-				}
+				} else if (Double.valueOf(zakresText) == 0)
+					a[8] = 1;
 
 			}
 
