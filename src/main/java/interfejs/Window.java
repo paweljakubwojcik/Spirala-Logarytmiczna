@@ -148,7 +148,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		// Rysowanie obrazka startowego
-
 		stworzSpirale();
 	}
 
@@ -156,9 +155,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	 * 
 	 * skaluje wszystkie elementy okienka
 	 * 
-	 * @author Pafeu
 	 * @param width
 	 * @param height
+	 * @author Pafeu
 	 */
 	private void przeskalujOkienko() {
 
@@ -290,9 +289,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 			requestFocus();
 			przyciskPelnyEkran.setText("PełnyEkran");
 			pelnyekran = false;
-
 		}
-
 	}
 
 	private void draw(BufferedImage BI) {
@@ -406,9 +403,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		if (e.getSource() == this) {
-			// JeĹ›li tworzenie wykresu bÄ™dzie zajmowaĹ‚o duĹĽo czasu trzeba bÄ™dzie
-			// ustawiÄ‡
-			// tutaj spanko
 			// System.out.println("resize");
 
 			przeskalujOkienko();

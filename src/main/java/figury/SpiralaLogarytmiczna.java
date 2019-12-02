@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import wykres.AntiAliazing;
 import wykres.Wykres;
 
 /**
@@ -23,26 +24,36 @@ public class SpiralaLogarytmiczna extends Figury {
 	private static String[] opisy = { "a=", "b=", "zakres=", "rad" };
 	private static Vector<MultiDraw> watki = new Vector<SpiralaLogarytmiczna.MultiDraw>();
 	private int numberOfThread;
+	private boolean SSAA;
 	private int podzialka;
 	private String[] opisyOsi = new String[2];
 
 	/**
-	 * Konstuktor Spirali Logarytmicznej, przy pierwszym wykonaniu tworzy wątki do
-	 * pracy wielowątkowej.
+	 * Konstuktor Spirali Logarytmicznej
 	 * 
 	 * @param parametrA      - parametr A spirali
 	 * @param parametrB      - parametr B spirali
 	 * @param zakres         - zakres rysowania spirali
 	 * @param graph          - BufferedImage na którym ma się spirala narysować
 	 * @param numberOfThread - liczba wątków utworzona do rysowania
+	 * @param nrSSAA         - pierwiastek liczby próbek na pixel
 	 */
 	private SpiralaLogarytmiczna(BigDecimal parametrA, BigDecimal parametrB, BigDecimal zakres, BufferedImage graph,
-			int numberOfThread) {
+			int numberOfThread, int nrSSAA) {
 		super(opisy, parametrA, parametrB, zakres, graph);
 		this.numberOfThread = numberOfThread;
+		SSAA = false;
 		wyznaczOsie();
 		wyznaczPunkty();
 		new Wykres(graph, krzywa, podzialka, opisyOsi);
+		if (nrSSAA > 1) {
+			SSAA = true;
+			BufferedImage krzywaSSAA = new BufferedImage(graph.getWidth() * nrSSAA, graph.getHeight() * nrSSAA,
+					BufferedImage.TYPE_INT_ARGB);
+			krzywa = krzywaSSAA;
+			wyznaczPunkty();
+			new Wykres(graph, AntiAliazing.SSAAMonoColor(krzywa, nrSSAA), podzialka, opisyOsi);
+		}
 	}
 
 	/**
@@ -128,7 +139,6 @@ public class SpiralaLogarytmiczna extends Figury {
 
 		// Próba znalezienia takiego a żeby mimo wszystko dało się narysować coś
 		// niebędącego oskryptowaną figurą, oraz wyznaczenie skali rysunku
-
 		while (skala == 0) {
 			double Xs = wartoscFunkcjiX(az, b, 0);
 			double Ys = wartoscFunkcjiY(az, b, 0);
@@ -260,7 +270,6 @@ public class SpiralaLogarytmiczna extends Figury {
 				double katFI;
 				for (double X = start.x; X < koniec.x; X += probki) {
 					for (double Y = start.y; Y < koniec.y; Y += probki) {
-
 						katFI = getKatFI(X, Y, az, b, skala, graphW, graphH);
 						if (katFI <= katStop && katFI >= katStart) {
 							addPointOfFunction(az, b, katFI, skala, graphW, graphH, katy);
@@ -268,7 +277,6 @@ public class SpiralaLogarytmiczna extends Figury {
 
 					}
 				}
-
 //				long czasPoczatkowy2 = System.currentTimeMillis();
 				Collections.sort(katy, new Comparator<KatPunkt>() {
 					@Override
@@ -295,13 +303,13 @@ public class SpiralaLogarytmiczna extends Figury {
 					}
 				}
 			}
-
 //			System.out.println("Czasy wykonywania aproksymowania= " + (System.currentTimeMillis() - czasPoczatkowy3));
 
 			// Ocena czy wykres po próbkowaniu kwalifikuje się do dokładniejszego
 			// próbkowania
 			if (licznikOdleglosciowy > iloscPKT / 32 && probki >= 1.0 / 4 || iloscPKT == 0 && probki >= 1.0 / 8) {
-				new Wykres(graph, krzywa, podzialka, opisyOsi);
+				if (!SSAA)
+					new Wykres(graph, krzywa, podzialka, opisyOsi);
 				probki /= 2.0;
 				OK = false;
 			} else {
@@ -314,7 +322,8 @@ public class SpiralaLogarytmiczna extends Figury {
 	}
 
 	/**
-	 * Odbicie lustrzane rysunku w zależności od ćwiartki
+	 * Odbicie lustrzane rysunku w zależności od ćwiartki w której leżą 'stopnie'.
+	 * Zmiany następują w obrazku 'krzywa'.
 	 * 
 	 * @param stopnie - kąt do którego docelowo funkcja ma się transformować
 	 * @param graphW2 - połowa szerokości rysowanego okienka
@@ -543,6 +552,7 @@ public class SpiralaLogarytmiczna extends Figury {
 		BufferedImage graph = null;
 
 		int numberOfThread = 0;
+		int nrSSAA = 0;
 
 		@Override
 		public SpiralaLogarytmicznaBuilder setParametrA(String parametrAText) {
@@ -579,10 +589,23 @@ public class SpiralaLogarytmiczna extends Figury {
 			return this;
 		}
 
+		/**
+		 * Nadaję liczbę próbek jaka ma być użyta do stworzenia jednego pixela
+		 * 
+		 * @param numberOfSamplings - pierwiastek liczby próbek na jeden pixel
+		 * @return - Wewnętrzna klasa Budowniczego
+		 */
+		public SpiralaLogarytmicznaBuilder setSSAA(int numberOfSamplings) {
+			this.nrSSAA = numberOfSamplings;
+			return this;
+		}
+
 		@Override
 		public SpiralaLogarytmiczna build() throws ExceptionInInitializerError {
 			if (numberOfThread == 0)
 				numberOfThread = Runtime.getRuntime().availableProcessors();
+			if (nrSSAA == 0)
+				nrSSAA = 1;
 
 			Figury.setKomentarz(sprawdzParametry());
 
@@ -592,7 +615,7 @@ public class SpiralaLogarytmiczna extends Figury {
 				parametrB = new BigDecimal(parametrBText);
 				zakres = new BigDecimal(zakresText);
 				this.zakres = zakres.multiply(new BigDecimal(Math.PI));
-				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph, numberOfThread);
+				return new SpiralaLogarytmiczna(parametrA, parametrB, zakres, graph, numberOfThread, nrSSAA);
 			} else if (parametrAText == null)
 				throw new ExceptionInInitializerError("Parametr A nie został ustawiony");
 			else if (parametrBText == null)

@@ -25,10 +25,8 @@ class SpiralaLogarytmicznaTestJUnit5 {
 	public static void setUpBeforeClass() {
 		BufferedImage graf = new BufferedImage(760, 400, BufferedImage.TYPE_INT_ARGB);
 		try {
-
 			new SpiralaLogarytmiczna.SpiralaLogarytmicznaBuilder().setParametrA("0.5").setParametrB("0.1")
 					.setZakres("30").setGraph(graf).build();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

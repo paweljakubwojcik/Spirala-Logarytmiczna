@@ -5,8 +5,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 /**
- * Zarządza gotowym wyglądem wykresu. Scala obrazki, dodaje tło.
- * 
+ * Zarządza gotowym wyglądem wykresu. Scala obrazki, rysuje i dodaje tło.
  * 
  * @author 7Adrian
  * @since 1.0
@@ -43,7 +42,6 @@ public class Wykres {
 		Graphics2D g = (Graphics2D) wykres.getGraphics();
 		g.drawImage(tlo, 0, 0, null);
 		g.drawImage(krzywa, 0, 0, null);
-
 	}
 
 	/**
@@ -53,7 +51,6 @@ public class Wykres {
 	private void drawWykres() {
 		Graphics2D g = (Graphics2D) graph.getGraphics();
 		g.drawImage(wykres, 0, 0, null);
-
 	}
 
 	/**
