@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -240,21 +243,35 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 	}
 
+	/**
+	 * Uruchamia i zamyka tryb pełnoekranowy
+	 */
 	private void setFullScreen() {
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice device = env.getDefaultScreenDevice();
+		GraphicsDevice[] devices = env.getScreenDevices();
+		for (GraphicsDevice dev : devices) {
+			Rectangle screenLocation = dev.getDefaultConfiguration().getBounds();
+			Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+			if (mouseLocation.x >= screenLocation.x && mouseLocation.x <= screenLocation.x + screenLocation.width
+					&& mouseLocation.y >= screenLocation.y
+					&& mouseLocation.y <= screenLocation.y + screenLocation.height) {
+				device = dev;
+				break;
+			}
+		}
 
 		if (!device.isFullScreenSupported() && pelnyekran == false) {
 			JOptionPane.showMessageDialog(this, "Twój komputer nie wspiera pełnego ekranu ;/");
 			requestFocus();
 		} else if (device.isFullScreenSupported() && pelnyekran == false) {
-
 			dispose();
 			setUndecorated(true);
 			setResizable(true);
 			device.setFullScreenWindow(this);
 			requestFocus();
-			setLocation(0, 0);
+			// setLocation(0, 0);
+
 			// sizePrzedFullscreenem = new Dimension(sizeWindowX, sizeWindowY);
 			// setSize(rozdzielczosc);// po setSize nie potrzeba wywoływać ponieważ wywołany
 			// zostaje ComponentResize()
