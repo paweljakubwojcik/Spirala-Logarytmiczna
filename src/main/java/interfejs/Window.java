@@ -56,9 +56,9 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	public static final String RYSUJTEXT = "RYSUJ";
 	public static final String CZYSCTEXT = "CZYŚĆ";
 	public static final String PELNYEKRANTEXT = "PEŁNY EKRAN";
-	public static final String DefaultA = "0.1";
+	public static final String DefaultA = "0.5";
 	public static final String DefaultB = "0.1";
-	public static final String DefaultZakres = "90";
+	public static final String DefaultZakres = "30";
 
 	private BufferedImage graphImage;
 
