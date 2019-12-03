@@ -67,7 +67,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	SpiralaLogarytmiczna spirala;
 
 	public Window() {
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(NAZWAPROGRAMUTEXT);
 		setLocationRelativeTo(null);
@@ -141,12 +140,12 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przeskalujOkienko();// w tym miejscu ustawia size wszystkich elementďż˝w
 		addComponentListener(this); // musi byďż˝ za metodďż˝ przeskalujOkienko();
 
-		setVisible(true);
-
 		graphImage = new BufferedImage(graph.getWidth(), graph.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		// Rysowanie obrazka startowego
 		stworzSpirale();
+		przeskalujOkienko();
+		setVisible(true);
 	}
 
 	/**
@@ -175,10 +174,15 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		napisNazwaProgramu.setSize(sizeWindowX, getFontMetrics(napisNazwaProgramu.getFont()).getHeight());
 		napisNazwaProgramu.setLocation(0, 0);
 
+		int odstepY = sizeWindowY / 240;
+//		int locationY = graph.getY() + graph.getHeight() + odstepY; // polozenie Y przyciskow i pol
+		int locationY = sizeWindowY - odstepY - napisParametrA.getHeight() - poleSize.height - getInsets().top - 10;
+
 		int margines = sizeWindowX / 60;
 		int graphWidth = sizeWindowX - 2 * margines; //
-		int graphHeight = sizeWindowY * 3 / 4;
+//		int graphHeight = sizeWindowY * 3 / 4;
 		int graphY = napisNazwaProgramu.getHeight();
+		int graphHeight = -napisNazwaProgramu.getHeight() + locationY - 10;
 
 		// aby rysunek nie wyszedl poza okienko
 		if (graphHeight > graphWidth)
@@ -186,7 +190,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		else
 			graph.setSize(graphHeight, graphHeight);
 
-		graph.setLocation(margines + (graphWidth - graph.getWidth()) / 2, graphY);
+		graph.setLocation(margines + (graphWidth - graph.getWidth()) / 2, graphY + 2);
 
 		napisParametry.setSize(getFontMetrics(defaultFont).stringWidth(napisParametry.getText()), poleSize.height);
 		napisParametrA.setSize(getFontMetrics(defaultFont).stringWidth(napisParametrA.getText()), poleSize.height);
@@ -201,8 +205,6 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 		przyciskCzysc.setSize(buttonSize);
 		przyciskPelnyEkran.setSize(170, 30);
 
-		int odstepY = sizeWindowY / 240;
-		int locationY = graph.getY() + graph.getHeight() + odstepY; // polozenie Y przyciskow i pol
 		int odstep = (graphWidth - (napisParametry.getWidth() + napisParametrA.getWidth() + poleParametrA.getWidth()
 				+ napisParametrB.getWidth() + poleParametrB.getWidth() + napisZakres.getWidth() + poleZakres.getWidth()
 				+ napisZakresJednostka.getWidth() + przyciskRysuj.getWidth() + przyciskCzysc.getWidth()
@@ -226,8 +228,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 		poleKomentarz.setLocation(margines, locationY + odstepY + poleSize.height);
 		poleKomentarz.setSize(graphWidth,
-				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 40);
-
+//				sizeWindowY - napisNazwaProgramu.getHeight() - graph.getHeight() - poleSize.height - 4 * odstepY - 40);
+				poleSize.height);
 	}
 
 	/**
