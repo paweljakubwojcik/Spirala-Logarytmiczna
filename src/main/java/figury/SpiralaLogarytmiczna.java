@@ -648,11 +648,17 @@ public class SpiralaLogarytmiczna extends Figury {
 				if (parametrAText.charAt(0) == 'E')
 					parametrAText = parametrAText.replace("E", "1E");
 
-				if (isItANumber(parametrAText))
-					if (Double.valueOf(parametrAText) <= 1E-120) {
+				if (isItANumber(parametrAText)) {
+					try {
+						if (Double.valueOf(parametrAText) <= 1E-120) {
+							a[3] = 1;
+							a[4] = 1;
+						}
+					} catch (NumberFormatException e) {
 						a[3] = 1;
-						a[4] = 1;
+						a[5] = 1;
 					}
+				}
 				if (!(isItANumber(parametrAText))) {
 					a[3] = 1;
 					a[5] = 1;
@@ -668,7 +674,12 @@ public class SpiralaLogarytmiczna extends Figury {
 					parametrBText = parametrBText.replace(".", "0.");
 				if (parametrBText.charAt(0) == 'E')
 					parametrBText = parametrBText.replace("E", "1E");
-				if (!(isItANumber(parametrBText))) {
+				try {
+					if (!(isItANumber(parametrBText))) {
+						a[3] = 1;
+						a[6] = 1;
+					}
+				} catch (NumberFormatException e) {
 					a[3] = 1;
 					a[6] = 1;
 				}
@@ -682,14 +693,18 @@ public class SpiralaLogarytmiczna extends Figury {
 					zakresText = zakresText.replace(".", "0.");
 				if (zakresText.charAt(0) == 'E')
 					zakresText = zakresText.replace("E", "1E");
-				if (!(isItANumber(zakresText))) {
+				try {
+					if (!(isItANumber(zakresText))) {
+						a[3] = 1;
+						a[7] = 1;
+					} else if (Double.valueOf(zakresText) == 0)
+						a[8] = 1;
+					else if (Double.isInfinite(Double.valueOf(zakresText)))
+						a[9] = 1;
+				} catch (NumberFormatException e) {
 					a[3] = 1;
 					a[7] = 1;
-				} else if (Double.valueOf(zakresText) == 0)
-					a[8] = 1;
-				else if (Double.isInfinite(Double.valueOf(zakresText)))
-					a[9] = 1;
-
+				}
 			}
 
 			for (int i = 0; i < a.length; i++)
