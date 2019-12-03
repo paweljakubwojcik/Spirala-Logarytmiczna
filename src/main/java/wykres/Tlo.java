@@ -47,20 +47,22 @@ public class Tlo {
 		g.drawLine(0, graphSize.y / 2, graphSize.x, graphSize.y / 2); // oś x
 		g.drawLine(graphSize.x / 2, 0, graphSize.x / 2, graphSize.y); // oś Y
 
-		for (int x = graphSize.x / 2; x < graphSize.x; x += podzialka) {
-			g.drawLine(x, (graphSize.y / 2) + 6, x, (graphSize.y / 2) - 6);
-			// TODO MNIEJSZE LINIE POMIEDZY DUZYMI PODZIALKAMI
+		if (podzialka != 0) {
+			for (int x = graphSize.x / 2; x < graphSize.x; x += podzialka) {
+				g.drawLine(x, (graphSize.y / 2) + 6, x, (graphSize.y / 2) - 6);
+				// TODO MNIEJSZE LINIE POMIEDZY DUZYMI PODZIALKAMI
 //			for (int x2 = x; x2 < (x + podzialka); x2 += podzialka / 10)
 //				g.drawLine(x2, (graphSize.y / 2) + 3, x2, (graphSize.y / 2) - 3);
-		}
-		for (int x = graphSize.x / 2; x > 0; x -= podzialka) {
-			g.drawLine(x, (graphSize.y / 2) + 6, x, (graphSize.y / 2) - 6);
-		}
-		for (int y = graphSize.y / 2; y < graphSize.y; y += podzialka) {
-			g.drawLine(graphSize.x / 2 + 6, y, graphSize.x / 2 - 6, y);
-		}
-		for (int y = graphSize.y / 2; y > 0; y -= podzialka) {
-			g.drawLine(graphSize.x / 2 + 6, y, graphSize.x / 2 - 6, y);
+			}
+			for (int x = graphSize.x / 2; x > 0; x -= podzialka) {
+				g.drawLine(x, (graphSize.y / 2) + 6, x, (graphSize.y / 2) - 6);
+			}
+			for (int y = graphSize.y / 2; y < graphSize.y; y += podzialka) {
+				g.drawLine(graphSize.x / 2 + 6, y, graphSize.x / 2 - 6, y);
+			}
+			for (int y = graphSize.y / 2; y > 0; y -= podzialka) {
+				g.drawLine(graphSize.x / 2 + 6, y, graphSize.x / 2 - 6, y);
+			}
 		}
 
 		return osie;

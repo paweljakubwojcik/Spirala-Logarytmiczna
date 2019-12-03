@@ -51,7 +51,7 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 	private JTextField poleParametrA, poleParametrB, poleZakres;
 	private JButton przyciskRysuj, przyciskCzysc, przyciskPelnyEkran;
 
-	public static final String NAZWAPROGRAMUTEXT = "Spirala Logarytmiczna";
+	public static final String NAZWAPROGRAMUTEXT = "Spirala Logarytmiczna     r=ae^(b\u03C6)";
 	public static final String PARAMETRYTEXT = "XXX";
 	public static final String RYSUJTEXT = "RYSUJ";
 	public static final String CZYSCTEXT = "CZYŚĆ";
@@ -289,6 +289,8 @@ public class Window extends JFrame implements ActionListener, ComponentListener 
 
 			System.out.println(
 					"Wykonywanie Spirali trwało: " + (System.currentTimeMillis() - start) / 1000.0 + " sekund");
+		} catch (NumberFormatException e) {
+			poleKomentarz.setText("Wprowadzone wartości są zbyt duże");
 		} catch (Exception exc) {
 			exc.printStackTrace();
 			System.err.println(exc.getMessage());

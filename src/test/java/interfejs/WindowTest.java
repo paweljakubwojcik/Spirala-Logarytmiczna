@@ -96,8 +96,9 @@ class WindowTest {
 		String K = KOM.getText();
 
 		// THEN
-		assertAll("Sprawdza opisy utworzonego okienka", () -> assertEquals("Spirala Logarytmiczna", okno.getTitle()),
-				() -> assertEquals("Spirala Logarytmiczna", Window.NAZWAPROGRAMUTEXT),
+		assertAll("Sprawdza opisy utworzonego okienka",
+				() -> assertEquals("Spirala Logarytmiczna     r=ae^(b\u03C6)", okno.getTitle()),
+				() -> assertEquals("Spirala Logarytmiczna     r=ae^(b\u03C6)", Window.NAZWAPROGRAMUTEXT),
 				() -> assertTrue(okno.isVisible()), () -> assertEquals("a=", A), () -> assertEquals("b=", B),
 				() -> assertEquals("zakres=", ZT), () -> assertEquals("rad", JZT), () -> assertEquals("RYSUJ", R),
 				() -> assertEquals("CZYŚĆ", C), () -> assertEquals("PEŁNY EKRAN", PE),
